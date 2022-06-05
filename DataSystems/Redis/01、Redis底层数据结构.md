@@ -2,7 +2,7 @@
 
 Redis 只会使用 C字符串 作为字面量，在大多数情况下，Redis使用SDS（Simple Dynamic String，简单动态字符串）作为字符串表示
 
- `sds.h/sdshdr` 
+`sds.h/sdshdr`
 
 ```
 struct sdshdr {
@@ -20,13 +20,11 @@ struct sdshdr {
 - 二进制安全
 - 兼容部分C字符串函数
 
-
-
 ### 链表
 
 链表提供了高效的节点重排能力,以及顺序性的节点访问方式,并且可以通过增删节点来灵活地调整链表的长度。
 
- `adlist.h/listNode`
+`adlist.h/listNode`
 
 ```
 struct listNode {
