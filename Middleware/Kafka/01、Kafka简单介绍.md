@@ -30,73 +30,54 @@
     - kafka 使用 zookeeper 保存相应元数据
     - kafka3.0 开始逐步测试使用 KRaft 代替 zookeeper
 
-## 重要配置
+## CONFIGURATION
 
-`server.properties`  服务端的配置文件
+### Broker Configs
 
 ```
+##################   Broker Configs   ##################
+
 # broker的全局唯一编号，不能重复
 broker.id=0
  
-# 用来监听链接的端口，producer、consumer将在此端口建立连接
+# 用来监听连接的端口，producer、consumer将在此端口建立连接
 port=9092
  
-# 处理网络请求的线程数量，也就是接收消息的线程数
-num.network.threads=3
- 
-# 消息从内存中写入磁盘是时候使用的线程数量
-num.io.threads=8
- 
-# Socket 发送消息缓冲区大小
-socket.send.buffer.bytes=102400
- 
-# Socket 接收消息缓冲区大小
-socket.receive.buffer.bytes=102400
- 
-# 请求套接字的缓冲区大小
-socket.request.max.bytes=104857600
- 
-# kafka运行日志存放的路径
+# broker 需要使用 zookeeper 保存元数据
+zookeeper.connect=zk-01:2181,zk-02:2181,zk-03:2181
+
+# kafka 存放日志的路径
 log.dirs=/tmp/kafka-logs
- 
+
+# The number of threads per data directory to be used for log recovery at startup and flushing at shutdown
+num.recovery.threads.per.data.dir=1
+
+# 允许服务器自动创建 topic
+auto.create.topics.enable=true
+
 # topic 在当前 broker 上的分片个数
 num.partitions=2
- 
-# 用来恢复和清理data下数据的线程数量
-num.recovery.threads.per.data.dir=1
- 
-# segment 文件保留的最长时间，默认保留7天（168小时），
+
+# 删除前保留日志文件的小时数
 log.retention.hours=168
  
-# 滚动生成新的 segment 文件的最大时间
-log.roll.hours=168
+# 删除前日志的最大大小
+log.retention.bytes=-1
+
+# 多久检查一次文件大小
+log.retention.check.interval.ms=300000
  
 # 日志文件中每个 segment 的大小，默认为1G
 log.segment.bytes=1073741824
  
-# 多久检查一次文件大小
-log.retention.check.interval.ms=300000
- 
-# 日志清理是否打开
-log.cleaner.enable=true
- 
-# broker 需要使用 zookeeper 保存元数据
-zookeeper.connect=zk-01:2181,zk-02:2181,zk-03:2181
- 
-# zookeeper 连接超时时间
-zookeeper.connection.timeout.ms=6000
- 
-# partion buffer中，消息的条数达到阈值，将触发将消息从内存刷到磁盘
-log.flush.interval.messages=9223372036854775807
- 
-# 消息 buffer 的时间，达到阈值，将触发将消息从内存刷到磁盘
-log.flush.interval.ms=
- 
+# 滚动生成新的 segment 文件的最大时间
+log.roll.hours=168
+
 # 允许删除 topic
 delete.topic.enable=true
 ```
 
-`producer.properties`  生产端的配置文件
+### Producer Configs
 
 ```
 # kafka 节点列表，用于获取 metadata，不必全部指定
@@ -140,7 +121,7 @@ client.id=console-producer
 queue.enqueue.timeout.ms=-1
 ```
 
-`consumer.properties`  消费端的配置文件
+### Consumer Configs
 
 ```
 # 消费者集群通过连接 ZK 来找到 broker
@@ -196,7 +177,7 @@ fetch.max.bytes=57671680
 fetch.wait.max.ms=500
 ```
 
-## 推荐阅读
+## 参考资料
 
 [KAFKA DOCS](https://kafka.apache.org/documentation)
 
