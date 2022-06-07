@@ -35,14 +35,18 @@
 ### Broker Configs
 
 ```
-##################   Broker Configs   ##################
-
 # broker的全局唯一编号，不能重复
 broker.id=0
  
-# 用来监听连接的端口，producer、consumer将在此端口建立连接
-port=9092
+# 侦听器列表
+listeners=PLAINTEXT://:9092
  
+# 侦听器名称和安全协议之间的映射
+listener.security.protocol.map=PLAINTEXT:PLAINTEXT,SSL:SSL,SASL_PLAINTEXT:SASL_PLAINTEXT,SASL_SSL:SASL_SSL
+
+# 发布到 ZooKeeper 以供客户端使用的侦听器
+advertised.listeners=null
+
 # broker 需要使用 zookeeper 保存元数据
 zookeeper.connect=zk-01:2181,zk-02:2181,zk-03:2181
 
@@ -63,90 +67,97 @@ log.retention.hours=168
  
 # 删除前日志的最大大小
 log.retention.bytes=-1
-
-# 多久检查一次文件大小
-log.retention.check.interval.ms=300000
  
 # 日志文件中每个 segment 的大小，默认为1G
 log.segment.bytes=1073741824
  
 # 滚动生成新的 segment 文件的最大时间
 log.roll.hours=168
-
-# 允许删除 topic
-delete.topic.enable=true
 ```
 
 ### Producer Configs
 
 ```
-# kafka 节点列表，用于获取 metadata，不必全部指定
-metadata.broker.list=kafka01:9092,kafka02:9092,kafka03:9092
+# broker 的地址清单
+bootstrap.servers=kafka-01:9092
+
+key.serializer=
+
+value.serializer=
+
+# 用来标记生产者
+client.id=
+
+# 0: 不在乎是否写入成功； 1: 写入 leader 成功； all: 写入 leader 和所有副本都成功；
+acks=all
+
+# 生产者内存缓冲区的大小 
+buffer.memory=33554432
+
+# 消息的压缩算法
+compression.type=none
+
+# 生产者可以重发消息的次数
+retries=3
+
+# 多个消息发送到同一个分区时，生产者会把他们放到同一个批次
+# 该参数指定批次可使用内存的大小
+batch.size=16384
  
-# 0:不在乎是否写入成功； 1:写入leader成功； 2:写入leader和所有副本都成功；
-request.required.acks=0
- 
-# sync:同步； async:异步；
-producer.type=sync
- 
-# 当 producer 接收到 error ACK,或者没有接收到 ACK 时,允许在丢弃该消息前重试的次数
-message.send.max.retries=3
- 
-# producer 每次重试前会更新 topic 的 MetaData 信息，以检查新的 Leader 是否被选举出来
-# 此选项指定更新 topic 的 MetaData 之前 producer 要等待的时间
-retry.backoff.ms=100
+# 一个批次的最大等待时间
+linger.ms=120000
 
-# async 模式下，当 message 被缓存的时间超过此值后，会被批量发送给 broker
-queue.buffering.max.ms = 5000
+# 生产者在阻塞之前单个连接上发送的未确认请求的最大数量
+max.in.flight.requests.per.connection=5
 
-# async 模式下，producer 允许缓存的最大消息量
-queue.buffering.max.messages=10000
+# 生产者等待请求响应的最长时间
+request.timeout.ms=30000
 
-# async 模式下，指定每次批量发送的数据量
-batch.num.messages=200
+# 在调用 send()、partitionsFor() 获取元数据时生产者的阻塞时间
+max.block.ms=60000
 
-# 在需要 ack 时，producer 等待 broker 应答的超时时间，否则发送错误到客户端
-request.timeout.ms=1500
+# 请求的最大大小（以字节为单位）
+max.request.size=1048576
 
-# Socket 发送消息缓冲区大小
-send.buffer.bytes=102400
+# 读取数据时使用的 TCP 接收缓冲区 (SO_RCVBUF) 的大小
+receive.buffer.bytes=65536
 
-# producer 刷新 topic metadata 的时间间隔
-topic.metadata.refresh.interval.ms=60000
-
-# producer 指定的一个标识字段，用来追踪调用
-client.id=console-producer
-
-# -1:不限制阻塞超时时间 0:立即清空队列,消息被抛弃 uint:"阻塞"的时间
-queue.enqueue.timeout.ms=-1
+# 发送数据时使用的 TCP 发送缓冲区 (SO_SNDBUF) 的大小
+send.buffer.bytes=131072
 ```
 
 ### Consumer Configs
 
 ```
-# 消费者集群通过连接 ZK 来找到 broker
-zookeeper.connect=zk-01:2181,zk-02:2181,zk-03:2181
- 
-# zookeeper 的 session 过期时间，用于检测消费者是否挂掉
-zookeeper.session.timeout.ms=18000
- 
-# 当消费者挂掉，其他消费者要等该指定时间才能检查到并且触发重新负载均衡
-zookeeper.connection.timeout.ms=10000
- 
-# ZK follower 可以落后于 ZK leader 多长时间
-zookeeper.sync.time.ms=2000
- 
-# 消费组ID
-group.id=/
- 
-# 消费者客户端编号，用于区分不同客户端，默认客户端程序自动产生
-client.id=/
+# broker 的地址清单
+bootstrap.servers=kafka-01:9092
 
-# 消息的 Key 反序列化类
-key.deserializer=/
+key.deserializer=
 
-# 消息的 Value 反序列化类
-value.deserializer=/
+value.deserializer=
+
+# 用来标记消费组
+group.id=
+
+client.id=
+
+# 一次拉取操作等待消息的最小字节数
+fetch.min.bytes=1
+
+# 一次拉取操作获取消息的最大字节数
+fetch.max.bytes=57671680
+
+# 若是不满足 fetch.min.bytes 时，客户端等待请求的最长等待时间
+fetch.wait.max.ms=500
+
+# 服务器从每个分区里返回给消费者的最大字节数
+max.partition.fetch.bytes=1048576
+
+# 认定消费组故障的时间
+session.timeout.ms=10000
+
+# 没有偏移量或偏移量失效时该怎么读取
+auto.offset.reset=latest
 
 # 是否开启自动提交消费偏移量
 enable.auto.commit=true
@@ -161,25 +172,16 @@ max.poll.records=500
 # 消费组会认为消费者已离开消费组，触发平衡操作
 max.poll.interval.ms=3000000
  
-# Socket 发送消息缓冲区大小
-send.buffer.bytes=131072
-
-# Socket 接收消息缓冲区大小
+# 读取数据时使用的 TCP 接收缓冲区 (SO_RCVBUF) 的大小
 receive.buffer.bytes=65536
- 
-# 一次拉取操作等待消息的最小字节数
-fetch.min.bytes=1
 
-# 一次拉取操作获取消息的最大字节数
-fetch.max.bytes=57671680
-
-# 若是不满足 fetch.min.bytes 时，客户端等待请求的最长等待时间
-fetch.wait.max.ms=500
+# 发送数据时使用的 TCP 发送缓冲区 (SO_SNDBUF) 的大小
+send.buffer.bytes=131072
 ```
 
 ## 参考资料
 
-[KAFKA DOCS](https://kafka.apache.org/documentation)
+[KAFKA DOCS](https://kafka.apache.org/28/documentation.html)
 
 [Kafka 入门与实践](https://search.jd.com/Search?keyword=kafka%E5%85%A5%E9%97%A8%E4%B8%8E%E5%AE%9E%E8%B7%B5)
 
