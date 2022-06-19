@@ -20,7 +20,9 @@
 
     - TaskManager 是 Flink 的工作进程
         1. Flink 一般会启动多个 TaskManager，每个 TaskManager 提供一定数量的处理槽，处理槽的数目限制了一个 TaskManager 可执行的任务数
-        2. TaskManager 启动后，会向
+        2. TaskManager 启动后，会向 ResourceManager 注册它的处理槽
+        3. 接收到 ResourceManager 的指示时，TaskManager 会向 JobManager 提供一个或多个处理槽
 
 ### Dispatcher
 
+    - Dispatcher 会跨多个作业运行，他会提供一个 REST 接口来让我们提交需要执行的应用
