@@ -30,7 +30,9 @@ TaskManager 是 Flink 的工作进程
 
 Dispatcher 会跨多个作业运行，他会提供一个 REST 接口来让我们提交需要执行的应用
 
-## 程序流程
+## 基础
+
+### 程序流程
 
 1. 设置执行环境
     - 集群、本地、流处理、批处理
@@ -39,7 +41,7 @@ Dispatcher 会跨多个作业运行，他会提供一个 REST 接口来让我们
 4. 将结果输出到 Sink
 5. 调用作业执行函数
 
-## 数据类型
+### 数据类型
 
 - 基础类型
     - Java 的所有基础数据类型，诸如int、Double、Long(包括Java原生类型int和装箱后的类型Integer)、String，以及Date、BigDecimal和BigInteger
@@ -56,163 +58,10 @@ Dispatcher 会跨多个作业运行，他会提供一个 REST 接口来让我们
 - 辅助类型
     - Java的ArrayList、HashMap和Enum
 
-## 常见 Transformation
+## 开发
 
-单数据流基本转换
-
-> 单数据流基本转换主要对单个数据流上的各元素进行处理
-
-- **map**
-    - map()对一个DataStream中的每个元素使用用户自定义的Mapper函数进行处理，每个输入元素对应一个输出元素，最终整个数据流被转换成一个新的DataStream
-- **filter**
-    - filter()对每个元素进行过滤，过滤的过程使用一个Filter函数进行逻辑判断
-- **flatMap**
-    - flatMap()和map()有些相似，输入都是数据流中的每个元素，与之不同的是，flatMap()的输出可以是零个、一个或多个元素
-
-基于Key的分组转换
-
-> 对数据分组主要是为了进行后续的聚合操作，即对同组数据进行聚合分析
-
-- **keyBy**
-    - 将一个 DataStream 转换为一个 KeyedStream
-    - 根据事件的某种属性或数据的某个字段进行分组，然后对一个分组内的数据进行处理
-- **Aggregation**
-    - 将一个 KeyedStream 转换为一个 DataStream
-    - 常见的聚合(Aggregation)函数有sum()、max()、min()等，这些聚合函数统称为聚合
-- **reduce**
-    - 两两合一地进行汇总操作，生成一个同类型的新元素
-
-多数据流转换
-
-- **union**
-    - 在 DataStream 上使用union()可以合并多个同类型的数据流
-    - 数据将按照先进先出(First In First Out)的模式合并，且不去重
-- **connect**
-    - connect()只能连接两个数据流，union()可以连接多个数据流
-    - connect()所连接的两个数据流的数据类型可以不一致，union() 所连接的两个或多个数据流的数据类型必须一致
-    - 两个DataStream经过connect()之后被转化为ConnectedStreams，ConnectedStreams会对两个流的数据应用不同的处理方法，且两个流之间可以共享状态
-
-数据重分布
-
-- **shuffle**
-    - shuffle()基于正态分布，将数据随机分布到下游各算子子任务上
-- **rebalance 与 rescale**
-    - rebalance() 使用Round-Ribon方法将数据均匀分布到各子任务上
-    - rescale() 就近发送给下游子任务
-- **broadcast**
-    - rescale() 发送给下游的所有子任务上
-- **global**
-    - global()会将所有数据发送给下游算子的第一个子任务上，使用global()时要小心，以免造成严重的性能问题
-- **partitionCustom**
-
-自定义函数
-
-- **接口**
-    - 对于map()、flatMap()、reduce()等函数，我们可以实现MapFunction、FlatMapFunction、ReduceFunction等接口
-- **Lambda表达式**
-- **Rich函数类**
-
-####                             
-
-## 时间和窗口
-
-### 时间语义
-
-> 在 1.12 以后版本默认是使用 EventTime，如果要显示使用 ProcessingTime，可以关闭 watermark（自动生成 watermark 的间隔设置为 0）
-> `env.getConfig().setAutoWatermarkInterval(0);`
-
-Event Time
-
-- 一般是事件发生的时间，由于事件从发生到进入Flink时间算子之间有很多环节，一个较早发生的事件因为延迟可能较晚到达，因此使用Event Time意味着事件到达有可能是乱序的
-- 在实际应用中，当涉及对事件按照时间窗口进行统计时，Flink会将窗口内的事件缓存下来，直到接收到一个Watermark，Watermark假设不会有更晚到达的事件
-- Watermark意味着在一个时间窗口下，Flink会等待一个有限的时间，这在一定程度上降低了计算结果的绝对准确性， 而且增加了系统的延迟
-
-Processing Time
-
-- 对于某个算子来说，Processing Time指使用算子的当前节点的操作系统时间
-- 对于一个程序，在同一个环境中，每个算子都有一定的耗时，同一个事件的Processing Time，第n个算子和第n+1个算子的不同
-- Processing Time在时间窗口下的计算会有不确定性
-
-### 窗口算子
-
-在流处理场景下，数据以源源不断的流的形式存在，数据一直在产生，没有始末。我们要对数据进行处理时，往往需要明确一个时间窗口，在一个时间窗口维度上对数据进行聚合，划分窗口是流处理需要解决的问题。
-
-- 滚动窗口（Tumbling Window）
-    - 滚动窗口模式下，窗口之间不重叠，且窗口长度(Window Size)是固定的
-- 滑动窗口（Sliding Window）
-    - 滑动窗口以一个步长(Slide)不断向前滑动，窗口的Size固定
-- 会话窗口（Session Window）
-    - 会话窗口模式下，两个窗口之间有一个间隙，称为Session Gap。当一个窗口在大于Session Gap的时间内没有接收到新数据时，窗口将关闭
-
-窗口处理函数
-
-- 增量计算
-  > 窗口保存一份中间数据，每流入一个新元素，新元素与中间数据两两合一，生成新的中间数据，再保存到窗口中
-    - ReduceFunction
-    - AggregateFunction
-- 全量计算
-  > 指的是窗口先缓存所有元素，等触发条件后才对窗口内的全量元素执行计算
-    - ProcessWindowFunction
-- ProcessWindowFunction与增量计算相结合
-  > 当我们想访问窗口里的元数据，但又不想缓存窗口里的所有数据时，可以将ProcessWindowFunction与增量计算函数reduce()和aggregate()相结合
-- 拓展和自定义窗口
-    - Trigger
-        - 触发器(Trigger)决定了何时启动窗口处理函数来处理窗口中的数据，以及何时将窗口内的数据清除
-    - Evictor
-        - 清除器(Evictor)是在WindowAssigner和Trigger的基础上的一个可选选项，用来清除一些数据
-        - 可以在窗口处理函数执行前或执行后调用Evictor
-
-### 双流连接
-
-- 窗口连接（Window Join）
-- 时间间隔连接（Interval Join）
-
-### 处理迟到数据
-
-- 直接将迟到数据丢弃
-- 将迟到数据发送到另一个数据流
-- 重新执行一次计算，将迟到数据考虑进来，更新计算结果
-
-## 状态和检查点
-
-### 状态
-
-为什么要管理状态
-
-- 数据流中的数据有重复，我们想对数据去重，需要记录哪些数据已经流入过应用，当新数据流入时，根据已流入数据来判断是否去重
-- 检查输入流是否符合某个特定的模式，需要将之前流入的元素以状态的形式缓存下来。比如，判断一个温度传感器数据流中的温度是否在持续上升
-- 对一个时间窗口内的数据进行聚合分析，分析一个小时内某项指标的75分位或99分位的数值
-- 在线机器学习场景下，需要根据新流入数据不断更新机器学习的模型参数
-
-常用状态
-
-- Managed State
-  > Flink管理的，Flink负责存储、恢复和优化
-    - Keyed State
-        - 只适用于 KeyedStream 上的算子
-        - 每个 Key 对应一个状态
-        - 重写Rich Function，通过里面的 RuntimeContext 访问
-        - 状态随着Key自动在多个算子子任务上迁移
-        - 适用于 ValueState，ListState MapState等数据类型
-    - Operator State
-        - 适用于所有算子
-        - 一个算子子任务对应一个状态
-        - 实现CheckpointedFunction等接口
-        - 有多种状态重新分配的方式
-        - 适用于 ListState、BroadcastState等数据类型
-- Raw State
-  > 开发者管理的，需要自己进行序列化
-
-### 检查点
-
-Flink定期保存状态数据到存储空间上，故障发生后从之前的备份中恢复，这个过程被称为Checkpoint机制。Checkpoint为Flink提供了Exactly-Once的投递保障。
-
-### 保存点
-
-Checkpoint机制和Savepoint机制在代码层面使用的分布式快照逻辑基本相同，生成的数据也近乎一样。
-Checkpoint机制的目的是为了故障重启，使得作业中的状态数据与故障重启之前的保持一致，是一种应对意外情况的有力保障。
-Savepoint机制的目的是手动备份数据，以便进行调试、迁移、迭代等，是一种协助开发者的支持功能
+**看官网，官网很清晰**
 
 ## 参考资料
 
-Flink 原理和实践
+[Apache Flink 文档](https://nightlies.apache.org/flink/flink-docs-release-1.15/zh/)
