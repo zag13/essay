@@ -1,0 +1,1 @@
+此目录下文件来自于 [Go Patterns](https://github.com/tmrts/go-patterns) 
