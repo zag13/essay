@@ -158,6 +158,22 @@ int execvp(const char *filename, char *const argv[]);
 int close(int sockfd);
 ```
 
+##### shutdown函数
+
+终止网络连接的通常方法是调用close函数。不过close有两个限制，可以使用shutdown函数来避免。
+
+1. close把描述符的引用计数减1，仅在该计数变为0时才关闭套接字
+2. close终止读和写两个方向的数据传送
+
+```
+#include <sys/socket.h>
+
+// @sockfd 套接字描述符
+// @howto SHUT_RD，关闭连接的读这一半；SHUT_WR，关闭连接的写这一半；SHUT_RDWR，连接的读和写都关闭
+// @return 若成功则为0，若出错则为-1
+int shutdown(int sockfd, int howto);
+```
+
 ##### getsockname和getpeername函数
 
 getsockname函数返回与某个套接字关联的本地协议地址，getpeername函数返回与某个套接字关联的外地协议地址。
@@ -381,27 +397,40 @@ main(int argc, char **argv)
 void
 str_cli(FILE *fp, int sockfd)
 {
-	int			maxfdp1;
+	int			maxfdp1, stdineof;
 	fd_set		rset;
-	char		sendline[MAXLINE], recvline[MAXLINE];
+	char		buf[MAXLINE];
+	int		n;
 
+	stdineof = 0;
 	FD_ZERO(&rset);
 	for ( ; ; ) {
-		FD_SET(fileno(fp), &rset);
+		if (stdineof == 0)
+			FD_SET(fileno(fp), &rset);
 		FD_SET(sockfd, &rset);
 		maxfdp1 = max(fileno(fp), sockfd) + 1;
 		Select(maxfdp1, &rset, NULL, NULL, NULL);
 
 		if (FD_ISSET(sockfd, &rset)) {	/* socket is readable */
-			if (Readline(sockfd, recvline, MAXLINE) == 0)
-				err_quit("str_cli: server terminated prematurely");
-			Fputs(recvline, stdout);
+			if ( (n = Read(sockfd, buf, MAXLINE)) == 0) {
+				if (stdineof == 1)
+					return;		/* normal termination */
+				else
+					err_quit("str_cli: server terminated prematurely");
+			}
+
+			Write(fileno(stdout), buf, n);
 		}
 
 		if (FD_ISSET(fileno(fp), &rset)) {  /* input is readable */
-			if (Fgets(sendline, MAXLINE, fp) == NULL)
-				return;		/* all done */
-			Writen(sockfd, sendline, strlen(sendline));
+			if ( (n = Read(fileno(fp), buf, MAXLINE)) == 0) {
+				stdineof = 1;
+				Shutdown(sockfd, SHUT_WR);	/* send FIN */
+				FD_CLR(fileno(fp), &rset);
+				continue;
+			}
+
+			Writen(sockfd, buf, n);
 		}
 	}
 }
