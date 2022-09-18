@@ -283,6 +283,25 @@ select函数允许进程指示内核等待多个事件中的任何一个发生�
 int select(int maxfdp1, fd_set *readset, fd_set *writeset, fd_set *exceptset, const struct timeval *timeout);
 ```
 
+**poll函数**
+
+poll函数提供的功能与select类似，不过在处理流设备时，它能够提供额外的信息。
+
+```
+#include <poll.h>
+
+// @nfds 结构数组中元素的个数
+// @timeout 指定poll函数返回前等待多长时间
+// @return 若有就绪描述符则为其数目，若超时则为0，若出错则为-1
+int poll(struct pollfd *fdarray, unsigned long nfds, int timeout);
+
+struct pollfd {
+   int   fd;         /* descriptor to check */
+   short events;     /* events of interest on fd */
+   short revents;    /* events that occurred on fd */
+}
+```
+
 #### TCP回射程序
 
 ##### 服务器
