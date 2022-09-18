@@ -119,10 +119,226 @@ int accept(int sockfd, struct sockaddr *cliaddr, socklen_t *addrlen)
 
 fork是Unix中派生新进程的唯一方法。
 
-#### TCP回射程序
+```
+#include <unistd.h>
+
+// @return 在子进程中为0，在父进程中为子进程ID，若出错则为-1
+pid_t fork(void);
+```
+
+存放在硬盘上的可执行程序文件能够被Unix执行的唯一方法是：由一个现有进程调用六个exec函数中的某一个。
 
 ```
-include 
+#include <unistd.h>
+
+// @return 若成功则不返回，若出错则为-1
+
+int execl(const char *pathname, const char *arg0, .../* (char *) 0 */);
+
+int execv(const char *pathname, char *const *argv[]);
+
+int execle(const char *pathname, const char *arg0, .../* (char *) 0, char *const envp[] */);
+
+int execve(const char *pathname, char *const argv[], char *const envp[]);
+
+int execlp(const char *filename, const char *arg0, .../* (char *) 0 */);
+
+int execvp(const char *filename, char *const argv[]);
+```
+
+##### close函数
+
+通常的Unix close函数也用来关闭套接字，并终止TCP连接。
+
+```
+#include <unistd.h>
+
+// @sockfd 套接字描述符
+// @return 若成功则为0，若出错则为-1
+int close(int sockfd);
+```
+
+##### getsockname和getpeername函数
+
+getsockname函数返回与某个套接字关联的本地协议地址，getpeername函数返回与某个套接字关联的外地协议地址。
+
+```
+#include <sys/socket.h>
+
+// @return 若成功则为0，若出错则为-1
+
+int getsockname(int sockfd, struct sockaddr *localaddr, socklen_t *addrlen);
+
+int getpeername(int sockfd, struct sockaddr *peeraddr, socklen_t *addrlen);
+```
+
+##### 信号相关
+
+信号（signal）就是告知某个进程发生了某个时间的通知，有时也称为软件中断（software interrupt）。
+信号通常是异步发生的，也就是说进程预先不知道信号的准确发生时刻。
+
+信号可以：
+1. 由一个进程发给另一个进程（或自身）
+2. 由内核发给进程
+
+**signal函数**
+
+```
+/* include signal */
+#include	"unp.h"
+
+Sigfunc *
+signal(int signo, Sigfunc *func)
+{
+	struct sigaction	act, oact;
+
+	act.sa_handler = func;
+	sigemptyset(&act.sa_mask);
+	act.sa_flags = 0;
+	if (signo == SIGALRM) {
+#ifdef	SA_INTERRUPT
+		act.sa_flags |= SA_INTERRUPT;	/* SunOS 4.x */
+#endif
+	} else {
+#ifdef	SA_RESTART
+		act.sa_flags |= SA_RESTART;		/* SVR4, 44BSD */
+#endif
+	}
+	if (sigaction(signo, &act, &oact) < 0)
+		return(SIG_ERR);
+	return(oact.sa_handler);
+}
+/* end signal */
+
+Sigfunc *
+Signal(int signo, Sigfunc *func)	/* for our signal() function */
+{
+	Sigfunc	*sigfunc;
+
+	if ( (sigfunc = signal(signo, func)) == SIG_ERR)
+		err_sys("signal error");
+	return(sigfunc);
+}
+```
+
+**wait和waitpid函数**
+
+```
+#include <sys/wait.h>
+
+// @return 若成功则为进程ID，若出错则为0或-1
+
+pid_t wait(int *statloc);
+pid_t waitpid(pid_t pid, int *statloc, int options);
+```
+
+#### TCP回射程序
+
+##### 服务器
+
+```
+#include	"unp.h"
+
+int
+main(int argc, char **argv)
+{
+	int					listenfd, connfd;
+	pid_t				childpid;
+	socklen_t			clilen;
+	struct sockaddr_in	cliaddr, servaddr;
+
+	listenfd = Socket(AF_INET, SOCK_STREAM, 0);
+
+	bzero(&servaddr, sizeof(servaddr));
+	servaddr.sin_family      = AF_INET;
+	servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
+	servaddr.sin_port        = htons(SERV_PORT);
+
+	Bind(listenfd, (SA *) &servaddr, sizeof(servaddr));
+
+	Listen(listenfd, LISTENQ);
+
+	for ( ; ; ) {
+		clilen = sizeof(cliaddr);
+		connfd = Accept(listenfd, (SA *) &cliaddr, &clilen);
+
+		if ( (childpid = Fork()) == 0) {	/* child process */
+			Close(listenfd);	/* close listening socket */
+			str_echo(connfd);	/* process the request */
+			exit(0);
+		}
+		Close(connfd);			/* parent closes connected socket */
+	}
+}
+```
+
+```
+#include	"unp.h"
+
+void
+str_echo(int sockfd)
+{
+	ssize_t		n;
+	char		buf[MAXLINE];
+
+again:
+	while ( (n = read(sockfd, buf, MAXLINE)) > 0)
+		Writen(sockfd, buf, n);
+
+	if (n < 0 && errno == EINTR)
+		goto again;
+	else if (n < 0)
+		err_sys("str_echo: read error");
+}
+```
+
+##### 客户端
+
+```
+#include	"unp.h"
+
+int
+main(int argc, char **argv)
+{
+	int					sockfd;
+	struct sockaddr_in	servaddr;
+
+	if (argc != 2)
+		err_quit("usage: tcpcli <IPaddress>");
+
+	sockfd = Socket(AF_INET, SOCK_STREAM, 0);
+
+	bzero(&servaddr, sizeof(servaddr));
+	servaddr.sin_family = AF_INET;
+	servaddr.sin_port = htons(SERV_PORT);
+	Inet_pton(AF_INET, argv[1], &servaddr.sin_addr);
+
+	Connect(sockfd, (SA *) &servaddr, sizeof(servaddr));
+
+	str_cli(stdin, sockfd);		/* do it all */
+
+	exit(0);
+}
+```
+
+```
+#include	"unp.h"
+
+void
+str_cli(FILE *fp, int sockfd)
+{
+	char	sendline[MAXLINE], recvline[MAXLINE];
+
+	while (Fgets(sendline, MAXLINE, fp) != NULL) {
+
+		Writen(sockfd, sendline, strlen(sendline));
+
+		if (Readline(sockfd, recvline, MAXLINE) == 0)
+			err_quit("str_cli: server terminated prematurely");
+
+		Fputs(recvline, stdout);
+	}
+}
 ```
 
 ### 基本UDP套接字
