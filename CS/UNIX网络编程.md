@@ -178,6 +178,7 @@ int getpeername(int sockfd, struct sockaddr *peeraddr, socklen_t *addrlen);
 信号通常是异步发生的，也就是说进程预先不知道信号的准确发生时刻。
 
 信号可以：
+
 1. 由一个进程发给另一个进程（或自身）
 2. 由内核发给进程
 
@@ -246,6 +247,7 @@ main(int argc, char **argv)
 	pid_t				childpid;
 	socklen_t			clilen;
 	struct sockaddr_in	cliaddr, servaddr;
+	void				sig_chld(int);
 
 	listenfd = Socket(AF_INET, SOCK_STREAM, 0);
 
@@ -258,9 +260,16 @@ main(int argc, char **argv)
 
 	Listen(listenfd, LISTENQ);
 
+	Signal(SIGCHLD, sig_chld);	/* must call waitpid() */
+
 	for ( ; ; ) {
 		clilen = sizeof(cliaddr);
-		connfd = Accept(listenfd, (SA *) &cliaddr, &clilen);
+		if ( (connfd = accept(listenfd, (SA *) &cliaddr, &clilen)) < 0) {
+			if (errno == EINTR)
+				continue;		/* back to for() */
+			else
+				err_sys("accept error");
+		}
 
 		if ( (childpid = Fork()) == 0) {	/* child process */
 			Close(listenfd);	/* close listening socket */
@@ -269,6 +278,17 @@ main(int argc, char **argv)
 		}
 		Close(connfd);			/* parent closes connected socket */
 	}
+}
+
+void
+sig_chld(int signo)
+{
+	pid_t	pid;
+	int		stat;
+
+	while ( (pid = waitpid(-1, &stat, WNOHANG)) > 0)
+		printf("child %d terminated\n", pid);
+	return;
 }
 ```
 
