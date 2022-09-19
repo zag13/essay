@@ -39,6 +39,52 @@ UDP数据报不能保证最终到达他们的目的地。与TCP一样，UDP既�
 一词来指称SCTP中的连接，因为SCTP是多宿的，从而每个关联的两端均涉及一组IP地址和一个端口号。SCTP提供消息服务，也就是维护来自应用层的记录边界。
 与TCP和UDP一样，SCTP既可以使用IPv4，也可以使用IPv6，而且能够在同一个关联中同时使用它们。
 
+## 应用层
+
+### DNS
+
+域名系统（Domain Name System）主要用于主机名字和IP地址之间的映射。
+
+DNS中的条目称为资源记录（resource record，RR）。
+
+- A A记录把一个主机名映射成一个32位的IPv4地址
+- AAAA 称为"4A"（quad A）记录的AAAA记录把一个主机名映射成一个128位的IPv6地址
+- PTR 称为"指针记录"（pointer record）的PTR记录把IP地址映射成主机名
+- MX MX记录把一个主机指定作为给定主机的"邮件交换器"（mail exchanger）
+- CNAME CNAME代表"canonical name"（规范名字），它的常见用法是为常用的服务（例如ftp和www）指派CNAME记录
+
+#### 相关函数
+
+##### gethostbyname函数
+
+gethostbyname函数试图由一个主机名找到相应的二进制的IP地址。只返回IPv4地址。
+
+```
+#include <netdb.h>
+
+// @return 若成功则为非空指针，若出错则为NULL且设置h_errno
+struct hostent *gethostbyname(const char *hostname);
+
+struct hostent {
+   char  *h_name;       /* official (canonical) name of host */
+   char **h_aliases;    /* pointer to array of pointers to alias names */
+   int    h_addrtype;   /* host address type: AF_INET */
+   int    h_length;     /* length of address: 4 */
+   char **h_addr_list;  /* ptr to array of ptrs with IPv4 addrs */
+}
+```
+
+##### gethostbyaddr函数
+
+gethostbyaddr函数试图由一个二进制的IP地址找到相应的主机名。
+
+```
+#include <netdb.h>
+
+// @return 若成功则为非空指针，若出错则为NULL且设置h_errno
+struct hostent *gethostbyaddr(const char *addr, socklen_t len, int family);
+```
+
 ## 基本套接字编程
 
 ### 基本TCP套接字编程
@@ -686,3 +732,31 @@ main(int argc, char **argv)
 	}
 }
 ```
+
+### 基本SCTP套接字编程
+
+#### 相关函数
+
+##### sctp_bindx函数
+
+##### sctp_connectx函数
+
+##### sctp_getpaddrs函数
+
+##### sctp_freepaddrs函数
+
+##### sctp_getladdrs函数
+
+##### sctp_freeladdrs函数
+
+##### sctp_sendmsg函数
+
+##### sctp_recvmsg函数
+
+##### sctp_opt_info函数
+
+##### sctp_peeloff函数
+
+##### shutdown函数
+
+#### SCTP回射程序
