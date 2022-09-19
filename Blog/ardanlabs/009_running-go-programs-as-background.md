@@ -25,7 +25,7 @@ http://developer.apple.com/library/mac/#documentation/MacOSX/Conceptual/BPSystem
 
 让我们从如何在 Mac OS 中构建守护进程开始。
 
-![](../assets/images/ardanlabs/Screen-Shot-2013-07-28-at-9.51.35-AM.png)
+![](images/ardanlabs/Screen-Shot-2013-07-28-at-9.51.35-AM.png)
 
 如果您打开 finder，您将看到以下文件夹。Library 下的 LaunchDaemons 文件夹是我们需要添加 launchd .plist 文件的地方。在 /System 下还有一个 Library/LaunchDaemons
 文件夹对应于操作系统的守护程序。
@@ -109,7 +109,7 @@ PID  Status  Label
 
 您可以创建仅针对您正在构建的目标平台编译的 Go 源代码文件。
 
-![](../assets/images/ardanlabs/Screen-Shot-2013-07-28-at-9.52.55-AM.png)
+![](images/ardanlabs/Screen-Shot-2013-07-28-at-9.52.55-AM.png)
 
 在我的 Going Go 的 LiteIDE 项目中，您将看到五个 Go 源代码文件。其中三个文件具有构建代码的目标平台的名称，darwin (Mac)、linux 和 windows。
 

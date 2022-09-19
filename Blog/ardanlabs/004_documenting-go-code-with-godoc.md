@@ -114,7 +114,7 @@ Godoc 解析 Go 源代码 - 包括注释 - 并生成 HTML 或纯文本格式的�
 
 这是我的 tracelog 包的文档示例：
 
-<img src="../assets/images/ardanlabs/Screen-Shot-2013-07-28-at-9.57.53-AM.png" alt="Screen-Shot-2013-07-28-at-9.57.53-AM" style="zoom:50%;" />
+<img src="images/ardanlabs/Screen-Shot-2013-07-28-at-9.57.53-AM.png" alt="Screen-Shot-2013-07-28-at-9.57.53-AM" style="zoom:50%;" />
 
 编写文档时有 3 个要素在起作用。 标题部分、标准文本和突出显示的文本。
 
@@ -166,7 +166,7 @@ package tracelog
 
 该网站已设置为读取您的代码文件并显示您的所有优秀文档。 在搜索框中输入这个 url (github.com/goinggo/utilities/v1/workpool) 并查看 GoDoc 为我的工作池包生成的文档：
 
-<img src="../assets/images/common/720x270.png" alt="placeholder" style="zoom:50%;" />
+<img src="images/common/720x270.png" alt="placeholder" style="zoom:50%;" />
 
 您可以看到在本地提供给您的相同文档现在已发布在 GoDoc 网站上，并带有您自己的可重复使用的 url：
 
@@ -175,13 +175,13 @@ package tracelog
 
 如果你碰巧在 Github 上看到我的公共工作池包，你会看到以下内容：
 
-<img src="../assets/images/common/720x270.png" alt="placeholder" style="zoom:50%;" />
+<img src="images/common/720x270.png" alt="placeholder" style="zoom:50%;" />
 
 有我的代码文件、许可证文件和我的自述 Markdown 文件。
 
 这是我使用的典型 README Markdown 文件：
 
-<img src="../assets/images/common/720x270.png" alt="placeholder" style="zoom:50%;" />
+<img src="images/common/720x270.png" alt="placeholder" style="zoom:50%;" />
 
 在此处查看原始版本：https://raw.github.com/goinggo/utilities/master/v1/workpool/README.md
 
@@ -189,7 +189,7 @@ package tracelog
 
 由于 Github 总是向用户显示 Readme Markdown 文件（如果存在），这就是人们在访问 Github 页面时看到的内容：
 
-<img src="../assets/images/common/720x270.png" alt="placeholder" style="zoom:50%;" />
+<img src="images/common/720x270.png" alt="placeholder" style="zoom:50%;" />
 
 现在人们也可以访问我在网络上编写的文档。 我不需要将文档复制并粘贴到 Readme Markdown 文件中，只需提供一个链接即可。 所有文档都集中在一个地方，并且格式清晰一致。
 

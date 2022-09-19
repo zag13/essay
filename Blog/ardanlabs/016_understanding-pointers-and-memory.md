@@ -13,11 +13,11 @@ http://golang.org/doc/faq#Pointers
 
 在下图中，我们有一个名为 myVariable 的变量。myVariable 的 "value of" 是相同类型值的地址。myVariable 被视为指针变量。
 
-![](../assets/images/ardanlabs/Screen+Shot+2013-07-27+at+2.57.16+PM.png)
+![](images/ardanlabs/Screen+Shot+2013-07-27+at+2.57.16+PM.png)
 
 在下图中，myVariable 的 "value of" 是值本身，而不是对值的引用。
 
-![](../assets/images/ardanlabs/Screen+Shot+2013-07-27+at+3.01.52+PM.png)
+![](images/ardanlabs/Screen+Shot+2013-07-27+at+3.01.52+PM.png)
 
 要访问值的属性，我们使用选择器运算符。选择器运算符允许我们访问值中的特定字段。语法始终为 Value.FieldName，其中句点 (.) 是选择器运算符。
 
