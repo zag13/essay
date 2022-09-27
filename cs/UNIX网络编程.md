@@ -55,15 +55,18 @@ DNS中的条目称为资源记录（resource record，RR）。
 
 #### 相关函数
 
-##### gethostbyname函数
+##### gethostbyname和gethostbyaddr函数
 
-gethostbyname函数试图由一个主机名找到相应的二进制的IP地址。只返回IPv4地址。
+gethostbyname函数试图由一个主机名找到相应的二进制的IP地址，只返回IPv4地址。
+gethostbyaddr函数试图由一个二进制的IP地址找到相应的主机名。(IPv4、不可重入)
 
 ```
 #include <netdb.h>
 
 // @return 若成功则为非空指针，若出错则为NULL且设置h_errno
+
 struct hostent *gethostbyname(const char *hostname);
+struct hostent *gethostbyaddr(const char *addr, socklen_t len, int family);
 
 struct hostent {
    char  *h_name;       /* official (canonical) name of host */
@@ -74,15 +77,42 @@ struct hostent {
 }
 ```
 
-##### gethostbyaddr函数
+##### getservbyname和getservbyport函数
 
-gethostbyaddr函数试图由一个二进制的IP地址找到相应的主机名。
+getservbyname用于给定名字查找相应服务，getservbyport用于给定端口号和可选协议查找相应服务。(IPv4)
 
 ```
 #include <netdb.h>
 
-// @return 若成功则为非空指针，若出错则为NULL且设置h_errno
-struct hostent *gethostbyaddr(const char *addr, socklen_t len, int family);
+// @return 若成功则为非空指针，若出错则为NULL
+
+struct servent *getservbyname(const char *servname, const char *protoname);
+struct servent *getservbyport(int port, const char *protoname);
+```
+
+##### getaddrinfo和getnameinfo函数
+
+getaddrinfo函数能够处理名字到地址以及服务到端口这两种转换，返回的是一个sockaddr结构而不是一个地址列表。
+getnameinfo函数以一个套接字地址为参数，返回描述其中的主机的一个字符串和描述其中的服务的另一个字符串。
+
+```
+#include <netdb.h>
+
+// @return 若成功则为0，若出错则为非0
+int getaddrinfo(const char *hostname, const char *service, const struct addrinfo *hints, struct addrinfo **result);
+int getnameinfo(const struct sockaddr *sockaddr, socklen_t addrlen, char *host, socklen_t hostlen,
+                char *serv, socklen_t servlen, inf flags);
+
+struct addrinfo {
+   int         ai_flags;            /* AI_PASSIVE, AI_CANONNAME */
+   int         ai_family;           /* AF_xxx */
+   int         ai_socktype;         /* SOCK_xxx */
+   int         ai_protocol;         /* 0 or IPPROTO_xxx for IPv4 and IPv6 */
+   socklen_t   ai_addrlen;          /* length of ai_addr */
+   char        *ai_canonname;       /* ptr to cannonical name for host */
+   struct sockaddr *ai_addr;        /* ptr to socket address structure */
+   struct addrinfo *ai_next;        /* ptr to next structure in linked list */
+}
 ```
 
 ## 基本套接字编程
