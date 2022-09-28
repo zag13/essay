@@ -1,4 +1,4 @@
-<!-- docs/_sidebar.md -->
+<!-- _sidebar.md -->
 
 * **计算机科学**
     * [UNIX网络编程](/cs/UNIX网络编程.md)
@@ -6,4 +6,8 @@
     * [ClickHouse](/big-data/clickhouse/)
     * [Flink](/big-data/flink/)
     * [Kafka](/big-data/kafka/)
-* **Go**
+* **Language**
+    * [Go](/language/go/)
+    * [Rust](/language/rust/)
+    * [PHP](/language/php/)
+    * [JavaScript](/language/javascript/)
