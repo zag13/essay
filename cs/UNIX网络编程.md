@@ -1,4 +1,4 @@
-# UNIX网络编程
+# [UNIX网络编程](https://github.com/unpbook/unpv13e)
 
 ## 传输层
 
@@ -325,59 +325,6 @@ pid_t wait(int *statloc);
 pid_t waitpid(pid_t pid, int *statloc, int options);
 ```
 
-##### I/O复用：select和poll函数
-
-有些进程需要一种预先告知内核的能力，使得内核一旦发现进程指定的一个或多个I/O条件就绪，它就通知进程。
-这种能力称为I/O复用，一般应用于下列场合：
-
-- 当客户处理多个描述符（通常是交互式输入和网络套接字）是，必须使用I/O复用
-- 客户同时处理多个套接字
-- 一个TCP服务器既要处理监听套接字，又要处理已连接套接字
-- 一个服务器既要处理TCP，又要处理UDP
-- 一个服务器要处理多个服务或者多个协议
-
-**I/O模型**
-
-- 阻塞式I/O
-- 非阻塞式I/O
-- I/O复用（select和poll）
-- 信号驱动式I/O（SIGIO）
-- 异步I/O（POSIX的aio_系列函数）
-
-**select函数**
-
-select函数允许进程指示内核等待多个事件中的任何一个发生，并只在有一个或多个事件发生或经历一段指定的时间后才唤醒它。
-
-```
-#include <sys/select.h>
-#include <sys/time.h>
-
-// @maxfdp1 指定待测试的描述符的个数
-// @*readset @*writeset @exceptset 要内核测试读、写和异常条件的描述符
-// @*timeout 告诉内核等待的时间
-// @return 若有就绪描述符则为其数目，若超时则为0，若出错则为-1
-int select(int maxfdp1, fd_set *readset, fd_set *writeset, fd_set *exceptset, const struct timeval *timeout);
-```
-
-**poll函数**
-
-poll函数提供的功能与select类似，不过在处理流设备时，它能够提供额外的信息。
-
-```
-#include <poll.h>
-
-// @nfds 结构数组中元素的个数
-// @timeout 指定poll函数返回前等待多长时间
-// @return 若有就绪描述符则为其数目，若超时则为0，若出错则为-1
-int poll(struct pollfd *fdarray, unsigned long nfds, int timeout);
-
-struct pollfd {
-   int   fd;         /* descriptor to check */
-   short events;     /* events of interest on fd */
-   short revents;    /* events that occurred on fd */
-}
-```
-
 #### TCP回射程序
 
 ##### 服务器
@@ -556,6 +503,35 @@ str_cli(FILE *fp, int sockfd)
 			Writen(sockfd, buf, n);
 		}
 	}
+}
+```
+
+```
+// nonblock/strclifork.c
+
+#include	"unp.h"
+
+void
+str_cli(FILE *fp, int sockfd)
+{
+	pid_t	pid;
+	char	sendline[MAXLINE], recvline[MAXLINE];
+
+	if ( (pid = Fork()) == 0) {		/* child: server -> stdout */
+		while (Readline(sockfd, recvline, MAXLINE) > 0)
+			Fputs(recvline, stdout);
+
+		kill(getppid(), SIGTERM);	/* in case parent still running */
+		exit(0);
+	}
+
+		/* parent: stdin -> server */
+	while (Fgets(sendline, MAXLINE, fp) != NULL)
+		Writen(sockfd, sendline, strlen(sendline));
+
+	Shutdown(sockfd, SHUT_WR);	/* EOF on stdin, send FIN */
+	pause();
+	return;
 }
 ```
 
@@ -790,3 +766,66 @@ main(int argc, char **argv)
 ##### shutdown函数
 
 #### SCTP回射程序
+
+### I/O复用：select和poll函数
+
+有些进程需要一种预先告知内核的能力，使得内核一旦发现进程指定的一个或多个I/O条件就绪，它就通知进程。
+这种能力称为I/O复用，一般应用于下列场合：
+
+- 当客户处理多个描述符（通常是交互式输入和网络套接字）是，必须使用I/O复用
+- 客户同时处理多个套接字
+- 一个TCP服务器既要处理监听套接字，又要处理已连接套接字
+- 一个服务器既要处理TCP，又要处理UDP
+- 一个服务器要处理多个服务或者多个协议
+
+**I/O模型**
+
+- 阻塞式I/O
+- 非阻塞式I/O
+- I/O复用（select和poll）
+- 信号驱动式I/O（SIGIO）
+- 异步I/O（POSIX的aio_系列函数）
+
+**select函数**
+
+select函数允许进程指示内核等待多个事件中的任何一个发生，并只在有一个或多个事件发生或经历一段指定的时间后才唤醒它。
+
+```
+#include <sys/select.h>
+#include <sys/time.h>
+
+// @maxfdp1 指定待测试的描述符的个数
+// @*readset @*writeset @exceptset 要内核测试读、写和异常条件的描述符
+// @*timeout 告诉内核等待的时间
+// @return 若有就绪描述符则为其数目，若超时则为0，若出错则为-1
+int select(int maxfdp1, fd_set *readset, fd_set *writeset, fd_set *exceptset, const struct timeval *timeout);
+```
+
+**poll函数**
+
+poll函数提供的功能与select类似，不过在处理流设备时，它能够提供额外的信息。
+
+```
+#include <poll.h>
+
+// @nfds 结构数组中元素的个数
+// @timeout 指定poll函数返回前等待多长时间
+// @return 若有就绪描述符则为其数目，若超时则为0，若出错则为-1
+int poll(struct pollfd *fdarray, unsigned long nfds, int timeout);
+
+struct pollfd {
+   int   fd;         /* descriptor to check */
+   short events;     /* events of interest on fd */
+   short revents;    /* events that occurred on fd */
+}
+```
+
+## 高级套接字编程
+
+### 非阻塞式I/O
+
+### 信号驱动式I/O
+
+### 线程
+
+### 客户/服务器程序设计范式
