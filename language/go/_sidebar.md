@@ -1,3 +1,3 @@
-<!-- docs/_sidebar.md -->
+<!-- _sidebar.md -->
 
 * [/](/)
