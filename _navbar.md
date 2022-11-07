@@ -7,10 +7,9 @@
     * [Rust](/language/rust/)
     * [PHP](/language/php/)
     * [JavaScript](/language/javascript/)
-* **Data System**
+* **[Data System](/data-system/)**
     * [Mysql](/data-system/mysql/)
     * [Redis](/data-system/redis/)
-    * [简介](/data-system/简介.md)
     * [ClickHouse](/data-system/clickhouse/)
     * [Flink](/data-system/flink/)
     * [Kafka](/data-system/kafka/)

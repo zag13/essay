@@ -64,7 +64,7 @@ www  WEB部署目录（或者子目录）
 
 ### 请求周期
 
-![](./img/laravel8_1.png)
+![](../../assets/img/laravel8_1.png)
 
 1. Laravel 应用的所有请求入口都是 `public/index.php` 文件，所有请求都会被 web 服务器导向这个文件
 2. `index.php` 文件载入 Composer 生成的自动加载设置，然后从 `bootstrap/app.php` 脚本获取 Laravel 应用实例，Laravel

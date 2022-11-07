@@ -2,7 +2,7 @@
 
 ## 整体架构
 
-![](./img/mysql_arch.jpg)
+![](../../assets/img/mysql_arch.jpg)
 
 ### 安装和启动
 
@@ -108,11 +108,11 @@ nnoDB是事务型数据库的首选引擎，支持事务安全表（ACID），�
 
 主键索引：
 
-![](./img/mysql_2.png)
+![](../../assets/img/mysql_2.png)
 
 辅助索引：
 
-![](./img/mysql_3.png)
+![](../../assets/img/mysql_3.png)
 
 使用 **InnoDB存储引擎** MySQL将创建一个名为 `ibdata1 `的10MB大小的自动扩展数据文件，以及两个名为`ib_logfile0`
 和`ib_logfile1`的5MB大小的日志文件
@@ -134,7 +134,7 @@ nnoDB是事务型数据库的首选引擎，支持事务安全表（ACID），�
 
 MyISAM基于ISAM存储引擎，并对其进行扩展，拥有较高的插入、查询速度，但不支持事务。
 
-![](./img/mysql_1.png)
+![](../../assets/img/mysql_1.png)
 
 使用**MyISAM引擎**创建数据库，将产生3个文件：`.frm`文件存储表定义、`.MYD(MYData)` 文件存储数据、 `.MYI(MYIndex)` 文件存储索引
 
@@ -202,7 +202,7 @@ MEMORY存储引擎将表中的数据存储到内存中，未查询和引用其�
 - 搜索有可能在 **非叶子节点** 结束。
 - 其搜索性能等价于在关键字全集内做一次二分查找
 
-![](./img/mysql_4.png)
+![](../../assets/img/mysql_4.png)
 
 **B+ 树**
 
@@ -211,7 +211,7 @@ MEMORY存储引擎将表中的数据存储到内存中，未查询和引用其�
 - **为所有叶子节点增加一个链指针**。
 - **所有关键字都在叶子节点出现**。
 
-![](./img/mysql_5.png)
+![](../../assets/img/mysql_5.png)
 
 **相对 B 树，B+ 树做索引的优势**
 
@@ -383,7 +383,7 @@ IO。对于这片内存空间，有一个专有的名词 —— **Buffer Pool**�
 日志功能，作为折中方案，我们会将数据库某条记录的更改以 redo 日志的方式持久化到磁盘，之后需要进行数据恢复时，通过对应的 redo
 日志来恢复数据即可。
 
-![](./img/mysql_6.jpg)
+![](../../assets/img/mysql_6.jpg)
 
 `type`：类型、 `space ID`： 空间ID、`page number`：页号、`data`：具体修改的数据
 
