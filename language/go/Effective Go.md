@@ -62,26 +62,43 @@
 
 ## Introduction
 
-Go 是一个新语言。虽然它借鉴了现有语言的思想，但它不同寻常的特性使 Go 程序与它的近亲语言存在很大的不同。将 C++ 或 Java 程序直接翻译成 Go 不太可能产生令人满意的结果——Java 程序是用 Java 编写的，而不是
-Go。另一方面，从 Go 的角度思考问题可能会产生一个成功但完全不同的程序。换句话说，要写好 Go，重要的是要了解它的特性和习语。了解 Go 编程的通俗约定也很重要，例如命名、格式化、程序构造等，以便您编写的程序易于其他 Go 程序员理解。
+Go是一个新语言。
+虽然借鉴了现有语言的一些概念，但它不同寻常的特性使Go程序与它的近亲语言存在很大的不同。
+将C++或Java程序直接翻译成Go不太可能产生令人满意的结果——Java程序是用Java编写的，而不是Go。
+另一方面，从Go的角度思考问题可能会产生一个成功但完全不同的程序。
+换句话说，要写好Go，重要的是要了解它的特性和习语。
+了解Go语言的通俗约定也很重要，例如命名、格式化、程序结构等，以便您编写的程序易于其他Go程序员理解。
 
-本文档提供了编写清晰、惯用的 Go 代码的技巧。它扩充了[language specification](https://go.dev/ref/spec)、[Tour of Go](https://go.dev/tour/)和[How to
-Write Go Code](https://go.dev/doc/code.html)，您应该首先阅读这些内容。
+本文档提供了编写清晰、符合语言习惯的的Go代码的技巧。
+它扩充了[language specification](https://go.dev/ref/spec)、
+[Tour of Go](https://go.dev/tour/)和[How to Write Go Code](https://go.dev/doc/code.html)，您应该首先阅读这些内容。
+
+2022年1月添加的注释：本文档是为Go于2009年发布而编写的，此后没有进行过重大更新。
+尽管作为了解如何使用语言本身它是一个很好的指南，但由于语言的稳定性，它很少提及库，也没有提及自编写以来Go生态系统的重大变化，例如构建系统、测试、模块和多态性。
+没有更新本文档的计划，因为已经发生了很多事情，而且越来越多的文档、博客和书籍很好地描述了现代Go的用法。
+Effective Go仍然有用，但读者应该明白它远非完整的指南。
+查看[issue 28782](https://github.com/golang/go/issues/28782)获取更多信息。
 
 ### Examples
 
-[Go 源代码](https://go.dev/src/) 不仅用作核心库，而且可以用作如何使用该语言的示例。此外，许多包都包含有效的、独立的可执行示例，您可以直接从 golang.org
+[Go package sources](https://go.dev/src/)不仅是核心库，而且可以作为如何使用该语言的示例。
+此外，许多包都包含有效的、独立的可执行示例，您可以直接从[golang.org](https://golang.org/)
 网站运行，例如[这个](https://go.dev/pkg/strings/#example_Map)（如有必要，单击 "Example" 将其打开）。
-如果您对如何解决问题或如何实现一些东西有疑问，库中的文档、代码和示例可以提供答案、想法和背景。
+如果您对如何解决问题或如何实现一些东西有疑问，依赖库中的文档、代码和示例可以提供答案、想法和背景介绍。
 
 ## Formatting
 
-格式问题是最有争议但最不重要的。人们可以适应不同的格式风格，但最好不必这样做，如果每个人都坚持相同的风格，那么花在这个问题上的时间就会更少。问题是如何在没有冗长的规范风格指南的情况下接近这个乌托邦。
+格式问题是最有争议但最不重要的。
+人们可以适应不同的格式风格，但最好不必这样做，如果每个人都坚持相同的风格，那么花在这个问题上的时间就会更少。
+问题是如何在没有冗长的规范风格指南的情况下接近这个乌托邦。
 
-在 Go 中，我们采取了一种不同寻常的方法，让机器处理大多数格式问题。`gofmt` 程序（也可用作 `go fmt`，它在包级别而不是源文件级别运行）读取 Go
-程序并以标准缩进和垂直对齐样式更改源代码，保留并在必要时重新格式化注释。如果你想知道如何处理一些新的布局情况，运行 `gofmt`；如果答案似乎不正确，请修改您的程序（或提交有关 gofmt 的错误），不要忽略它。
+在Go中，我们采取了一种不同寻常的方法，让机器处理大多数格式问题。
+Gofmt程序（也可用作go fmt，它在包级别而不是源文件级别运行）读取Go程序并以标准缩进和垂直对齐样式更改源代码，保留并在必要时重新格式化注释。
+如果关于一些新的布局情况你想知道如何处理，运行gofmt；如果答案似乎不正确，请修改您的程序（或提交有关gofmt的错误），不要忽略它。
 
-例如，无需花时间排列结构体字段上的注释。`Gofmt` 将为您做到这一点。给出声明
+例如，无需花时间排列结构体字段上的注释。
+Gofmt将为您做到这一点。
+声明如下
 
 ```
 type T struct {
@@ -90,7 +107,7 @@ type T struct {
 }
 ```
 
-`gofmt` 将自动排列为：
+gofmt将其排列为：
 
 ```
 type T struct {
@@ -99,125 +116,35 @@ type T struct {
 }
 ```
 
-标准包中的所有 Go 代码都已使用 `gofmt` 格式化。
+标准包中的所有Go代码都已使用gofmt格式化。
 
-一些格式细节仍然存在。非常简短：
+关于格式的一些细节仍然存在。
+非常简短：
 
-缩进
-
-- 我们使用制表符进行缩进，gofmt 默认发出它们。仅在必须时使用空格。
-
-线长
-
-- Go 没有行长限制。不用担心打孔卡溢出。如果感觉一行太长，请将其包裹起来并用额外的制表符缩进。
-
-括弧
-
-- 与 C 和 Java 相比，Go 需要的括号更少：控制结构（if、for、switch）的语法中没有括号。此外运算符优先级层次结构更短更清晰，所以
-
-  ```
-  x<<8 + y<<16
-  ``` 
-
-  与其他语言不同，表示间距所暗示的含义。
+- 缩进
+    - 我们使用制表符进行缩进，gofmt默认使用。仅在必须时使用空格。
+- 行长
+    - Go没有行长限制。不用担心溢出。如果感觉一行太长，请将其包裹起来并用额外的制表符缩进。
+- 括号
+    - 与C和Java相比，Go需要的括号更少：控制结构（if、for、switch）的语法中没有括号。此外运算符优先级层次结构更短更清晰，所以
+      ```
+      x<<8 + y<<16
+      ```
+      间距是有其暗示的含义，这与与其他语言不同。
 
 ## Commentary
 
-Go 提供 C 风格的块注释 /* */ 和 C++ 风格的行注释 //。行注释是常态；块注释主要用于包注释，但在表达式中或禁用大量代码时很有用。
+Go提供C风格的块注释/* */和C++风格的行注释//。
+行注释是常态；块注释主要用于包注释，但在表达式中或禁用大量代码时很有用。
 
-该程序——Web 服务器——godoc 处理 Go 源文件以提取该包的相关文档。出现在顶级声明之前的注释（没有插入换行符）与声明一起被提取以用作项目的解释性文本。这些注释的性质和风格决定了文档 godoc 产生的质量。
-
-每个包都应该有一个*包注释*，即包子句之前的块注释。对于拥有多文件的包，包注释只需要出现在一个文件中，任何一个都可以。包注释应介绍包并提供与整个包相关的信息。它将首先出现在 godoc 页面上，并应设置随后的详细文档。
-
-```
-/*
-Package regexp implements a simple library for regular expressions.
-
-The syntax of the regular expressions accepted is:
-
-    regexp:
-        concatenation { '|' concatenation }
-    concatenation:
-        { closure }
-    closure:
-        term [ '*' | '+' | '?' ]
-    term:
-        '^'
-        '$'
-        '.'
-        character
-        '[' [ '^' ] character-ranges ']'
-        '(' regexp ')'
-*/
-package regexp
-```
-
-如果包很简单，包注释可以很简短。
-
-```
-// Package path implements utility routines for
-// manipulating slash-separated filename paths.
-```
-
-注释不需要额外的格式，例如星标。生成的输出甚至可能不会以固定宽度的字体呈现，所以不要依赖间距来对齐——godoc，就像 gofmt 一样，会处理好这一点。注释是未解释的纯文本，因此 HTML 和其他注释（ _this_
-将逐字复制）不应使用。godoc 所做的一项调整是以固定宽度字体显示缩进文本，适用于程序片段。[fmt 包](https://go.dev/pkg/fmt/) 的包注释使用这个效果很好。
-
-根据上下文，godoc 甚至可能不会重新格式化注释，因此请确保它们看起来很好：使用正确的拼写、标点和句子结构，折叠长行等等。
-
-在包中，紧接在顶级声明之前的任何注释都用作该声明的*文档注释*。程序中的每个导出（大写）名称都应该有一个*文档注释*。
-
-文档注释为完整的句子效果最好，它允许各种各样的自动演示。第一句话应该是一个以声明的名称开头的一句话摘要。
-
-```
-// Compile parses a regular expression and returns, if successful,
-// a Regexp that can be used to match against text.
-func Compile(str string) (*Regexp, error) {
-```
-
-如果每个文档注释都以它描述的项目的名称开头，您可以使用 [go](https://go.dev/cmd/go/)
-工具的 [doc](https://go.dev/cmd/go/#hdr-Show_documentation_for_package_or_symbol) 子命令并通过 grep 过滤输出。想象一下，你不记得 "Compile"
-这个名字，但正在寻找正则表达式的解析函数，所以你运行了这个命令，
-
-```
-$ go doc -all regexp | grep -i parse
-```
-
-如果包中的所有文档注释都以 "This function..." 开头，grep 无法帮助您想起名称。但是因为包中的每个文档注释都以名字开始，所以您会看到类似这样的内容，它会让人想起您正在寻找的单词。
-
-```
-$ go doc -all regexp | grep -i parse
-    Compile parses a regular expression and returns, if successful, a Regexp
-    MustCompile is like Compile but panics if the expression cannot be parsed.
-    parsed. It simplifies safe initialization of global variables holding
-$
-```
-
-Go 的声明语法允许对声明进行分组。单个文档注释可以引入一组相关的常量或变量。由于整个声明都出现了，注释通常可以比较敷衍。
-
-```
-// Error codes returned by failures to parse an expression.
-var (
-    ErrInternal      = errors.New("regexp: internal error")
-    ErrUnmatchedLpar = errors.New("regexp: unmatched '('")
-    ErrUnmatchedRpar = errors.New("regexp: unmatched ')'")
-    ...
-)
-```
-
-分组还可以指明项目之间的关系，例如一组变量受互斥锁保护的事实。
-
-```
-var (
-    countLock   sync.Mutex
-    inputCount  uint32
-    outputCount uint32
-    errorCount  uint32
-)
-```
+出现在顶级声明之前的注释，中间没有换行符，被认为是解释文档。
+这些“文档注释”是Go包或命令的主要文档。
+有关文档注释的更多信息，请参阅[Go Doc Comments](https://go.dev/doc/comment)。
 
 ## Names
 
-名称在 Go 中与在任何其他语言中一样重要。它们甚至具有语义效果：名称在包外的可见性取决于它的第一个字符是否为大写。因此，值得花一点时间讨论 Go 程序中的命名约定。
+名称在 Go 中与在任何其他语言中一样重要。它们甚至具有语义效果：名称在包外的可见性取决于它的第一个字符是否为大写。因此，值得花一点时间讨论
+Go 程序中的命名约定。
 
 ### Package names
 
@@ -231,19 +158,25 @@ import "bytes"
 按照惯例，包被赋予小写的单字名称；不需要下划线或混合大写字母。首先是要简洁，因为每个使用您的包的人都会输入该名称。并且不要担心先验证是否冲突。
 包名只是导入的默认名称；它不需要在所有源代码中都是唯一的，并且在极少数发生冲突的情况下，导入包可以选择不同的名称以在本地使用。无论如何，冲突很少见，因为导入中的文件名决定了正在使用哪个包。
 
-另一个约定是包名是其源目录的基名；src/encoding/base64 被导入为 "encoding/base64" 其名称为 base64，而不是 encoding_base64 或 encodingBase64。
+另一个约定是包名是其源目录的基名；src/encoding/base64 被导入为 "encoding/base64" 其名称为 base64，而不是 encoding_base64 或
+encodingBase64。
 
-包的导入器将使用名称来引用其内容，因此包中的导出名称可以使用该事实来避免重复。（不要使用 import . 符号，它可以简化在测试的包之外运行的测试，但在其他方面应该避免。）例如，bufio 包中的缓冲读取器类型称为 Reader，而不是
-BufReader，因为用户将其视为 bufio.Reader，这是一个简洁明了的名称。此外，由于导入的实体总是以其包名来寻址，因此 bufio.Reader 不会与 io.Reader 冲突。类似地，创建新实例的函数 ring.Ring
-——Go 中构造函数的定义—— 一般会被叫做 NewRing，但是因为 Ring 是该包唯一的导出类型，并且该包被称为 ring ，所以它只是被叫做 New，包的客户端将其视为 ring.New。使用包结构来帮助您选择好名称。
+包的导入器将使用名称来引用其内容，因此包中的导出名称可以使用该事实来避免重复。（不要使用 import .
+符号，它可以简化在测试的包之外运行的测试，但在其他方面应该避免。）例如，bufio 包中的缓冲读取器类型称为 Reader，而不是
+BufReader，因为用户将其视为 bufio.Reader，这是一个简洁明了的名称。此外，由于导入的实体总是以其包名来寻址，因此 bufio.Reader
+不会与 io.Reader 冲突。类似地，创建新实例的函数 ring.Ring
+——Go 中构造函数的定义—— 一般会被叫做 NewRing，但是因为 Ring 是该包唯一的导出类型，并且该包被称为 ring ，所以它只是被叫做
+New，包的客户端将其视为 ring.New。使用包结构来帮助您选择好名称。
 
 另一个简短的例子是 once.Do；once.Do(setup) 读起来很好，也不会因为被叫做 once.DoOrWaitUntilDone(setup)
 而看起来更好。长名称不会自动使内容更具可读性。有用的文档注释通常比超长的名称更有价值。
 
 ### Getters
 
-Go 不提供对 getters 和 setters 的自动支持。自己提供 getters 和 setters 并没有什么问题，而且这样做通常是合适的，但是将 Get 放入 getter 的名称中既不是惯用的也不是必需的。如果您有一个名为
-owner（小写，未导出）的字段，则相应的 getter 应为方法 Owner（大写，已导出），而不是 GetOwner。使用大写名称进行导出已经提供了将字段与方法区分开来的钩子。相对应的 setter 函数，如果需要， 名称应为
+Go 不提供对 getters 和 setters 的自动支持。自己提供 getters 和 setters 并没有什么问题，而且这样做通常是合适的，但是将 Get
+放入 getter 的名称中既不是惯用的也不是必需的。如果您有一个名为
+owner（小写，未导出）的字段，则相应的 getter 应为方法 Owner（大写，已导出），而不是 GetOwner。使用大写名称进行导出已经提供了将字段与方法区分开来的钩子。相对应的
+setter 函数，如果需要， 名称应为
 SetOwner。这两个名字在实践中都很好读：
 
 ```
@@ -257,8 +190,10 @@ if owner != user {
 
 按照惯例，单方法接口由方法名称加上 -er 后缀或类似修饰来命名，以构造代理名词：Reader，Writer，Formatter，CloseNotifier 等。
 
-有许多这样的名称，尊重它们以及它们存储的函数名称是很有用的。Read，Write，Close，Flush，String 等具有规范的签名和含义。为避免混淆，除非它具有相同的签名和含义，否则不要为您的方法提供这些名称之一。
-相反，如果您的类型实现了与知名类型上的方法具有相同含义的方法，请为其赋予相同的名称和签名；将你的字符串转换器方法称为 String 而不是 ToString。
+有许多这样的名称，尊重它们以及它们存储的函数名称是很有用的。Read，Write，Close，Flush，String
+等具有规范的签名和含义。为避免混淆，除非它具有相同的签名和含义，否则不要为您的方法提供这些名称之一。
+相反，如果您的类型实现了与知名类型上的方法具有相同含义的方法，请为其赋予相同的名称和签名；将你的字符串转换器方法称为 String
+而不是 ToString。
 
 ### MixedCaps
 
@@ -303,8 +238,10 @@ if i < f()  // wrong!
 
 ## Control structures
 
-Go 的控制结构与 C 的控制结构相似，但在一些方面有所不同。没有 do 或者 while 循环，只有一个有点概括的 for；switch 变得更灵活；if 和 switch 接受一个可选的初始化语句，如 for; break 和
-continue 语句采用可选标签来标识要中断或继续的内容；并且有新的控制结构，包括 type switch 和多路通信复用器，select。语法也略有不同：没有括号，正文必须始终用大括号分隔。
+Go 的控制结构与 C 的控制结构相似，但在一些方面有所不同。没有 do 或者 while 循环，只有一个有点概括的 for；switch 变得更灵活；if
+和 switch 接受一个可选的初始化语句，如 for; break 和
+continue 语句采用可选标签来标识要中断或继续的内容；并且有新的控制结构，包括 type switch
+和多路通信复用器，select。语法也略有不同：没有括号，正文必须始终用大括号分隔。
 
 ### If
 
@@ -316,7 +253,8 @@ if x > 0 {
 }
 ```
 
-强制大括号鼓励 if 在多行上编写简单的语句。无论如何，这样做是一种很好的风格，尤其是当主体包含控制语句时，例如 return 或者 break。
+强制大括号鼓励 if 在多行上编写简单的语句。无论如何，这样做是一种很好的风格，尤其是当主体包含控制语句时，例如 return 或者
+break。
 
 因为 if 和 switch 可以接受一个初始化语句，通常会看到一个用于设置局部变量的语句。
 
@@ -337,7 +275,8 @@ if err != nil {
 codeUsing(f)
 ```
 
-这是代码必须防范一系列错误条件的常见情况的示例。如果控制流成功的顺着页面向下运行，则代码可读性很好，从而消除了出现的错误情况。由于错误情况往往以 return 语句结尾，因此生成的代码不需要 else 语句。
+这是代码必须防范一系列错误条件的常见情况的示例。如果控制流成功的顺着页面向下运行，则代码可读性很好，从而消除了出现的错误情况。由于错误情况往往以
+return 语句结尾，因此生成的代码不需要 else 语句。
 
 ```
 f, err := os.Open(name)
@@ -366,7 +305,8 @@ f, err := os.Open(name)
 d, err := f.Stat()
 ```
 
-看起来好像它声明了 d 和 err。但是请注意，err 在这两个语句都出现了。这种重复是合法的：err 由第一个语句声明，在第二个语句中重新分配。这意味着 f.Stat 使用上面声明的现有 err 变量，并给它一个新值。
+看起来好像它声明了 d 和 err。但是请注意，err 在这两个语句都出现了。这种重复是合法的：err 由第一个语句声明，在第二个语句中重新分配。这意味着
+f.Stat 使用上面声明的现有 err 变量，并给它一个新值。
 
 在 := 声明中，可能会出现已经声明过了的变量 v，前提是：
 
@@ -431,7 +371,8 @@ for _, value := range array {
 
 空白标识符有很多用途，如后面部分所述。
 
-对于字符串，range 可以为您做更多的工作，通过解析 UTF-8 来分解单个 Unicode 代码点。错误的编码消耗一个字节并产生替换符文 U+FFFD。（名称（带有关联的内置类型）rune 是 Go 术语，用于单个 Unicode
+对于字符串，range 可以为您做更多的工作，通过解析 UTF-8 来分解单个 Unicode 代码点。错误的编码消耗一个字节并产生替换符文
+U+FFFD。（名称（带有关联的内置类型）rune 是 Go 术语，用于单个 Unicode
 代码点。请参阅[语言规范](https://go.dev/ref/spec#Rune_literals)获取更多相关信息。）循环
 
 ```
@@ -449,7 +390,8 @@ character U+FFFD '�' starts at byte position 6
 character U+8A9E '語' starts at byte position 7
 ```
 
-最后，Go 没有逗号运算符，++ 和 -- 是语句而不是表达式。因此，如果您想在 a 中运行多个变量，for 您应该使用并行赋值（尽管这排除了 ++ 和 --）。
+最后，Go 没有逗号运算符，++ 和 -- 是语句而不是表达式。因此，如果您想在 a 中运行多个变量，for 您应该使用并行赋值（尽管这排除了
+++ 和 --）。
 
 ```
 // Reverse a
@@ -460,7 +402,8 @@ for i, j := 0, len(a)-1; i < j; i, j = i+1, j-1 {
 
 ### Switch
 
-Go 中的 switch 比 C 更通用。表达式不必是常量甚至整数，case 会从上到下进行评估，直到找到匹配项，如果 switch 没有表达式，则选择 true。因此，有可能——而且是惯用的——将 if-else-if-else 写为
+Go 中的 switch 比 C 更通用。表达式不必是常量甚至整数，case 会从上到下进行评估，直到找到匹配项，如果 switch 没有表达式，则选择
+true。因此，有可能——而且是惯用的——将 if-else-if-else 写为
 switch。
 
 ```
@@ -489,7 +432,8 @@ func shouldEscape(c byte) bool {
 }
 ```
 
-尽管它们在 Go 中不像其他一些类似 C 的语言那样常见，但 break 语句可用于提前终止 switch。但是，有时，有必要跳出周围的循环，而不是 switch，而在 Go 中，这可以通过在循环前放置一个标签并 "breaking"
+尽管它们在 Go 中不像其他一些类似 C 的语言那样常见，但 break 语句可用于提前终止 switch。但是，有时，有必要跳出周围的循环，而不是
+switch，而在 Go 中，这可以通过在循环前放置一个标签并 "breaking"
 该标签来完成。此示例显示了这两种用途。
 
 ```
@@ -570,9 +514,11 @@ case *int:
 
 ### Multiple return values
 
-Go 的一个不同寻常的特性是函数和方法可以返回多个值。这种形式可用于改进 C 程序中的几个笨拙的习惯用法：带着错误一起返回，例如 -1 代表 EOF 和修改的由地址传递的参数。
+Go 的一个不同寻常的特性是函数和方法可以返回多个值。这种形式可用于改进 C 程序中的几个笨拙的习惯用法：带着错误一起返回，例如
+-1 代表 EOF 和修改的由地址传递的参数。
 
-在 C 语言中，写入错误由负计数表示，错误代码隐藏在易失性位置。在 Go 中，Write 可以返回一个计数和一个错误："是的，你写了一些字节，但不是全部，因为你的设备满了"。os 包中 Write 方法的签名是：
+在 C 语言中，写入错误由负计数表示，错误代码隐藏在易失性位置。在 Go 中，Write 可以返回一个计数和一个错误："
+是的，你写了一些字节，但不是全部，因为你的设备满了"。os 包中 Write 方法的签名是：
 
 ```
 func (file *File) Write(b []byte) (n int, err error)
@@ -605,7 +551,8 @@ func nextInt(b []byte, i int) (int, int) {
 
 ### Named result parameters
 
-Go 函数的返回或结果 "parameters" 可以指定名称并用作常规变量，就像传入参数一样。命名返回参数时，它们在函数开始时会被初始化为对应类型的零值；如果函数执行 return 返回不带参数的语句，则使用返回参数的当前值作为返回值。
+Go 函数的返回或结果 "parameters" 可以指定名称并用作常规变量，就像传入参数一样。命名返回参数时，它们在函数开始时会被初始化为对应类型的零值；如果函数执行
+return 返回不带参数的语句，则使用返回参数的当前值作为返回值。
 
 这些名称不是强制性的，但它们可以使代码更短更清晰：它们是文档。如果我们为 nextInt 命名返回参数，返回 int 的是哪个就很明显了。
 
@@ -629,7 +576,8 @@ func ReadFull(r Reader, buf []byte) (n int, err error) {
 
 ### Defer
 
-Go 的 defer 语句会时函数调用（被延迟的函数）在函数执行 return 之前立即运行。这是一种不寻常但有效的方式来处理类似无论函数采用哪条路径返回都必须释放资源的情况。典型示例是解锁互斥锁或关闭文件。
+Go 的 defer 语句会时函数调用（被延迟的函数）在函数执行 return
+之前立即运行。这是一种不寻常但有效的方式来处理类似无论函数采用哪条路径返回都必须释放资源的情况。典型示例是解锁互斥锁或关闭文件。
 
 ```
 // Contents returns the file's contents as a string.
@@ -658,7 +606,8 @@ func Contents(filename string) (string, error) {
 
 推迟对类似 Close 函数的调用有两个优点。首先，它保证您永远不会忘记关闭文件，如果您稍后编辑该函数以添加新的返回路径，则很容易犯这个错误。其次，这意味着关闭位于开启附近，这比将其放在函数的末尾要清楚得多。
 
-延迟函数的参数（如果函数是方法，则包括接收者）在 _defer_ 执行时赋值，而不是在 _call_ 执行时赋值。除了避免担心在函数执行时变量会改变值，这意味着单个延迟调用站点可以延迟多个函数执行。这是一个愚蠢的例子。
+延迟函数的参数（如果函数是方法，则包括接收者）在 _defer_ 执行时赋值，而不是在 _call_
+执行时赋值。除了避免担心在函数执行时变量会改变值，这意味着单个延迟调用站点可以延迟多个函数执行。这是一个愚蠢的例子。
 
 ```
 for i := 0; i < 5; i++ {
@@ -666,7 +615,8 @@ for i := 0; i < 5; i++ {
 }
 ```
 
-延迟函数按 LIFO 顺序执行，因此在函数返回时此代码会打印出 4 3 2 1 0。一个更合理的例子是通过执行 trace 函数。我们可以编写几个简单的跟踪程序，如下所示：
+延迟函数按 LIFO 顺序执行，因此在函数返回时此代码会打印出 4 3 2 1 0。一个更合理的例子是通过执行 trace
+函数。我们可以编写几个简单的跟踪程序，如下所示：
 
 ```
 func trace(s string)   { fmt.Println("entering:", s) }
@@ -719,17 +669,21 @@ leaving: a
 leaving: b
 ```
 
-对于其他语言习惯于 block-level 进行资源管理的程序员来说，defer 可能看起来很奇怪，但它最有趣和最强大的地方恰恰来自于它不是 block-based 而是 function-based。在 panic 和 recover
+对于其他语言习惯于 block-level 进行资源管理的程序员来说，defer 可能看起来很奇怪，但它最有趣和最强大的地方恰恰来自于它不是
+block-based 而是 function-based。在 panic 和 recover
 章节中，我们将看到它的另一个例子。
 
 ## Data
 
 ### Allocation with new
 
-Go 有两个分配语句，内置函数 new 和 make。它们做不同的事情并适用于不同的情景，这可能会令人困惑，但规则很简单。先来说说 new。它是一个分配内存的内置函数，但与其他一些语言中的同名函数不同，它不会*初始化*内存，它只会将其*
-归零*。也就是说，new(T) 为 type T 的新项目分配为零的内存并返回其地址，即 type 的值 *T。在 Go 术语中，它返回一个指向新分配的类型为 T 的零值的指针。
+Go 有两个分配语句，内置函数 new 和 make。它们做不同的事情并适用于不同的情景，这可能会令人困惑，但规则很简单。先来说说
+new。它是一个分配内存的内置函数，但与其他一些语言中的同名函数不同，它不会*初始化*内存，它只会将其*
+归零*。也就是说，new(T) 为 type T 的新项目分配为零的内存并返回其地址，即 type 的值 *T。在 Go 术语中，它返回一个指向新分配的类型为
+T 的零值的指针。
 
-由于 new 返回的内存为零，因此在设计数据结构时，每种类型的零值无需进一步初始化即可使用。这意味着用户可以通过 new 创建一个数据结构并开始工作。例如，文档 bytes.Buffer 说明 "零值 Buffer
+由于 new 返回的内存为零，因此在设计数据结构时，每种类型的零值无需进一步初始化即可使用。这意味着用户可以通过 new
+创建一个数据结构并开始工作。例如，文档 bytes.Buffer 说明 "零值 Buffer
 是一个可以使用的空缓冲区"。同样，sync.Mutex 没有显式构造函数或 Init 方法。相反，sync.Mutex 的零值被定义为未锁定的互斥体。
 
 Zero-value-is-useful 的属性是可传递的。考虑这种类型声明。
@@ -803,14 +757,16 @@ m := map[int]string{Enone: "no error", Eio: "Eio", Einval: "invalid argument"}
 ### Allocation with make
 
 回到分配。内置函数 make(T, _args_) 的用途不同于 new(T)。它只创建 slice、map 和 channel，并返回*已初始化的*（非零） T 类型（非 *
-T）的值。不一样的原因是这三种类型是必须在使用前初始化的数据结构的引用。例如，slice 是一个 three-item 描述符，包括指向数据的指针（在数组内）、长度和容量，在这些项被初始化之前，切片为 nil。对于 slice、map 和
+T）的值。不一样的原因是这三种类型是必须在使用前初始化的数据结构的引用。例如，slice 是一个 three-item
+描述符，包括指向数据的指针（在数组内）、长度和容量，在这些项被初始化之前，切片为 nil。对于 slice、map 和
 channel，初始化内部数据结构才能将该值供以使用。例如，
 
 ```
 make([]int, 10, 100)
 ```
 
-分配一个 100 个整数的 array，然后创建一个长度为 10、容量为 100 的 slice，指向数组的前 10 个元素。（创建 slice 时，可以省略容量；请参阅 slices 部分获取更多信息。）相反，new([]int)
+分配一个 100 个整数的 array，然后创建一个长度为 10、容量为 100 的 slice，指向数组的前 10 个元素。（创建 slice 时，可以省略容量；请参阅
+slices 部分获取更多信息。）相反，new([]int)
 返回指向新分配的零切片结构的指针，即指向 nil slice 值的指针。
 
 下面这些例子说明了 new 和 make 之间的区别。
@@ -857,10 +813,13 @@ x := Sum(&array)  // Note the explicit address-of operator
 
 ### Slices
 
-Slices 将数组包装，为数据序列提供更通用、更强大、更方便的接口。除了具有显式维度的项（例如转换矩阵）之外，Go 中的大多数数组编程都是使用切片而不是简单数组完成的。
+Slices 将数组包装，为数据序列提供更通用、更强大、更方便的接口。除了具有显式维度的项（例如转换矩阵）之外，Go
+中的大多数数组编程都是使用切片而不是简单数组完成的。
 
-Slices 是对底层数组的引用，如果将一个切片分配给另一个，两者都引用同一个数组。如果函数接受切片参数，则调用者是可以看见它对切片内元素所做的更改，类似于将指针传递给底层数组。因此 Read
-函数可以接受一个切片参数，而不是一个指针和一个计数; 切片内的长度设置了读取数据量的上限。这是 package os 中 File 类型的 Read 方法的签名：
+Slices 是对底层数组的引用，如果将一个切片分配给另一个，两者都引用同一个数组。如果函数接受切片参数，则调用者是可以看见它对切片内元素所做的更改，类似于将指针传递给底层数组。因此
+Read
+函数可以接受一个切片参数，而不是一个指针和一个计数; 切片内的长度设置了读取数据量的上限。这是 package os 中 File 类型的
+Read 方法的签名：
 
 ```
 func (f *File) Read(buf []byte) (n int, err error)
@@ -888,7 +847,8 @@ func (f *File) Read(buf []byte) (n int, err error)
 ```
 
 Slice 的长度可以更改，只要它仍然符合底层数组的限制；只需分配自身的一部分给切片。切片的容量，可通过内置函数 cap
-访问，返回切片可能采用的最大长度。这里有一个将数据附加到切片的函数。如果数据超出容量，则重新分配切片。最终返回切片。该函数利用了 len 和 cap 在应用于 nil slice 时是合法的事实，返回 0。
+访问，返回切片可能采用的最大长度。这里有一个将数据附加到切片的函数。如果数据超出容量，则重新分配切片。最终返回切片。该函数利用了
+len 和 cap 在应用于 nil slice 时是合法的事实，返回 0。
 
 ```
 func Append(slice, data []byte) []byte {
@@ -929,7 +889,8 @@ text := LinesOfText{
 }
 ```
 
-有时分配 2D slice 是必要的，例如，处理像素扫描线时可能出现的情况。有两种方法可以实现这一点。一种是独立分配每个 slice；另一种是分配一个 array 并将 slice
+有时分配 2D slice 是必要的，例如，处理像素扫描线时可能出现的情况。有两种方法可以实现这一点。一种是独立分配每个
+slice；另一种是分配一个 array 并将 slice
 放入其中。使用哪个取决于您的应用。如果切片可能会增长或缩小，则应独立分配它们以避免覆盖下一行；如果没有，使用单个分配构造对象会更有效。作为参考，这里是这两种方法的草案。首先，一次一行：
 
 ```
@@ -956,8 +917,10 @@ for i := range picture {
 
 ### Maps
 
-Maps 是一种方便且强大的内置数据结构，它将一种类型的值（键）与另一种类型的值（元素或值）相关联。键可以是定义了相等运算符的任何类型，例如 integers，floating point 和 complex
-numbers，strings，pointers， interfaces（只要动态类型支持比较）、structs 和 arrays。Slices 不能用作映射键，因为切片不能进行比较。像切片一样，maps 持有对底层数据结构的引用。如果您将
+Maps 是一种方便且强大的内置数据结构，它将一种类型的值（键）与另一种类型的值（元素或值）相关联。键可以是定义了相等运算符的任何类型，例如
+integers，floating point 和 complex
+numbers，strings，pointers， interfaces（只要动态类型支持比较）、structs 和 arrays。Slices 不能用作映射键，因为切片不能进行比较。像切片一样，maps
+持有对底层数据结构的引用。如果您将
 map 传递给函数并更改 map 中的内容，则更改将在调用者中可见。
 
 Maps 可以使用带有冒号分隔的键值对的常用复合字面量语法来构造，因此在初始化期间很容易构建它们。
@@ -978,7 +941,8 @@ var timeZone = map[string]int{
 offset := timeZone["EST"]
 ```
 
-尝试使用映射中不存在的键获取映射值将返回映射中条目类型的零值。例如，如果包含整数的映射，则查找不存在的键时将返回 0。集合可以通过值为 bool 的映射来实现。将映射的值设置 true，然后通过简单的索引对其进行测试。
+尝试使用映射中不存在的键获取映射值将返回映射中条目类型的零值。例如，如果包含整数的映射，则查找不存在的键时将返回 0。集合可以通过值为
+bool 的映射来实现。将映射的值设置 true，然后通过简单的索引对其进行测试。
 
 ```
 attended := map[string]bool{
@@ -1000,7 +964,8 @@ var ok bool
 seconds, ok = timeZone[tz]
 ```
 
-显而易见，这被称为 “comma ok”。在这个例子中，如果 tz 存在，seconds 将被赋值且 ok 为 true；如果不存在，seconds 将被赋值为 0 且 ok 为 false。这是一个利用这个规则进行错误报告的函数：
+显而易见，这被称为 “comma ok”。在这个例子中，如果 tz 存在，seconds 将被赋值且 ok 为 true；如果不存在，seconds 将被赋值为 0 且
+ok 为 false。这是一个利用这个规则进行错误报告的函数：
 
 ```
 func offset(tz string) int {
@@ -1026,10 +991,12 @@ delete(timeZone, "PDT")  // Now on Standard Time
 
 ### Printing
 
-Go 中的格式化打印类似于 C 家族，但更丰富、更通用。这些函数在 package fmt 中，并具有大写的名称：fmt.Printf，fmt.Fprintf，fmt.Sprintf 等。字符串函数（Sprintf
+Go 中的格式化打印类似于 C 家族，但更丰富、更通用。这些函数在 package fmt 中，并具有大写的名称：fmt.Printf，fmt.Fprintf，fmt.Sprintf
+等。字符串函数（Sprintf
 等）返回一个字符串，而不是为提供的缓冲区进行填充。
 
-您不需要提供格式字符串。对于 Printf，Fprintf 和 Sprintf 中的每一个 都还有另一对与之对应的函数，例如 Print 和 Println。这些函数不采用格式字符串，而是为每个参数生成默认格式。Println
+您不需要提供格式字符串。对于 Printf，Fprintf 和 Sprintf 中的每一个 都还有另一对与之对应的函数，例如 Print 和
+Println。这些函数不采用格式字符串，而是为每个参数生成默认格式。Println
 版本还在参数之间插入一个空格并在输出中附加一个换行符，Print 版本仅在两边的操作数都不是字符串时才添加空格。下面示例中，每一行都产生相同的输出。
 
 ```
@@ -1054,7 +1021,8 @@ fmt.Printf("%d %x; %d %x\n", x, x, int64(x), int64(x))
 18446744073709551615 ffffffffffffffff; -1 -1
 ```
 
-如果您只想要默认转换，例如整数的十进制，您可以使用通用格式 %v（用于 “value”）；结果正是 Print 和 Println 会产生的结果。此外，该格式可以打印*任何*
+如果您只想要默认转换，例如整数的十进制，您可以使用通用格式 %v（用于 “value”）；结果正是 Print 和 Println
+会产生的结果。此外，该格式可以打印*任何*
 值，甚至是数组、切片、结构体和映射。这是上一节中定义的时区映射的打印语句。
 
 ```
@@ -1093,7 +1061,8 @@ fmt.Printf("%#v\n", timeZone)
 map[string]int{"CST":-21600, "EST":-18000, "MST":-25200, "PST":-28800, "UTC":0}
 ```
 
-（注意 & 符号）当应用于字符串或 []byte 类型的值时，也可以通过 %q 使用带引号的字符串格式。如果可能，%#q 格式将使用反引号。（%q 格式也适用于 integer 和 rune，生成单引号 rune 常量）此外，%x
+（注意 & 符号）当应用于字符串或 []byte 类型的值时，也可以通过 %q 使用带引号的字符串格式。如果可能，%#q 格式将使用反引号。（%q
+格式也适用于 integer 和 rune，生成单引号 rune 常量）此外，%x
 适用于字符串、字节数组和字节切片以及整数，生成长十六进制字符串，（% x）格式允许字节之间填充空格。
 
 另一种方便的格式是 %T，打印出值的类型。
@@ -1127,7 +1096,8 @@ fmt.Printf("%v\n", t)
 必须是值类型；此示例使用指针，因为这对于结构体类型更有效且更惯用。参阅 [pointers vs. value receivers](https://go.dev/doc/effective_go#pointers_vs_values)
 以获取更多信息。）
 
-我们的 String 方法能够调用 Sprintf，因为打印线程是完全可重入的，可以这样包装。然而，关于这种方法有一个重要的细节需要理解：不要通过调用 Sprintf 来构造 String 方法，这样会使你的 String
+我们的 String 方法能够调用 Sprintf，因为打印线程是完全可重入的，可以这样包装。然而，关于这种方法有一个重要的细节需要理解：不要通过调用
+Sprintf 来构造 String 方法，这样会使你的 String
 方法陷入死循环。如果 Sprintf 调用尝试将接收器直接打印为字符串，则可能会发生这种情况，这反过来又会再次调用该方法。如本例所示，这是一个常见且容易犯的错误。
 
 ```
@@ -1149,13 +1119,15 @@ func (m MyString) String() string {
 
 在 [初始化](https://go.dev/doc/effective_go#initialization) 部分，我们将看到另一种避免这种递归的技术。
 
-另一种打印技术是将打印线程的参数直接传递给另一个这样的线程。Printf 的签名使用类型 ...interface{} 作为其最终参数，以指定任意数量的参数（任意类型）可以出现在 format 之后。
+另一种打印技术是将打印线程的参数直接传递给另一个这样的线程。Printf 的签名使用类型 ...interface{}
+作为其最终参数，以指定任意数量的参数（任意类型）可以出现在 format 之后。
 
 ```
 func Printf(format string, v ...interface{}) (n int, err error) {
 ```
 
-在函数 Printf 中，v 的行为类似于 []interface{} 类型的变量，但如果将其传递给另一个可变参数函数，则它的行为类似于常规的参数列表。下面是我们上面使用的函数 log.Println 的实现。它将其参数直接传递给
+在函数 Printf 中，v 的行为类似于 []interface{} 类型的变量，但如果将其传递给另一个可变参数函数，则它的行为类似于常规的参数列表。下面是我们上面使用的函数
+log.Println 的实现。它将其参数直接传递给
 fmt.Sprintln 以进行实际格式化。
 
 ```
@@ -1221,7 +1193,8 @@ fmt.Println(x)
 ### Constants
 
 Go 中的常量就是常量。它们是在编译时创建的，即使在函数中定义为局部变量，也只能是 numbers，characters (runes)，strings 或
-booleans。由于编译时的限制，定义它们的表达式必须是常量表达式，可由编译器计算。例如， 1<<3 是一个常量表达式，而 math.Sin(math.Pi/4) 不是，因为 math.Sin 调用需要在运行时发生。
+booleans。由于编译时的限制，定义它们的表达式必须是常量表达式，可由编译器计算。例如， 1<<3 是一个常量表达式，而 math.Sin(
+math.Pi/4) 不是，因为 math.Sin 调用需要在运行时发生。
 
 在 Go 中，使用 iota 创建枚举常量。由于 iota 可以是表达式的一部分，并且表达式可以隐式重复，因此很容易构建复杂的值集。
 
@@ -1241,7 +1214,8 @@ const (
 )
 ```
 
-将诸如 String 之类的方法附加到任何用户定义的类型的能力使得任意值可以自动格式化以进行打印。尽管您会看到它最常应用于结构体，但这种技术对于数量类型（如 ByteSize 等浮点类型）也很有用。
+将诸如 String 之类的方法附加到任何用户定义的类型的能力使得任意值可以自动格式化以进行打印。尽管您会看到它最常应用于结构体，但这种技术对于数量类型（如
+ByteSize 等浮点类型）也很有用。
 
 ```
 func (b ByteSize) String() string {
@@ -1269,7 +1243,8 @@ func (b ByteSize) String() string {
 
 表达式 YB 打印为 1.00YB，而 ByteSize(1e13) 打印为 9.09TB。
 
-这里使用 Sprintf 来实现 ByteSize 的 String 方法是安全的（避免无限重复），不是因为转换，而是因为它使用 %f 调用 Sprintf，这不是字符串格式：Sprintf 只会在需要字符串时调用 String 方法 ,
+这里使用 Sprintf 来实现 ByteSize 的 String 方法是安全的（避免无限重复），不是因为转换，而是因为它使用 %f 调用
+Sprintf，这不是字符串格式：Sprintf 只会在需要字符串时调用 String 方法 ,
 且 %f 想要一个浮点值。
 
 ### Variables
@@ -1286,7 +1261,8 @@ var (
 
 ### The init function
 
-最后，每个源文件都可以定义自己的无参数 init 函数来设置所需的任何状态。（实际上每个文件可以有多个 init 函数）最后：在包中的所有变量声明都赋值后，且只有在所有导入的包都初始化后才调用 init。
+最后，每个源文件都可以定义自己的无参数 init 函数来设置所需的任何状态。（实际上每个文件可以有多个 init
+函数）最后：在包中的所有变量声明都赋值后，且只有在所有导入的包都初始化后才调用 init。
 
 除了不能表示为声明的初始化之外，init 函数的一个常见用途是在实际执行开始之前验证或修复程序状态的正确性。
 
@@ -1352,8 +1328,10 @@ func (p *ByteSlice) Write(data []byte) (n int, err error) {
 
 我们传递 ByteSlice 的地址，因为只有 *ByteSlice 满足 io.Writer。接收者的指针与值的规则是值方法可以在指针和值上调用，但指针方法只能在指针上调用。
 
-出现这个规则是因为指针方法可以修改接收者；在一个值上调用它们会导致该方法接收该值的副本，因此任何修改都将被丢弃。因此，Go 不允许这种错误。不过，有一个方便的例外。当值是可寻址的时，Go
-通过自动插入地址运算符来处理对值调用指针方法的情形。在我们的示例中，变量 b 是可寻址的，因此我们可以只使用 b.Write 调用它的 Write 方法。编译器会为我们重写为 (&b).Write。
+出现这个规则是因为指针方法可以修改接收者；在一个值上调用它们会导致该方法接收该值的副本，因此任何修改都将被丢弃。因此，Go
+不允许这种错误。不过，有一个方便的例外。当值是可寻址的时，Go
+通过自动插入地址运算符来处理对值调用指针方法的情形。在我们的示例中，变量 b 是可寻址的，因此我们可以只使用 b.Write 调用它的
+Write 方法。编译器会为我们重写为 (&b).Write。
 
 顺便说一句，在字节切片上使用 Write 的想法是 bytes.Buffer 实现的核心。
 
@@ -1361,10 +1339,12 @@ func (p *ByteSlice) Write(data []byte) (n int, err error) {
 
 ### Interfaces
 
-Go 中的接口提供了一种指定对象行为的方法：如果有东西可以做到这些，那么它就可以在这里使用。我们已经看过几个简单的例子；自定义打印可以通过 String 方法实现，而 Fprintf 可以使用 Write 方法生成任何输出。
+Go 中的接口提供了一种指定对象行为的方法：如果有东西可以做到这些，那么它就可以在这里使用。我们已经看过几个简单的例子；自定义打印可以通过
+String 方法实现，而 Fprintf 可以使用 Write 方法生成任何输出。
 只有一两个方法的接口在 Go 代码中很常见，并且通常被赋予从方法派生的名称，例如 io.Writer 表示实现 Write 的东西。
 
-一个类型可以实现多个接口。例如，如果一个集合实现了 sort.Interface，它可以通过 package sort 中的线程进行排序，其中包含 Len()、Less(i, j int) bool 和 Swap(i, j int)
+一个类型可以实现多个接口。例如，如果一个集合实现了 sort.Interface，它可以通过 package sort 中的线程进行排序，其中包含 Len()
+、Less(i, j int) bool 和 Swap(i, j int)
 ，它还可以有自定义格式。在这个例子中，Sequence 满足了这两者。
 
 ```
@@ -1404,7 +1384,8 @@ func (s Sequence) String() string {
 
 ### Conversions
 
-Sequence 的 String 方法正在重新创建 Sprint 已经为切片所做的工作。（复杂性还为 O(N²) ）如果我们在调用 Sprint 之前将 Sequence 转换为普通的 []int，我们可以分担工作（并加快速度）。
+Sequence 的 String 方法正在重新创建 Sprint 已经为切片所做的工作。（复杂性还为 O(N²) ）如果我们在调用 Sprint 之前将 Sequence
+转换为普通的 []int，我们可以分担工作（并加快速度）。
 
 ```
 func (s Sequence) String() string {
@@ -1414,7 +1395,8 @@ func (s Sequence) String() string {
 }
 ```
 
-此方法自定义 String 方法中安全调用 Sprintf 方法的另一个示例。因为如果我们忽略类型名称，这两种类型（Sequence 和 []int）是相同的，所以在它们之间进行转换是合法的。
+此方法自定义 String 方法中安全调用 Sprintf 方法的另一个示例。因为如果我们忽略类型名称，这两种类型（Sequence 和 []
+int）是相同的，所以在它们之间进行转换是合法的。
 转换不会创建新值，它只是暂时充当现有值具有新类型的作用。（还有其他合法的转换，例如从整数到浮点，确实会创建一个新值）
 
 转换表达式的类型以访问不同的方法集是 Go 程序中的一个习惯用法。例如，我们可以使用现有类型 sort.IntSlice 将整个示例简化为：
@@ -1430,12 +1412,15 @@ func (s Sequence) String() string {
 }
 ```
 
-现在，我们不是让 Sequence 实现多个接口（排序和打印），而是让数据项转换为多种类型（Sequence、sort.IntSlice 和 []int），每个类型都执行某些部分工作。这在实践中更不寻常，但可能是有效的。
+现在，我们不是让 Sequence 实现多个接口（排序和打印），而是让数据项转换为多种类型（Sequence、sort.IntSlice 和 []
+int），每个类型都执行某些部分工作。这在实践中更不寻常，但可能是有效的。
 
 ### Interface conversions and type assertions
 
-[Type switches](https://go.dev/doc/effective_go#type_switch) 是一种转换形式：它们采用一个接口，并且对于 switch 中的每种 case，在某种意义上将其转换为该 case
-的类型。这是 fmt.Printf 下的代码如何使用 type switch 将值转换为字符串的简化版本。如果它已经是一个字符串，我们想要接口保存的实际字符串值，而如果它有一个 String 方法，我们想要调用该方法的结果。
+[Type switches](https://go.dev/doc/effective_go#type_switch) 是一种转换形式：它们采用一个接口，并且对于 switch 中的每种
+case，在某种意义上将其转换为该 case
+的类型。这是 fmt.Printf 下的代码如何使用 type switch 将值转换为字符串的简化版本。如果它已经是一个字符串，我们想要接口保存的实际字符串值，而如果它有一个
+String 方法，我们想要调用该方法的结果。
 
 ```
 type Stringer interface {
@@ -1453,7 +1438,8 @@ case Stringer:
 
 第一个 case 找到具体值；第二个将接口转换为另一个接口。以这种方式混合类型非常好。
 
-如果我们只关心一种类型怎么办？如果我们知道该值包含一个字符串并且我们只想提取它？one-case type switch 是可以的，*type assertion* 也可以。Type assertion
+如果我们只关心一种类型怎么办？如果我们知道该值包含一个字符串并且我们只想提取它？one-case type switch 是可以的，*type
+assertion* 也可以。Type assertion
 接受接口值并从中提取指定显式类型的值。该语法借用了 type switch 的子句，但使用了显式类型而不是 type 关键字：
 
 ```
@@ -1493,10 +1479,12 @@ if str, ok := value.(string); ok {
 
 如果一个类型的存在只是为了实现一个接口并且永远不会在该接口之外导出方法，则不需要导出该类型本身。仅导出接口就可以清楚地表明该值没有超出接口中描述的有趣行为。它还避免了对通用方法的每个实例重复文档的需要。
 
-在这种情况下，构造函数应该返回一个接口值而不是实现类型。例如，在哈希库中 crc32.NewIEEE 和 adler32.New 都返回接口类型 hash.Hash32。在 Go 程序中用 CRC-32 算法替换 Adler-32
+在这种情况下，构造函数应该返回一个接口值而不是实现类型。例如，在哈希库中 crc32.NewIEEE 和 adler32.New 都返回接口类型
+hash.Hash32。在 Go 程序中用 CRC-32 算法替换 Adler-32
 只需要更改构造函数调用即可；其余代码不受算法更改的影响。
 
-类似的方法允许将各种加密包中的流密码算法与它们链接在一起的块密码分开。Package crypto/cipher 中的 Block interface 指定了分组密码的行为，它提供了对单个数据块的加密。那么，类比 bufio
+类似的方法允许将各种加密包中的流密码算法与它们链接在一起的块密码分开。Package crypto/cipher 中的 Block interface
+指定了分组密码的行为，它提供了对单个数据块的加密。那么，类比 bufio
 package，实现该接口的 cipher package 可以用来构造流式密码，以 Stream interface 为代表，无需了解分组加密的细节。
 
 crypto/cipher interface 如下所示：
@@ -1521,12 +1509,14 @@ type Stream interface {
 func NewCTR(block Block, iv []byte) Stream
 ```
 
-NewCTR 不仅适用于一种特定的加密算法和数据源，还适用于 Block interface 和任何 Stream 的任何实现。因为它们返回接口值，所以用其他加密模式替换 CTR 加密是本地化的变化。
+NewCTR 不仅适用于一种特定的加密算法和数据源，还适用于 Block interface 和任何 Stream 的任何实现。因为它们返回接口值，所以用其他加密模式替换
+CTR 加密是本地化的变化。
 必须编辑构造函数调用，但由于周围的代码必须仅将结果视为 Stream，因此不会注意到差异。
 
 ### Interfaces and methods
 
-由于几乎任何东西都可以附加方法，因此几乎任何东西都可以满足接口。一个说明性示例是在 http 包中，它定义了 Handler 接口。任何实现 Handler 的对象都可以服务 HTTP 请求。
+由于几乎任何东西都可以附加方法，因此几乎任何东西都可以满足接口。一个说明性示例是在 http 包中，它定义了 Handler 接口。任何实现
+Handler 的对象都可以服务 HTTP 请求。
 
 ```
 type Handler interface {
@@ -1534,7 +1524,8 @@ type Handler interface {
 }
 ```
 
-ResponseWriter 本身就是一个接口，它提供对将响应返回给客户端所需的方法的访问。这些方法包括标准的 Write 方法，因此可以在任何可以使用 io.Writer 的地方使用 http.ResponseWriter。
+ResponseWriter 本身就是一个接口，它提供对将响应返回给客户端所需的方法的访问。这些方法包括标准的 Write 方法，因此可以在任何可以使用
+io.Writer 的地方使用 http.ResponseWriter。
 Request 是一个结构，其中包含来自客户端的请求的解析表示。
 
 为简洁起见，让我们忽略 POST 并假设 HTTP 请求始终是 GET；这种简化不会影响处理程序的设置方式。这是一个处理程序的简单实现，用于计算页面被访问的次数。
@@ -1551,7 +1542,8 @@ func (ctr *Counter) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 }
 ```
 
-（与我们的主题保持一致，请注意 Fprintf 如何打印到 http.ResponseWriter）在真实服务器中，对 ctr.n 的访问需要防止并发访问。请参阅 sync 和 atomic 包以获取建议。
+（与我们的主题保持一致，请注意 Fprintf 如何打印到 http.ResponseWriter）在真实服务器中，对 ctr.n 的访问需要防止并发访问。请参阅
+sync 和 atomic 包以获取建议。
 
 作为参考，以下是如何将此类服务器附加到 URL 树上的节点。
 
@@ -1595,7 +1587,9 @@ func ArgServer() {
 }
 ```
 
-我们如何把它变成一个 HTTP 服务器？我们可以让 ArgServer 成为我们忽略其值的某种类型的方法，但有一种更简洁的方法。由于我们可以为除指针和接口之外的任何类型定义方法，因此我们可以为函数编写方法。Package http
+我们如何把它变成一个 HTTP 服务器？我们可以让 ArgServer
+成为我们忽略其值的某种类型的方法，但有一种更简洁的方法。由于我们可以为除指针和接口之外的任何类型定义方法，因此我们可以为函数编写方法。Package
+http
 包含以下代码：
 
 ```
@@ -1611,7 +1605,8 @@ func (f HandlerFunc) ServeHTTP(w ResponseWriter, req *Request) {
 }
 ```
 
-HandlerFunc 是具有方法 ServeHTTP 的类型，因此该类型的值可以服务于 HTTP 请求。看方法的实现：接收者是一个函数，f，方法调用f。这可能看起来很奇怪，但它与接收器是一个通道和在通道上发送的方法没有什么不同。
+HandlerFunc 是具有方法 ServeHTTP 的类型，因此该类型的值可以服务于 HTTP
+请求。看方法的实现：接收者是一个函数，f，方法调用f。这可能看起来很奇怪，但它与接收器是一个通道和在通道上发送的方法没有什么不同。
 
 为了使 ArgServer 成为 HTTP 服务器，我们首先将其修改为具有正确的签名。
 
@@ -1622,13 +1617,15 @@ func ArgServer(w http.ResponseWriter, req *http.Request) {
 }
 ```
 
-ArgServer 现在与 HandlerFunc 具有相同的签名，因此可以将其转换为该类型以访问其方法，就像我们将 Sequence 转换为 IntSlice 以访问 IntSlice.Sort 一样。设置它的代码很简洁：
+ArgServer 现在与 HandlerFunc 具有相同的签名，因此可以将其转换为该类型以访问其方法，就像我们将 Sequence 转换为 IntSlice 以访问
+IntSlice.Sort 一样。设置它的代码很简洁：
 
 ```
 http.Handle("/args", http.HandlerFunc(ArgServer))
 ```
 
-当有人访问 /args 页面时，安装在该页面上的处理程序具有值 ArgServer 并键入 HandlerFunc。HTTP 服务器将调用该类型的方法 ServeHTTP，以 ArgServer 作为接收者，接收者将依次调用
+当有人访问 /args 页面时，安装在该页面上的处理程序具有值 ArgServer 并键入 HandlerFunc。HTTP 服务器将调用该类型的方法
+ServeHTTP，以 ArgServer 作为接收者，接收者将依次调用
 ArgServer（通过 HandlerFunc.ServeHTTP 中的调用 f(w, req)）。然后将显示参数。
 
 在本节中，我们从一个结构体、一个整数、一个通道和一个函数创建了一个 HTTP 服务器，所有这些都是因为接口只是一组方法，可以为（几乎）任何类型定义。
@@ -1636,7 +1633,8 @@ ArgServer（通过 HandlerFunc.ServeHTTP 中的调用 f(w, req)）。然后将�
 ## The blank identifier
 
 在 [for range loops](https://go.dev/doc/effective_go#for) 和 [maps](https://go.dev/doc/effective_go#maps)
-的上下文中，我们已经多次提到空白标识符。可以使用任何类型的任何值分配或声明空白标识符，并且可以无害地丢弃该值。这有点像写入 Unix /dev/null 文件：它表示一个只写值，用作需要变量但实际值无关的占位符。
+的上下文中，我们已经多次提到空白标识符。可以使用任何类型的任何值分配或声明空白标识符，并且可以无害地丢弃该值。这有点像写入
+Unix /dev/null 文件：它表示一个只写值，用作需要变量但实际值无关的占位符。
 它的用途超出了我们已经看到的范围。
 
 ### The blank identifier in multiple assignment
@@ -1687,7 +1685,8 @@ func main() {
 }
 ```
 
-要消除有关未使用导入的抱怨，请使用空白标识符来引用导入包中的符号。类似地，将未使用的变量 fd 分配给空白标识符将使未使用的变量错误静音。这个版本的程序确实可以编译。
+要消除有关未使用导入的抱怨，请使用空白标识符来引用导入包中的符号。类似地，将未使用的变量 fd
+分配给空白标识符将使未使用的变量错误静音。这个版本的程序确实可以编译。
 
 ```
 package main
@@ -1716,7 +1715,8 @@ func main() {
 
 ### Import for side effect
 
-最终应该使用或删除前面示例中未使用的导入（如 fmt 或 io）：空白分配将代码标识为正在进行的工作。但有时导入一个包只是为了它的副作用而不显式使用是有用的。例如，在它的 init 函数中，net/http/pprof
+最终应该使用或删除前面示例中未使用的导入（如 fmt 或 io）：空白分配将代码标识为正在进行的工作。但有时导入一个包只是为了它的副作用而不显式使用是有用的。例如，在它的
+init 函数中，net/http/pprof
 包注册了提供调试信息的 HTTP 处理程序。它有一个导出的 API，但大多数客户端只需要处理程序注册并通过网页访问数据。要仅出于副作用导入包，请将包重命名为空白标识符：
 
 ```
@@ -1727,12 +1727,16 @@ import _ "net/http/pprof"
 
 ### Interface checks
 
-正如我们在上面对 [接口](https://go.dev/doc/effective_go#interfaces_and_types) 的讨论中看到的，一个类型不需要明确声明它实现了一个接口。相反，类型仅通过实现接口的方法来实现接口。
-实际上，大多数接口转换都是静态的，因此在编译时进行检查。例如，将 *os.File 传递给需要 io.Reader 的函数将无法编译，除非 *os.File 实现了 io.Reader 接口。
+正如我们在上面对 [接口](https://go.dev/doc/effective_go#interfaces_and_types)
+的讨论中看到的，一个类型不需要明确声明它实现了一个接口。相反，类型仅通过实现接口的方法来实现接口。
+实际上，大多数接口转换都是静态的，因此在编译时进行检查。例如，将 *os.File 传递给需要 io.Reader 的函数将无法编译，除非 *
+os.File 实现了 io.Reader 接口。
 
 不过，一些接口检查确实发生在运行时。一个实例在 [encoding/json](https://go.dev/pkg/encoding/json/)
-包中，它定义了一个 [Marshaler](https://go.dev/pkg/encoding/json/#Marshaler) 接口。当 JSON 编码器接收到实现该接口的值时，编码器会调用该值的编组方法将其转换为
-JSON，而不是执行标准转换。编码器在运行时使用如下 [type assertion](https://go.dev/doc/effective_go#interface_conversions) 检查此属性：
+包中，它定义了一个 [Marshaler](https://go.dev/pkg/encoding/json/#Marshaler) 接口。当 JSON
+编码器接收到实现该接口的值时，编码器会调用该值的编组方法将其转换为
+JSON，而不是执行标准转换。编码器在运行时使用如下 [type assertion](https://go.dev/doc/effective_go#interface_conversions)
+检查此属性：
 
 ```
 m, ok := val.(json.Marshaler)
@@ -1746,14 +1750,17 @@ if _, ok := val.(json.Marshaler); ok {
 }
 ```
 
-这种情况出现的一个地方是当有必要在包中保证它实际满足接口的类型时。如果一个类型，例如 [json.RawMessage](https://go.dev/pkg/encoding/json/#RawMessage) 需要自定义 JSON
-表示，它应该实现 json.Marshaler，但没有静态转换会导致编译器自动验证这一点。如果类型无意中无法满足接口，JSON 编码器仍然可以工作，但不会使用自定义实现。为保证实现正确，可以在包中使用使用空白标识符的全局声明：
+这种情况出现的一个地方是当有必要在包中保证它实际满足接口的类型时。如果一个类型，例如 [json.RawMessage](https://go.dev/pkg/encoding/json/#RawMessage)
+需要自定义 JSON
+表示，它应该实现 json.Marshaler，但没有静态转换会导致编译器自动验证这一点。如果类型无意中无法满足接口，JSON
+编码器仍然可以工作，但不会使用自定义实现。为保证实现正确，可以在包中使用使用空白标识符的全局声明：
 
 ```
 var _ json.Marshaler = (*RawMessage)(nil)
 ```
 
-在此声明中，涉及将 *RawMessage 转换为 Marshaler 的赋值要求 *RawMessage 实现 Marshaler，并且将在编译时检查该属性。如果 json.Marshaler
+在此声明中，涉及将 *RawMessage 转换为 Marshaler 的赋值要求 *RawMessage 实现 Marshaler，并且将在编译时检查该属性。如果
+json.Marshaler
 接口发生变化，这个包将不再编译，我们会注意到它需要更新。
 
 此构造中出现空白标识符表明该声明仅用于类型检查，而不是用于创建变量。但是，不要对满足接口的每种类型都这样做。按照惯例，此类声明仅在代码中不存在静态转换时使用，这是一种罕见的情况。
@@ -1774,7 +1781,8 @@ type Writer interface {
 }
 ```
 
-Package io 还导出了几个其他接口，这些接口指定了可以实现多个此类方法的对象。例如，有 io.ReadWriter，一个包含 Read 和 Write 的接口。我们可以通过显式列出这两个方法来指定 io.ReadWriter
+Package io 还导出了几个其他接口，这些接口指定了可以实现多个此类方法的对象。例如，有 io.ReadWriter，一个包含 Read 和 Write
+的接口。我们可以通过显式列出这两个方法来指定 io.ReadWriter
 ，但是嵌入这两个接口以形成新的接口更容易也更令人回味，如下所示：
 
 ```
@@ -1787,7 +1795,8 @@ type ReadWriter interface {
 
 这说明了它的样子：ReadWriter 可以做 Reader 和 Writer 所做的事情；它是嵌入式接口的联合。只有接口可以嵌入到接口中。
 
-相同的基本思想适用于结构，但具有更深远的影响。bufio 包有两种结构类型，bufio.Reader 和 bufio.Writer，它们当然都实现了包 io 中的类似接口。并且 bufio
+相同的基本思想适用于结构，但具有更深远的影响。bufio 包有两种结构类型，bufio.Reader 和 bufio.Writer，它们当然都实现了包 io
+中的类似接口。并且 bufio
 还实现了一个缓冲的读取器/写入器，它通过使用嵌入将读取器和写入器组合到一个结构中来实现：它列出了结构中的类型，但不给它们字段名称。
 
 ```
@@ -1816,10 +1825,12 @@ func (rw *ReadWriter) Read(p []byte) (n int, err error) {
 }
 ```
 
-通过直接嵌入结构，我们避免了这种记账。嵌入式类型的方法是免费的，也就是说 bufio.ReadWriter 不仅有 bufio.Reader 和 bufio.Writer 的方法，它还满足
+通过直接嵌入结构，我们避免了这种记账。嵌入式类型的方法是免费的，也就是说 bufio.ReadWriter 不仅有 bufio.Reader 和
+bufio.Writer 的方法，它还满足
 io.Reader、io.Writer、io.ReadWriter 这三个接口。
 
-嵌入与子类化有一个重要的区别。当我们嵌入一个类型时，该类型的方法成为外部类型的方法，但是当它们被调用时，方法的接收者是内部类型，而不是外部类型。在我们的示例中，当调用 bufio.ReadWriter 的 Read
+嵌入与子类化有一个重要的区别。当我们嵌入一个类型时，该类型的方法成为外部类型的方法，但是当它们被调用时，方法的接收者是内部类型，而不是外部类型。在我们的示例中，当调用
+bufio.ReadWriter 的 Read
 方法时，它的效果与上面写的转发方法完全相同；接收者是 ReadWriter 的 reader 字段，而不是 ReadWriter 本身。
 
 嵌入也可以是一种简单的方便。此示例显示了一个嵌入字段以及一个常规的命名字段。
@@ -1831,7 +1842,8 @@ type Job struct {
 }
 ```
 
-Job 类型现在具有 *log.Logger 的 Print、Printf、Println 和其他方法。当然，我们可以给 Logger 一个字段名称，但没有必要这样做。现在，一旦初始化，我们就可以登录到 Job：
+Job 类型现在具有 *log.Logger 的 Print、Printf、Println 和其他方法。当然，我们可以给 Logger 一个字段名称，但没有必要这样做。现在，一旦初始化，我们就可以登录到
+Job：
 
 ```
 job.Println("starting now...")
@@ -1851,7 +1863,8 @@ func NewJob(command string, logger *log.Logger) *Job {
 job := &Job{command, log.New(os.Stderr, "Job: ", log.Ldate)}
 ```
 
-如果我们需要直接引用嵌入字段，则忽略包限定符的字段类型名称用作字段名称，就像在我们的 ReadWriter 结构的 Read 方法中所做的那样。在这里，如果我们需要访问 Job 变量 job 的 *log.Logger，我们将编写
+如果我们需要直接引用嵌入字段，则忽略包限定符的字段类型名称用作字段名称，就像在我们的 ReadWriter 结构的 Read
+方法中所做的那样。在这里，如果我们需要访问 Job 变量 job 的 *log.Logger，我们将编写
 job.Logger，如果我们想改进 Logger 的方法，这将很有用。
 
 ```
@@ -1860,9 +1873,11 @@ func (job *Job) Printf(format string, args ...interface{}) {
 }
 ```
 
-嵌入类型引入了名称冲突的问题，但解决它们的规则很简单。首先，字段或方法 X 将任何其他项 X 隐藏在类型的更深嵌套部分中。如果 log.Logger 包含一个名为 Command 的字段或方法，则 Job 的 Command 字段将支配它。
+嵌入类型引入了名称冲突的问题，但解决它们的规则很简单。首先，字段或方法 X 将任何其他项 X 隐藏在类型的更深嵌套部分中。如果
+log.Logger 包含一个名为 Command 的字段或方法，则 Job 的 Command 字段将支配它。
 
-其次，如果同名出现在同一个嵌套层级，通常是报错；如果 Job 结构包含另一个名为 Logger 的字段或方法，则嵌入 log.Logger 将是错误的。但是，如果在类型定义之外的程序中从不提及重复名称，则可以。
+其次，如果同名出现在同一个嵌套层级，通常是报错；如果 Job 结构包含另一个名为 Logger 的字段或方法，则嵌入 log.Logger
+将是错误的。但是，如果在类型定义之外的程序中从不提及重复名称，则可以。
 此限定提供了一些保护，防止对从外部嵌入的类型进行更改；如果添加的字段与另一个子类型中的另一个字段冲突，如果两个字段都未使用过，则没有问题。
 
 ## Concurrency
@@ -1871,24 +1886,28 @@ func (job *Job) Printf(format string, args ...interface{}) {
 
 并发编程是一个很大的话题，这里有一些 Go 特定的亮点。
 
-由于实现对共享变量的正确访问所需的微妙之处，许多环境中的并发编程变得困难。Go 鼓励一种不同的方法，在这种方法中，共享值在 channel 上传递，实际上，从不被单独的执行线程主动共享。在任何给定时间，只有一个 goroutine
+由于实现对共享变量的正确访问所需的微妙之处，许多环境中的并发编程变得困难。Go 鼓励一种不同的方法，在这种方法中，共享值在
+channel 上传递，实际上，从不被单独的执行线程主动共享。在任何给定时间，只有一个 goroutine
 可以访问该值。设计上不会发生数据竞争。为了鼓励这种思维方式，我们将其简化为一个口号：
 
 Do not communicate by sharing memory; instead, share memory by communicating.
 
 这种方法可能太过分了。例如，引用计数最好通过在整数变量周围放置互斥锁来完成。但是作为一种高级方法，使用通道来控制访问可以更容易地编写清晰、正确的程序。
 
-考虑此模型的一种方法是考虑在一个 CPU 上运行的典型单线程程序。它不需要同步原语。现在运行另一个这样的实例；它也不需要同步。现在让这两个交流；如果通信是同步器，则仍然不需要其他同步。例如，Unix 管道就非常适合这个模型。 尽管 Go
+考虑此模型的一种方法是考虑在一个 CPU 上运行的典型单线程程序。它不需要同步原语。现在运行另一个这样的实例；它也不需要同步。现在让这两个交流；如果通信是同步器，则仍然不需要其他同步。例如，Unix
+管道就非常适合这个模型。 尽管 Go
 的并发方法起源于 Hoare 的通信顺序进程 (CSP)，但它也可以看作是 Unix 管道的类型安全泛化。
 
 ### Goroutines
 
-它们被称为 goroutines 因为现有的术语——threads、coroutines、processes 等——传达了不准确的含义。Goroutine 有一个简单的模型：它是一个在同一地址空间中与其他 goroutine
+它们被称为 goroutines 因为现有的术语——threads、coroutines、processes 等——传达了不准确的含义。Goroutine
+有一个简单的模型：它是一个在同一地址空间中与其他 goroutine
 并发执行的函数。它是轻量级的，成本仅比堆栈空间的分配多一点。堆栈开始时很小，因此它们很便宜，并且通过根据需要分配（和释放）堆存储来增长。
 
 Goroutine 被多路复用到多个 OS 线程上，因此如果一个线程阻塞，例如在等待 I/O 时，其他线程会继续运行。他们的设计隐藏了线程创建和管理的许多复杂性。
 
-使用 go 关键字为函数或方法调用添加前缀，以在新的 goroutine 中运行调用。调用完成后，goroutine 静默退出。（效果类似于在后台运行命令的 Unix shell 的 & 符号）
+使用 go 关键字为函数或方法调用添加前缀，以在新的 goroutine 中运行调用。调用完成后，goroutine 静默退出。（效果类似于在后台运行命令的
+Unix shell 的 & 符号）
 
 ```
 go list.Sort()  // run list.Sort concurrently; don't wait for it.
@@ -1911,7 +1930,8 @@ func Announce(message string, delay time.Duration) {
 
 ### Channels
 
-像 maps 一样，channels 是用 make 分配的，是对底层数据结构的引用。如果提供了可选的整数参数，它会设置通道的缓冲区大小。对于无缓冲或同步通道，默认为 0。
+像 maps 一样，channels 是用 make 分配的，是对底层数据结构的引用。如果提供了可选的整数参数，它会设置通道的缓冲区大小。对于无缓冲或同步通道，默认为
+0。
 
 ```
 ci := make(chan int)            // unbuffered channel of integers
@@ -1936,7 +1956,8 @@ doSomethingForAWhile()
 
 接收器总是阻塞，直到有数据要接收。如果通道没有缓冲，发送方会阻塞，直到接收方收到该值。如果通道有缓冲区，发送方只会阻塞，直到值被复制到缓冲区；如果缓冲区已满，这意味着要等到某个接收器检索到一个值。
 
-缓冲通道可以像信号量一样使用，例如限制吞吐量。在这个例子中，传入的请求被传递给 handle，它向通道发送一个值，处理请求，然后从通道接收一个值，为下一个消费者准备 “semaphore”。通道缓冲区的容量限制了同时处理的调用数。
+缓冲通道可以像信号量一样使用，例如限制吞吐量。在这个例子中，传入的请求被传递给 handle，它向通道发送一个值，处理请求，然后从通道接收一个值，为下一个消费者准备
+“semaphore”。通道缓冲区的容量限制了同时处理的调用数。
 
 ```
 var sem = make(chan int, MaxOutstanding)
@@ -1957,7 +1978,8 @@ func Serve(queue chan *Request) {
 
 一旦 MaxOutstanding 处理程序正在执行进程，任何其他处理程序都将阻止尝试发送到填充的通道缓冲区，直到现有处理程序之一完成并从缓冲区接收。
 
-但是，这种设计有一个问题：Serve 为每个传入请求创建一个新的 goroutine，即使它们中只有 MaxOutstanding 可以随时运行。因此，如果请求来得太快，程序可能会消耗无限的资源。我们可以通过改变 Serve 来控制
+但是，这种设计有一个问题：Serve 为每个传入请求创建一个新的 goroutine，即使它们中只有 MaxOutstanding
+可以随时运行。因此，如果请求来得太快，程序可能会消耗无限的资源。我们可以通过改变 Serve 来控制
 goroutines 的创建来解决这个缺陷。这是一个明显的解决方案，但要注意它有一个我们将在随后修复的错误：
 
 ```
@@ -1972,7 +1994,8 @@ func Serve(queue chan *Request) {
 }
 ```
 
-错误在于，在 Go for 循环中，循环变量在每次迭代中都被重用，因此 req 变量在所有 goroutine 之间共享。这不是我们想要的。我们需要确保 req 对于每个 goroutine 都是唯一的。这是一种方法，将 req
+错误在于，在 Go for 循环中，循环变量在每次迭代中都被重用，因此 req 变量在所有 goroutine 之间共享。这不是我们想要的。我们需要确保
+req 对于每个 goroutine 都是唯一的。这是一种方法，将 req
 的值作为参数传递给 goroutine 中的闭包：
 
 ```
@@ -2010,7 +2033,8 @@ req := req
 
 但在 Go 中这样做是合法且惯用的。你会得到一个新版本的同名变量，故意在本地隐藏循环变量，但每个 goroutine 都是唯一的。
 
-回到编写服务器的一般问题，另一种很好地管理资源的方法是启动固定数量的句柄 goroutine，它们都从请求通道中读取。goroutine 的数量限制了同时调用处理的数量。这个 Serve 函数还接受一个将被告知退出的通道；启动
+回到编写服务器的一般问题，另一种很好地管理资源的方法是启动固定数量的句柄 goroutine，它们都从请求通道中读取。goroutine
+的数量限制了同时调用处理的数量。这个 Serve 函数还接受一个将被告知退出的通道；启动
 goroutine 后，它会阻止从该通道接收。
 
 ```
@@ -2033,7 +2057,8 @@ func Serve(clientRequests chan *Request, quit chan bool) {
 
 Go 最重要的属性之一是 channel 是一个可以像其他任何东西一样分配和传递的一流值。此属性的一个常见用途是实现安全的并行解复用。
 
-在上一节的示例中，handle 是一个理想化的请求处理程序，但我们没有定义它正在处理的类型。如果该类型包含要回复的通道，则每个客户端都可以提供自己的回复路径。这是 Request 类型的示意图定义。
+在上一节的示例中，handle 是一个理想化的请求处理程序，但我们没有定义它正在处理的类型。如果该类型包含要回复的通道，则每个客户端都可以提供自己的回复路径。这是
+Request 类型的示意图定义。
 
 ```
 type Request struct {
@@ -2090,7 +2115,8 @@ func (v Vector) DoSome(i, n int, u Vector, c chan int) {
 }
 ```
 
-我们在一个循环中独立启动这些片段，每个 CPU 一个。他们可以按任何顺序完成，但这没关系；我们只是在启动所有 goroutine 后通过排空通道来计算完成信号。
+我们在一个循环中独立启动这些片段，每个 CPU 一个。他们可以按任何顺序完成，但这没关系；我们只是在启动所有 goroutine
+后通过排空通道来计算完成信号。
 
 ```
 const numCPU = 4 // number of CPU cores
@@ -2108,26 +2134,30 @@ func (v Vector) DoAll(u Vector) {
 }
 ```
 
-我们可以询问运行时什么值是合适的，而不是为 numCPU 创建一个常量值。[runtime.NumCPU](https://go.dev/pkg/runtime#NumCPU) 函数返回机器中硬件 CPU 内核的数量，所以我们可以这样写
+我们可以询问运行时什么值是合适的，而不是为 numCPU 创建一个常量值。[runtime.NumCPU](https://go.dev/pkg/runtime#NumCPU)
+函数返回机器中硬件 CPU 内核的数量，所以我们可以这样写
 
 ```
 var numCPU = runtime.NumCPU()
 ```
 
-还有一个函数 [runtime.GOMAXPROCS](https://go.dev/pkg/runtime#GOMAXPROCS)，它报告（或设置）Go 程序可以同时运行的用户指定的内核数量。它默认为 runtime.NumCPU
+还有一个函数 [runtime.GOMAXPROCS](https://go.dev/pkg/runtime#GOMAXPROCS)，它报告（或设置）Go 程序可以同时运行的用户指定的内核数量。它默认为
+runtime.NumCPU
 的值，但可以通过设置类似命名的 shell 环境变量或使用正数调用函数来覆盖。用零调用它只是查询值。因此，如果我们想尊重用户的资源请求，我们应该写
 
 ```
 var numCPU = runtime.GOMAXPROCS(0)
 ```
 
-确保不要混淆 concurrency（将程序构造为独立执行的组件）和 parallelism（在多个 CPU 上并行执行计算以提高效率）的概念。尽管 Go 的并发特性可以使一些问题易于构建为并行计算，但 Go
+确保不要混淆 concurrency（将程序构造为独立执行的组件）和 parallelism（在多个 CPU 上并行执行计算以提高效率）的概念。尽管 Go
+的并发特性可以使一些问题易于构建为并行计算，但 Go
 是一种并发语言，而不是并行语言，并且并非所有并行化问题都适合 Go 的模型。
 有关区别的讨论，请参阅[此博客文章](https://blog.golang.org/2013/01/concurrency-is-not-parallelism.html)。
 
 ### A leaky buffer
 
-并发编程的工具甚至可以让非并发的想法更容易表达。这是一个从 RPC 包中抽象出来的示例。客户端 goroutine 循环从某个源（可能是网络）接收数据。为了避免分配和释放缓冲区，它保留了一个空闲列表，并使用一个缓冲通道来表示它。
+并发编程的工具甚至可以让非并发的想法更容易表达。这是一个从 RPC 包中抽象出来的示例。客户端 goroutine
+循环从某个源（可能是网络）接收数据。为了避免分配和释放缓冲区，它保留了一个空闲列表，并使用一个缓冲通道来表示它。
 如果通道为空，则分配一个新缓冲区。一旦消息缓冲区准备好，它就会发送到 serverChan 上的服务器。
 
 ```
@@ -2169,12 +2199,14 @@ func server() {
 }
 ```
 
-客户端尝试从 freeList 中检索缓冲区；如果没有可用，它会分配一个新的。服务器发送到 freeList 会将 b 放回空闲列表，除非列表已满，在这种情况下，缓冲区会被丢弃在地板上，由垃圾收集器回收。
+客户端尝试从 freeList 中检索缓冲区；如果没有可用，它会分配一个新的。服务器发送到 freeList 会将 b
+放回空闲列表，除非列表已满，在这种情况下，缓冲区会被丢弃在地板上，由垃圾收集器回收。
 （选择语句中的默认子句在没有其他情况准备好时执行，这意味着选择永远不会阻塞）这个实现只用几行就构建了一个漏桶空闲列表，依靠缓冲通道和垃圾收集器进行记账。
 
 ## Errors
 
-Library routines 必须经常向调用者返回某种错误指示。如前所述，Go 的多值返回使得在返回正常返回值的同时返回详细的错误描述变得很容易。使用此功能提供详细的错误信息是一种很好的方式。例如，正如我们将看到的，os.Open
+Library routines 必须经常向调用者返回某种错误指示。如前所述，Go
+的多值返回使得在返回正常返回值的同时返回详细的错误描述变得很容易。使用此功能提供详细的错误信息是一种很好的方式。例如，正如我们将看到的，os.Open
 不仅在失败时返回一个 nil 指针，它还返回一个错误值来描述发生了什么错误。
 
 按照惯例，errors 有 error 类型，一个简单的内置接口。
@@ -2185,7 +2217,8 @@ type error interface {
 }
 ```
 
-库编写者可以在后台使用更丰富的模型自由地实现此接口，从而不仅可以查看错误，还可以提供一些上下文。如前所述，除了通常的 *os.File 返回值之外，os.Open 还返回一个错误值。
+库编写者可以在后台使用更丰富的模型自由地实现此接口，从而不仅可以查看错误，还可以提供一些上下文。如前所述，除了通常的 *
+os.File 返回值之外，os.Open 还返回一个错误值。
 如果文件打开成功，则error为nil，但是当出现问题时，它会持有一个os.PathError：
 
 ```
@@ -2208,11 +2241,14 @@ PathError's Error 生成一个这样的字符串：
 open /etc/passwx: no such file or directory
 ```
 
-这样的错误，包括有问题的文件名、操作和它触发的操作系统错误，即使在远离导致它的调用的地方打印也是有用的；它比简单的 "no such file or directory" 提供更多信息。
+这样的错误，包括有问题的文件名、操作和它触发的操作系统错误，即使在远离导致它的调用的地方打印也是有用的；它比简单的 "no such
+file or directory" 提供更多信息。
 
-在可行的情况下，错误字符串应标识其来源，例如通过使用前缀命名生成错误的操作或包。例如，在包图像中，由于未知格式导致的解码错误的字符串表示为 "image: unknown format"。
+在可行的情况下，错误字符串应标识其来源，例如通过使用前缀命名生成错误的操作或包。例如，在包图像中，由于未知格式导致的解码错误的字符串表示为 "
+image: unknown format"。
 
-关心精确错误详细信息的调用者可以使用类型开关或类型断言来查找特定错误并提取详细信息。对于 PathErrors，这可能包括检查内部 Err 字段是否存在可恢复的故障。
+关心精确错误详细信息的调用者可以使用类型开关或类型断言来查找特定错误并提取详细信息。对于 PathErrors，这可能包括检查内部
+Err 字段是否存在可恢复的故障。
 
 ```
 for try := 0; try < 2; try++ {
@@ -2228,12 +2264,14 @@ for try := 0; try < 2; try++ {
 }
 ```
 
-这里的第二个 if 语句是另一种 [type assertion](https://go.dev/doc/effective_go#interface_conversions)。如果失败，ok 将为 false，e 将为 nil。
+这里的第二个 if 语句是另一种 [type assertion](https://go.dev/doc/effective_go#interface_conversions)。如果失败，ok 将为
+false，e 将为 nil。
 如果成功，ok 将为 true，这意味着错误的类型是 *os.PathError，然后 e 也是，我们可以检查它以获取有关错误的更多信息。
 
 ### Panic
 
-向调用者报告错误的常用方法是将错误作为额外的返回值返回。Read 方法是一个众所周知的例子。它返回一个字节数和一个错误。但是，如果错误无法恢复怎么办？ 有时程序根本无法继续。
+向调用者报告错误的常用方法是将错误作为额外的返回值返回。Read 方法是一个众所周知的例子。它返回一个字节数和一个错误。但是，如果错误无法恢复怎么办？
+有时程序根本无法继续。
 
 为此，有一个内置函数 panic，它实际上会创建一个运行时错误，从而停止程序（但请参阅下一节）。该函数采用任意类型的单个参数（通常是字符串）在程序终止时打印。这也是一种表示不可能发生的事情的方法，例如退出无限循环。
 
@@ -2267,7 +2305,8 @@ func init() {
 
 ### Recover
 
-当 panic 被调用时，包括隐含的运行时错误，例如索引切片越界或类型断言失败，它会立即停止当前函数的执行并开始展开 goroutine 的堆栈，沿途运行任何延迟函数 . 如果展开到达 goroutine 堆栈的顶部，程序就会终止。
+当 panic 被调用时，包括隐含的运行时错误，例如索引切片越界或类型断言失败，它会立即停止当前函数的执行并开始展开 goroutine
+的堆栈，沿途运行任何延迟函数 . 如果展开到达 goroutine 堆栈的顶部，程序就会终止。
 但是，可以使用内置函数 recover 重新获得对 goroutine 的控制并恢复正常执行。
 
 调用 recovery 会停止展开并返回传递给 panic 的参数。因为在展开时运行的唯一代码是在延迟函数内部，recover 仅在延迟函数内部有用。
@@ -2291,11 +2330,14 @@ func safelyDo(work *Work) {
 }
 ```
 
-在这个例子中，如果 do(work) 出现恐慌，结果将被记录下来，goroutine 将干净地退出而不会打扰其他人。在延迟关闭中不需要做任何其他事情；调用recover 可以完全处理这种情况。
+在这个例子中，如果 do(work) 出现恐慌，结果将被记录下来，goroutine 将干净地退出而不会打扰其他人。在延迟关闭中不需要做任何其他事情；调用recover
+可以完全处理这种情况。
 
-因为除非直接从延迟函数调用，否则恢复总是返回 nil，延迟代码可以调用库例程，这些库例程本身使用恐慌并恢复而不会失败。例如，safelyDo 中的延迟函数可能会在调用恢复之前调用日志记录函数，并且该日志记录代码将不受恐慌状态的影响。
+因为除非直接从延迟函数调用，否则恢复总是返回 nil，延迟代码可以调用库例程，这些库例程本身使用恐慌并恢复而不会失败。例如，safelyDo
+中的延迟函数可能会在调用恢复之前调用日志记录函数，并且该日志记录代码将不受恐慌状态的影响。
 
-有了我们的恢复模式，do 函数（以及它调用的任何东西）可以通过调用 panic 来干净利落地摆脱任何糟糕的情况。我们可以使用这个想法来简化复杂软件中的错误处理。让我们看一个 regexp 包的理想化版本，它通过使用本地错误类型调用
+有了我们的恢复模式，do 函数（以及它调用的任何东西）可以通过调用 panic 来干净利落地摆脱任何糟糕的情况。我们可以使用这个想法来简化复杂软件中的错误处理。让我们看一个
+regexp 包的理想化版本，它通过使用本地错误类型调用
 panic 来报告解析错误。下面是 Error 定义、Error 方法和 Compile 函数。
 
 ```
@@ -2325,10 +2367,12 @@ func Compile(str string) (regexp *Regexp, err error) {
 }
 ```
 
-如果 doParse 发生恐慌，恢复块会将返回值设置为 nil——延迟函数可以修改命名的返回值。然后它将在对 err 的赋值中通过断言它具有本地类型 Error 来检查问题是否是解析错误。
+如果 doParse 发生恐慌，恢复块会将返回值设置为 nil——延迟函数可以修改命名的返回值。然后它将在对 err 的赋值中通过断言它具有本地类型
+Error 来检查问题是否是解析错误。
 如果没有，类型断言将失败，导致运行时错误继续堆栈展开，就好像没有任何东西中断它一样。此检查意味着如果发生意外情况，例如索引越界，即使我们使用恐慌和恢复来处理解析错误，代码也会失败。
 
-有了错误处理，错误方法（因为它是一个绑定到类型的方法，它很好，甚至很自然，因为它与内置错误类型具有相同的名称）使得报告解析错误变得容易，而不必担心展开 手动解析堆栈：
+有了错误处理，错误方法（因为它是一个绑定到类型的方法，它很好，甚至很自然，因为它与内置错误类型具有相同的名称）使得报告解析错误变得容易，而不必担心展开
+手动解析堆栈：
 
 ```
 if pos == 0 {
@@ -2343,8 +2387,10 @@ if pos == 0 {
 
 ## A web server
 
-让我们完成一个完整的 Go 程序，一个 Web 服务器。这实际上是一种网络重新服务器。Google 在 chart.apis.google.com 上提供了一项服务，可以将数据自动格式化为图表和图形。
-但是，它很难以交互方式使用，因为您需要将数据作为查询放入 URL。这里的程序为一种形式的数据提供了一个更好的接口：给定一小段文本，它调用图表服务器来生成一个二维码，一个对文本进行编码的框矩阵。该图像可以用您手机的摄像头抓取并解释为例如
+让我们完成一个完整的 Go 程序，一个 Web 服务器。这实际上是一种网络重新服务器。Google 在 chart.apis.google.com
+上提供了一项服务，可以将数据自动格式化为图表和图形。
+但是，它很难以交互方式使用，因为您需要将数据作为查询放入
+URL。这里的程序为一种形式的数据提供了一个更好的接口：给定一小段文本，它调用图表服务器来生成一个二维码，一个对文本进行编码的框矩阵。该图像可以用您手机的摄像头抓取并解释为例如
 URL，而无需您在手机的小键盘上输入 URL。
 
 这是完整的程序。下面是一个解释。
@@ -2398,17 +2444,20 @@ const templateStr = `
 `
 ```
 
-主要的部分应该很容易理解。one 标志为我们的服务器设置默认的 HTTP 端口。模板变量 templ 是有趣的地方。它构建了一个 HTML 模板，将由服务器执行以显示页面；稍后再详细介绍。
+主要的部分应该很容易理解。one 标志为我们的服务器设置默认的 HTTP 端口。模板变量 templ 是有趣的地方。它构建了一个 HTML
+模板，将由服务器执行以显示页面；稍后再详细介绍。
 
 主函数解析标志，并使用我们上面讨论的机制，将函数 QR 绑定到服务器的根路径。然后调用http.ListenAndServe启动服务器；它在服务器运行时阻塞。
 
 QR 只是接收到包含表单数据的请求，并对名为 s 的表单值中的数据执行模板。
 
-模板包html/template功能强大；该程序仅涉及其功能。本质上，它通过替换从传递给 templ.Execute 的数据项派生的元素（在本例中为表单值）来动态重写一段 HTML 文本。在模板文本 (templateStr)
+模板包html/template功能强大；该程序仅涉及其功能。本质上，它通过替换从传递给 templ.Execute 的数据项派生的元素（在本例中为表单值）来动态重写一段
+HTML 文本。在模板文本 (templateStr)
 中，双大括号分隔的部分表示模板操作。从 {{if .}} 到 {{end}} 的部分仅在当前数据项的值（称为 . （点），是非空的。即当字符串为空时，这块模板被抑制。
 
 两个片段 {{.}} 表示在网页上显示呈现给模板的数据（查询字符串）。HTML 模板包会自动提供适当的转义，以便安全地显示文本。
 
-模板字符串的其余部分只是页面加载时显示的 HTML。如果这解释得太快，请参阅模板包的[文档](https://go.dev/pkg/html/template/)以进行更深入的讨论。
+模板字符串的其余部分只是页面加载时显示的 HTML。如果这解释得太快，请参阅模板包的[文档](https://go.dev/pkg/html/template/)
+以进行更深入的讨论。
 
 你就拥有了：几行代码加上一些数据驱动的 HTML 文本，就成了一个有用的 Web 服务器。Go 足够强大，可以在几行代码中完成很多事情。
