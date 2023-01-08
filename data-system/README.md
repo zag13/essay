@@ -16,6 +16,23 @@
 
 ## 承
 
+### 流计算框架对比
+
+| Apache | Flink                                                               | SparkStreaming                                            | Storm                                                                             | Samza                                                |
+|--------|---------------------------------------------------------------------|-----------------------------------------------------------|-----------------------------------------------------------------------------------|------------------------------------------------------|
+| 架构     | 架构介于spark和storm之间，主从结构与spark streaming相似，DataFlow Grpah与Storm相似     | 架构依赖spark，主从模式，每个Batch处理都依赖主（driver），可以理解为时间维度上的spark DAG | 主从模式，且依赖ZK，处理过程中对主的依赖不大                                                           | 过度依赖kafka，接入数据源相对单一，Samza处理数据流时，会分别按次处理每条收到的消息       |
+| 处理模式   | Native                                                              | Micro-batch                                               | Native                                                                            | Native                                               |
+| 容错     | 基于Chandy-Lamport distributed snapshots checkpoint机制   <br>     High | WAL及RDD 血统机制            <br>     High                     | Records ACK       <br>     Medium                                                 | Log-Based                      <br>     Medium       |
+| 处理模型   | 单条事件处理                                                              | 一个事件窗口内的所有事件                                              | 单条事件处理                                                                            | 单条事件处理                                               |
+| 延迟     | 毫秒级低延迟                                                              | 秒级低延迟                                                     | 毫秒级低延迟                                                                            | 毫秒级低延迟                                               |
+| 吞吐量    | High                                                                | High                                                      | Low                                                                               | High                                                 |
+| 数据处理保证 | exactly once                                                        | exactly once（实现采用ChandyLamport 算法，即marker-checkpoint）     | at least once(实现采用record-level acknowledgments)，Trident可以支持storm 提供exactly once语义 | at least once                                        |
+| 高级API  | Flink栈中提供了提供了很多具有高级API和满足不同场景的类库：机器学习、图分析、关系式数据处理                   | 能够很容易的对接Spark生态栈里面的组件，同时能够对接主流的消息传输组件及存储系统                | 应用需要按照特定的storm定义的规则编写                                                             | Samza只支持JVM语言                                        |
+| 易用性    | 支持SQL Steaming，Batch和STREAMING采用统一编程框架                              | 支持SQL Steaming Batch和STREAMING采用统一编程框架                    | 不支持SQL Steaming                                                                   | Samza提供的高级抽象使其在很多方面比Storm等系统提供的基元（Primitiv e）更易于配合使用 |
+| 成熟性    | 已经发展一段时间                                                            | 相对较早的流系统，比较稳定                                             | 相对较早的流系统，比较稳定                                                                     | 相对较早的流系统，比较稳定                                        |
+| 社区活跃度  | Contributors 1,095                                                  | Contributors 1,876                                        | Contributors 351                                                                  | Contributors 138                                     |
+| 部署性    | 部署相对简单，只依赖JRE环境                                                     | 部署相对简单，只依赖JRE环境                                           | 依赖JRE环境和Zookeeper                                                                 | 依赖JRE环境                                              |
+
 ### HDFS
 
 ### OBS
