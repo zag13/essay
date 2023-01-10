@@ -1,6 +1,6 @@
 # Flink
 
-## 核心特性
+## 核心特性   
 
 - 统一数据处理组件栈,处理不同类型的数据需求(Batch,Stream,Machine Learning,Graph)
 - 支持事件时间(EventTime),接入时间(Ingestion Time),处理时间(Processing Time)等时间概念
