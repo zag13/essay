@@ -1,5 +1,7 @@
 # Redis
 
+[一文详解Redis中BigKey、HotKey的发现与处理](https://mp.weixin.qq.com/s/FPYE1B839_8Yk1-YSiW-1Q)
+
 ## 基础
 
 ### 数据类型
