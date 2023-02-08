@@ -21,13 +21,40 @@
     - countWindow：计数窗口（Keyed DataStream）
     - window：自定义窗口（Keyed DataStream）
 - 多流合并
-  - join：关联操作
-  - connect：连接操作
-  - coGroup：关联操作
-  - union：合并操作
-  - intervalJoin：间接join操作（Keyed DataStream）
+    - join：关联操作
+    - connect：连接操作
+    - coGroup：关联操作
+    - union：合并操作
+    - intervalJoin：间接join操作（Keyed DataStream）
 - 单流切分
-  - split：切分操作
-  - sideOutput：旁路输出
+    - split：切分操作
+    - sideOutput：旁路输出
 
 ![](../../assets/img/flink/uXDjyqBhz5SCoadZ.png)
+
+## 时间概念
+
+- Event Time：事件发生的时间
+- Ingestion Time：数据进入系统的时间
+- Processing Time：数据被处理的时间
+
+## Watermark 和 窗口
+
+- 用于标记 Event Time 的进度
+- 跟随 DataStream Event-Time变动，并自身携带 TimeStamp
+- 用于触发窗口计算
+- 用于触发延迟数据的处理
+- Watermark = Max EventTime - Late Threshold
+- Late Threshold 越高，数据处理延迟越高，但是系统吞吐量越高
+- 窗口触发条件：Watermark >= Window End Time
+- Watermark 的主要目的是告诉窗口不再会有比当前 Watermark 更晚的数据到达
+
+![](../../assets/img/flink/r6Me7NhBPsvi8gfQ.png)
+
+![](../../assets/img/flink/lpouILt7dNgzmBPh.png)
+
+![](../../assets/img/flink/riO0zDVaIdMpNEX7.png)
+
+![](../../assets/img/flink/YZRWH1UeaQBxMGw4.png)
+
+![](../../assets/img/flink/1K4Rvdk6HPhQyq92.png)
