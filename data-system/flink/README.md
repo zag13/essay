@@ -1,17 +1,24 @@
 # Flink
 
-## 核心特性   
+## 必读
 
-- 统一数据处理组件栈,处理不同类型的数据需求(Batch,Stream,Machine Learning,Graph)
-- 支持事件时间(EventTime),接入时间(Ingestion Time),处理时间(Processing Time)等时间概念
-- 基于轻量级分布式快照(Snapshot)实现的容错
-- 支持有状态计算
-    - Support for very large state
-    - queryable state支持
-    - 灵活的state-backend(HDFS,内存,RocksDB)
-- 支持高度灵活的窗口(Window)操作
-- 带反压的连续流模型
-- 基于JVM 实现独立的内存管理:
-    - Flink 在 JVM 中实现了自己的内存管理。
-- 应用可以超出主内存的大小限制,并且承受更少的垃圾收集的开销
-- 对象序列化二进制存储,类似于C对内存的管理
+[Apache Flink 文档](https://nightlies.apache.org/flink/flink-docs-release-1.15/zh/)
+
+- **实践练习**
+    - [概览](https://nightlies.apache.org/flink/flink-docs-release-1.15/zh/docs/learn-flink/overview/)
+    - [DataStream API 简介](https://nightlies.apache.org/flink/flink-docs-release-1.15/zh/docs/learn-flink/datastream_api/)
+    - [数据管道 & ETL](https://nightlies.apache.org/flink/flink-docs-release-1.15/zh/docs/learn-flink/etl/)
+    - [流式分析](https://nightlies.apache.org/flink/flink-docs-release-1.15/zh/docs/learn-flink/streaming_analytics/)
+    - [事件驱动应用](https://nightlies.apache.org/flink/flink-docs-release-1.15/zh/docs/learn-flink/event_driven/)
+    - [容错处理](https://nightlies.apache.org/flink/flink-docs-release-1.15/zh/docs/learn-flink/fault_tolerance/)
+- **概念透析**
+    - [概览](https://nightlies.apache.org/flink/flink-docs-release-1.15/zh/docs/concepts/overview/)
+    - [有状态流处理](https://nightlies.apache.org/flink/flink-docs-release-1.15/zh/docs/concepts/stateful-stream-processing/)
+    - [及时流处理](https://nightlies.apache.org/flink/flink-docs-release-1.15/zh/docs/concepts/time/)
+    - [Flink 架构](https://nightlies.apache.org/flink/flink-docs-release-1.15/zh/docs/concepts/flink-architecture/)
+    - [词汇表](https://nightlies.apache.org/flink/flink-docs-release-1.15/zh/docs/concepts/glossary/)
+- **内幕**
+    - [作业调度](https://nightlies.apache.org/flink/flink-docs-release-1.15/zh/docs/internals/job_scheduling/)
+    - [Task 生命周期](https://nightlies.apache.org/flink/flink-docs-release-1.15/zh/docs/internals/task_lifecycle/)
+    - [文件系统](https://nightlies.apache.org/flink/flink-docs-release-1.15/zh/docs/internals/filesystems/)
+

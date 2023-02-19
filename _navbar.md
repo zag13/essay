@@ -14,7 +14,8 @@
     * [Flink](/data-system/flink/)
     * [Kafka](/data-system/kafka/)
     * [大数据导读](/data-system/README.md)
+* **System Design**
+  * [README](/system-design/README.md)
 * **Technology Stack**
-    * [System Design](/technology-stack/system-design/)
     * [Docker](/technology-stack/Docker.md)
     * [Git](/technology-stack/Git.md)
