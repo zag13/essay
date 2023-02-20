@@ -2,7 +2,41 @@
 
 ## Event Time and Processing Time
 
-![](../../assets/img/flink/event_processing_time.svg)
+- Processing Time: 处理时间，即执行相应操作时的机器系统时间
+- Event Time: 事件时间，即事件在其生产设备发生的时间
+
+<img src="../../assets/img/flink/event_processing_time.svg" width="92%">
+
+## Event Time and Watermark
+
+watermark本质上一种时间戳，通常会基于watermark机制触发window窗口计算，用于处理乱序事件或延迟数据。
+watermark可以理解为全局进度指标，表示我们确信不会再有延迟事件到来的某个时间点。
+当一个算子接收到时间为T的水位线，就可以认为不会再接收到任何时间戳小于或等于T的事件了。
+而对于那些可能易于watermark的迟到事件，Flink中可以采取的机制有SideOutput、AllowedLateness或直接丢弃。
+
+**有序的数据流watermark：**
+
+在某些情况下，基于Event Time的数据流是有序的(相对event time)。
+在有序流中，watermark就是一个简单的周期性标记。
+
+<img src="../../assets/img/flink/stream_watermark_in_order.svg" width="92%">
+
+**无序的数据流watermark：**
+
+在更多场景下，基于Event Time的数据流是无序的(相对event time)。
+在无序流中，它告诉operator比watermark更早(时间戳更小)的事件已经到达，可以触发window计算啦。
+
+<img src="../../assets/img/flink/stream_watermark_out_of_order.svg" width="92%">
+
+**并行流当中的watermark：**
+
+在多并行度的情况下，watermark对齐会取所有channel最小的watermark。
+
+<img src="../../assets/img/flink/parallel_streams_watermarks.svg" width="92%">
+
+## Lateness
+
+[Allowed Lateness](https://nightlies.apache.org/flink/flink-docs-release-1.16/zh/docs/dev/datastream/operators/windows/#allowed-lateness)
 
 ## 代码分析
 
