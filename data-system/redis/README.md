@@ -6,7 +6,7 @@
 
 ### 数据类型
 
-![](../../assets/img/redis-data-structure-types.jpg)
+![](../../assets/img/redis/redis-data-structure-types.jpg)
 
 #### STRINGS
 
@@ -268,7 +268,7 @@ pexpire lock-key milliseconds
 - 特点2：内存压力不是很大，长期占用内存的冷数据会被持续清理
 - 总结：周期性抽查存储空间（随机抽查，重点抽查）
 
-![](../../assets/img/redis_2.png)
+![](../../assets/img/redis/redis_2.png)
 
 #### 逐出算法
 
@@ -387,7 +387,7 @@ geohash key member [member ...]
     4. 身份验证
     5. 发送slave端口信息
 
-   ![](../../assets/img/redis_3.png)
+   ![](../../assets/img/redis/redis_3.png)
 
 2. **数据同步阶段**——在slave初次连接master后，复制master中的所有数据到slave **&&** 将slave的数据库状态更新成master当前的数据库状态
 
@@ -397,7 +397,7 @@ geohash key member [member ...]
     4. 请求部分同步数据
     5. 恢复部分同步数据
 
-   ![](../../assets/img/redis_4.png)
+   ![](../../assets/img/redis/redis_4.png)
 
 3. **命令传播阶段**  ——
    当master数据库状态被修改后，导致主从服务器数据库状态不一致，此时需要让主从数据同步到一致的状态，同步的动作称为命令传播 **
@@ -407,9 +407,9 @@ geohash key member [member ...]
     - 短时间网络中断 部分复制
     - 长时间网络中断 全量复制
 
-![](../../assets/img/redis_5.png)
+![](../../assets/img/redis/redis_5.png)
 
-![](../../assets/img/redis_6.png)
+![](../../assets/img/redis/redis_6.png)
 
 ```shell
 #主从连接（slave连接master）

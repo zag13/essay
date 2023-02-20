@@ -1,4 +1,5 @@
 <!-- _sidebar.md -->
 
 * [Kafka](./)
-* [01、Kafka简单介绍](/data-system/kafka/01、Kafka简单介绍.md)
+* [简单介绍](./简单介绍.md)
+* [高可用](./高可用.md)
