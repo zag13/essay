@@ -9,9 +9,9 @@
     <link rel="icon" href="./assets/favicon.ico">
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
     <style>
-        .github-corner {
-            position: absolute;
-        }
+      .github-corner {
+        position: absolute;
+      }
     </style>
 </head>
 <body>
@@ -41,12 +41,49 @@
             theme: 'classic',       // default
             tabComments: true,      // default
             tabHeadings: true       // default
-        }
+        },
+
+        vueMounts: {
+            '.markmap': {
+                data() {
+                    return {
+                        content: '',
+                    }
+                },
+                mounted() {
+                    path = this.getQueryVariable('path');
+                    this.content = this.loadFile(decodeURIComponent(path) + '.md');
+                },
+                methods: {
+                    loadFile(name) {
+                        const xhr = new XMLHttpRequest();
+                        const okStatus = document.location.protocol === 'file:' ? 0 : 200;
+                        xhr.open('GET', name, false);
+                        xhr.overrideMimeType('text/markdown;charset=utf-8');
+                        xhr.send(null);
+                        return xhr.status === okStatus ? xhr.responseText : null;
+                    },
+                    getQueryVariable(variable) {
+                        var query = window.location.hash.split("?")[1];
+                        var vars = query.split("&");
+                        for (var i = 0; i < vars.length; i++) {
+                            var pair = vars[i].split("=");
+                            if (pair[0] === variable) {
+                                return pair[1];
+                            }
+                        }
+                        return false;
+                    }
+                }
+            },
+        },
     }
 </script>
 <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+<script src="//cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js"></script>
 <script src="//cdn.jsdelivr.net/npm/docsify@4/lib/plugins/search.min.js"></script>
 <script src="//cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
 <script src="//cdn.jsdelivr.net/npm/docsify-tabs@1"></script>
+<script src="//cdn.jsdelivr.net/npm/markmap-autoloader@0.14.4"></script>
 </body>
 </html>
