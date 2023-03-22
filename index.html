@@ -55,7 +55,8 @@
                     }
 
                     const transformer = new Transformer()
-                    const markdown = this.loadFile(decodeURIComponent(this.getQueryVariable('path')) + '.md');
+                    var path = decodeURIComponent(this.getQueryVariable('path'));
+                    const markdown = this.loadFile(path.replace("readme", "README") + '.md');
                     const {root, features} = transformer.transform(markdown);
 
                     Markmap.create(svgEl, opts, root);
