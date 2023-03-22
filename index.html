@@ -46,7 +46,7 @@
         vueMounts: {
             '#markmap': {
                 mounted() {
-                    const { Markmap, Transformer } = window.markmap;
+                    const {Markmap, Transformer} = window.markmap;
 
                     const svgEl = document.querySelector('#markmap');
 
@@ -56,7 +56,7 @@
 
                     const transformer = new Transformer()
                     const markdown = this.loadFile(decodeURIComponent(this.getQueryVariable('path')) + '.md');
-                    const { root, features } = transformer.transform(markdown);
+                    const {root, features} = transformer.transform(markdown);
 
                     Markmap.create(svgEl, opts, root);
                 },

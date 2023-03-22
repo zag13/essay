@@ -1,6 +1,6 @@
 # UNIX
 
-[思维导图](/mind.html?path=/technology-stack/unix/README)
+[思维导图](/mind.html?path=/technology-stack/unix/readme)
 
 ## 必读
 
