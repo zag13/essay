@@ -1,8 +1,5 @@
 # VMware
 
-    - xclient.info
-    - VUZQX-VPGWW-C1ZWQ-RWVX9-FP5EV
-
 ## 配置
 
 ### 配置静态IP

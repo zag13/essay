@@ -1,7 +1,5 @@
 <!-- _navbar.md -->
 
-* **计算机科学**
-    * [UNIX网络编程](/computer-science/UNIX网络编程.md)
 * **Language**
     * [Go](/language/go/)
     * [Rust](/language/rust/)
@@ -14,8 +12,8 @@
     * [Flink](/data-system/flink/)
     * [Kafka](/data-system/kafka/)
     * [大数据导读](/data-system/README.md)
-* **System Design**
-  * [README](/system-design/README.md)
 * **Technology Stack**
-    * [Docker](/technology-stack/Docker.md)
-    * [Git](/technology-stack/Git.md)
+    * [UNIX](/technology-stack/unix/)
+    * [System Design](/technology-stack/system-design/)
+    * [Docker](/technology-stack/docker/)
+    * [Git](/technology-stack/git/)

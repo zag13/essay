@@ -141,7 +141,7 @@
 - `--userland-proxy=true|false`：是否使用用户态代理来实现容器间和出容器的回环通信，默认为 true；
 - `--userns-remap=default|uid:gid|user:group|user|uid`：指定容器的用户命名空间，默认是创建新的 UID 和 GID 映射到容器内进程。
 
-![](../assets/img/docker/docker_1.png)
+![](../../assets/img/docker/docker_1.png)
 
 ## 常用技巧
 
