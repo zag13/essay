@@ -10,10 +10,14 @@
 - [The Go Blog](https://go.dev/blog/)
 - [Go wiki](https://github.com/golang/go/wiki)
 
+### 资源
+
+- [Golang Internals Resources](https://github.com/emluque/golang-internals-resources)
+
 ### 书籍
 
-- [Go程序设计语言](https://awesome-programming-books.github.io/golang/go程序设计语言.pdf)
-- [Go语言实战](https://awesome-programming-books.github.io/golang/Go语言实战.pdf)
+- [《Go程序设计语言》](https://awesome-programming-books.github.io/golang/go程序设计语言.pdf)
+- [《Go语言实战》](https://awesome-programming-books.github.io/golang/Go语言实战.pdf)
 
 ### 文章
 
