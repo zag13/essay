@@ -61,7 +61,7 @@
 
                     Markmap.create(svgEl, opts, root);
 
-                    const links = document.querySelectorAll('a');
+                    const links = document.querySelectorAll('#markmap a');
                     links.forEach(link => {
                         link.setAttribute('target', '_blank');
                     });
