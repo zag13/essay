@@ -60,6 +60,11 @@
                     const {root, features} = transformer.transform(markdown);
 
                     Markmap.create(svgEl, opts, root);
+
+                    const links = document.querySelectorAll('a');
+                    links.forEach(link => {
+                        link.setAttribute('target', '_blank');
+                    });
                 },
                 methods: {
                     loadFile(name) {
