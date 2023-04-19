@@ -1,9 +1,14 @@
 # Mysql
 
-## 必读
+[思维导图](/mind.html?path=/data-system/mysql/README)
 
-[MySQL 8.0 Reference Manual](https://dev.mysql.com/doc/refman/8.0/en/)
+## 推荐阅读
 
-[MySQL 实战 45 讲](https://time.geekbang.org/column/intro/100020801)
+### 文档
 
-[高性能 MySQL 实战](https://xueyuanjun.com/books/high-performance-mysql)
+- [MySQL 8.0 Reference Manual](https://dev.mysql.com/doc/refman/8.0/en/)
+
+### 书籍
+
+- 《高性能MySQL》
+- [MySQL实战45讲](https://time.geekbang.org/column/intro/100020801)
