@@ -1,6 +1,7 @@
 <!-- _sidebar.md -->
 
 * [Go](./)
+* [SRC](./src/)
 * [Effective Go](./Effective%20Go.md)
 * [Language Specification](./Language%20Specification.md)
 * [How to Write Go Code](./How%20to%20Write%20Go%20Code.md)
