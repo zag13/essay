@@ -20,6 +20,7 @@
 - [Golang 泛型初识](https://juejin.cn/post/7116815890343493646)
 - [An Introduction To Generics](https://go.dev/blog/intro-generics)
 - [Go设计模式](https://github.com/tmrts/go-patterns)
+- [Go 1.18 将引入新的网络地址包](https://taoshu.in/go/go-1.18-netip.html)
 
 ### 资源
 
