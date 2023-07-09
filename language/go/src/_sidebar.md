@@ -1,5 +1,6 @@
 <!-- _sidebar.md -->
 
 * [Go](../)
-* [SRC](./)
+* [src](./)
 * [fmt](./fmt.md)
+* [json](./json.md)
