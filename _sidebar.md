@@ -13,8 +13,8 @@
     * [Kafka](/data-system/kafka/)
     * [大数据导读](/data-system/README.md)
 * **Technology Stack**
+    * [编程理念](/technology-stack/programming-philosophy/)
     * [UNIX](/technology-stack/unix/)
-    * [Chat Box](/technology-stack/chatbox/)
     * [System Design](/technology-stack/system-design/)
     * [Docker](/technology-stack/docker/)
     * [Git](/technology-stack/git/)

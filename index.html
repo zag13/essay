@@ -51,11 +51,11 @@
                     const svgEl = document.querySelector('#markmap');
 
                     const opts = {
-                        initialExpandLevel: 3,
+                        initialExpandLevel: this.getQueryVariable('initialexpandlevel') ?? 3,
                     }
 
                     const transformer = new Transformer()
-                    var path = decodeURIComponent(this.getQueryVariable('path'));
+                    const path = decodeURIComponent(this.getQueryVariable('path'));
                     const markdown = this.loadFile(path.replace("readme", "README") + '.md');
                     const {root, features} = transformer.transform(markdown);
 
