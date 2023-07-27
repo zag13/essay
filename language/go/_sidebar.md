@@ -2,6 +2,7 @@
 
 * [Go](./)
 * [src](./src/)
+* [《100 go mistakes》](./《100%20go%20mistakes》.md)
 * [Effective Go](./Effective%20Go.md)
 * [Language Specification](./Language%20Specification.md)
 * [How to Write Go Code](./How%20to%20Write%20Go%20Code.md)
