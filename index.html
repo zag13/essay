@@ -51,7 +51,7 @@
                     const svgEl = document.querySelector('#markmap');
 
                     const opts = {
-                        initialExpandLevel: isNaN(this.getQueryVariable('initialexpandlevel')) ? this.getQueryVariable('initialexpandlevel') : 3,
+                        initialExpandLevel: this.getQueryVariable('initialexpandlevel') > 0 ? this.getQueryVariable('initialexpandlevel') : 3,
                     }
 
                     const transformer = new Transformer()
