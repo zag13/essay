@@ -1,6 +1,6 @@
 # 《100 go mistakes》
 
-[思维导图](/mind.html?path=/language/go/《100%20go%20mistakes》)
+[思维导图](/mind.html?path=/language/go/《100%20go%20mistakes》&initialexpandlevel=2)
 
 ## 代码和项目组织
 
@@ -73,3 +73,24 @@
 47. **忽视 defer 的参数和接收器的评估** defer 会在函数返回前执行，但是参数和接收器是在使用 defer 语句是评估的；可以使用闭包
 
 ## 错误管理
+
+48. **panic** 谨慎使用 panic
+49. **忽视何时封装错误** `fmt.Errorf("detail error: %w", err)`
+50. **不准确的错误类型检查** 使用 `errors.As()` 对封装后的错误类型进行检查
+51. **不准确的错误值检查** 使用 `errors.Is()` 对封装后的错误值进行检查
+52. **两次处理同一个错误** 要么记录日志，要么返回错误（可以使用 `fmt.Errorf()` 进行封装）
+53. **不处理错误** 对某个错误不感兴趣，将其赋值给 `_` 语义会更明确
+54. **不处理 defer 中的错误** 有可能导致资源未被释放
+
+## 并发：基础
+
+55. **混淆并发和并行** 并发是指两个或多个任务在时间上重叠，而并行是指两个或多个任务在同一时刻执行
+56. **认为并发总是更快** 当任务开销小于 goroutine 的开销时，并发会降低性能
+57. **不知道使用 channel 还是 mutex** 一般来说，并发 goroutines 需要使用 channel，而并行 goroutines 需要使用 mutex
+58. **不理解竞争问题** 原子操作；使用互斥锁；使用 channel
+59. **不知道工作负载类型** CPU 密集型、I/O 密集型
+60. **不理解 Go context** context 用于在 goroutine 之间传递请求作用域的数据、取消信号和截止日期
+
+## 并发：实践
+
+61. **传播不恰当的 context** 
