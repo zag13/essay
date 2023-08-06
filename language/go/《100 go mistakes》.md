@@ -93,4 +93,34 @@
 
 ## 并发：实践
 
-61. **传播不恰当的 context** 
+61. **传播不恰当的 context** 子任务的话要清楚父任务的 context 是否需要传递
+62. **启动一个不知道何时停止的 goroutine** 设计时要考虑怎么停止 goroutine
+63. **使用 goroutine 和循环变量时不谨慎** for range 常见问题
+64. **使用 select/channel 保证确定性** select 是伪随机的
+65. **不使用通知类型 channel** 使用 `chan struct{}` 作为通知类型 channel
+66. **不使用 nil channel** 一般不使用
+67. **对 channel 缓冲区大小感到困惑** 只有无缓冲才能保证同步性
+68. **忘记字符串格式化的副作用** String() 可能不是并发安全的，甚至死锁
+69. **使用 append 导致数据竞争** 切片 append 不是并发安全的
+70. **在 slice 和 map 中错误使用互斥锁** slice 和 map 是指针类型
+71. **错误使用 sync.WaitGroup** 不要在 子goroutine 中使用 wg.Add()
+72. **忘记还有 sync.Cond** 同时向多个 goroutine 发送信号
+73. **不使用 errgroup** 不要重复造轮子
+74. **复制同步原语** 使用指针
+
+## 标准库
+
+75. **提供错误的持续时间** 使用 `time.Second()` 而不是 1e9
+76. **time.After 内存泄漏** 只有当计时器过期时，创建的资源才会释放，在循环中要使用 `time.NewTimer` 来替代
+77. **常见的 JSON 处理错误** 类型嵌入；时间类型；any 中的数字被认为是 float64
+78. **常见的 SQL 错误**
+    - `sql.Open()` 并不建立连接，只是验证参数
+    - `*sql.DB` 是一个连接池
+    - 要使用 Prepared Statement
+    - 要使用 sql.Nullxxx
+    - 要处理迭代中的错误
+79. **没有释放临时资源** `resp.Body` `sql.Rows` `os.File`
+80. **处理 http 请求时没有返回** `http.Error` 后立即返回
+81. **使用默认的 http 客户端和服务端** 要设置超时时间
+
+## 测试
