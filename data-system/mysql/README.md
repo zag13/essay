@@ -2,6 +2,10 @@
 
 [思维导图](/mind.html?path=/data-system/mysql/README)
 
+## 一条语句的执行过程
+
+1. 
+
 ## 推荐阅读
 
 ### 文档
