@@ -1,4 +1,4 @@
-# Mysql
+# MySQL
 
 [思维导图](/mind.html?path=/data-system/mysql/README)
 
