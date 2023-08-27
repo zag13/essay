@@ -11,7 +11,6 @@
     * [ClickHouse](/data-system/clickhouse/)
     * [Flink](/data-system/flink/)
     * [Kafka](/data-system/kafka/)
-    * [大数据导读](/data-system/README.md)
 * **Technology Stack**
     * [UNIX](/technology-stack/unix/)
     * [System Design](/technology-stack/system-design/)
