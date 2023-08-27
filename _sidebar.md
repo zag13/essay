@@ -6,7 +6,7 @@
     * [PHP](/language/php/)
     * [JavaScript](/language/javascript/)
 * **Data System**
-    * [Mysql](/data-system/mysql/)
+    * [MySQL](/data-system/mysql/)
     * [Redis](/data-system/redis/)
     * [ClickHouse](/data-system/clickhouse/)
     * [Flink](/data-system/flink/)
