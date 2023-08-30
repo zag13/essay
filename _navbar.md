@@ -12,7 +12,9 @@
     * [Flink](/data-system/flink/)
     * [Kafka](/data-system/kafka/)
 * **Technology Stack**
+    * [编程理念](/technology-stack/programming-philosophy/)
     * [UNIX](/technology-stack/unix/)
+    * [Algorithm](/technology-stack/algorithm/)
     * [System Design](/technology-stack/system-design/)
     * [Docker](/technology-stack/docker/)
     * [Git](/technology-stack/git/)
