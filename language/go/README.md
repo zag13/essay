@@ -6,8 +6,8 @@
 
 ### 文档
 
-- [Go Documentation](https://go.dev/doc/)
-- [The Go Blog](https://go.dev/blog/)
+- [Effective Go](https://go.dev/doc/effective_go)
+- [The Go Memory Model](https://go.dev/ref/mem)
 - [Go wiki](https://github.com/golang/go/wiki)
 - [Practical Go: Real world advice for writing maintainable Go programs](https://dave.cheney.net/practical-go/presentations/qcon-china.html)
 
@@ -26,3 +26,5 @@
 ### 资源
 
 - [Golang Internals Resources](https://github.com/emluque/golang-internals-resources)
+- [Go Documentation](https://go.dev/doc/)
+- [The Go Blog](https://go.dev/blog/)
