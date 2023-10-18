@@ -4,12 +4,13 @@
 
 ## 推荐阅读
 
-### 文档
+### 必读
 
 - [Effective Go](https://go.dev/doc/effective_go)
 - [The Go Memory Model](https://go.dev/ref/mem)
-- [Go wiki](https://github.com/golang/go/wiki)
-- [Practical Go: Real world advice for writing maintainable Go programs](https://dave.cheney.net/practical-go/presentations/qcon-china.html)
+- [Go Documentation](https://go.dev/doc/)
+- [The Go Blog](https://go.dev/blog/)
+- [Go Wiki](https://github.com/golang/go/wiki)
 
 ### 书籍
 
@@ -18,13 +19,11 @@
 
 ### 文章
 
-- [Golang 泛型初识](https://juejin.cn/post/7116815890343493646)
+- [The Go Programming Language Specification](https://go.dev/ref/spec)
+- [Frequently Asked Questions (FAQ)](https://go.dev/doc/faq)
+- [How to Write Go Code](https://go.dev/doc/code)
 - [An Introduction To Generics](https://go.dev/blog/intro-generics)
+- [Practical Go: Real world advice for writing maintainable Go programs](https://dave.cheney.net/practical-go/presentations/qcon-china.html)
+- [Golang 泛型初识](https://juejin.cn/post/7116815890343493646)
 - [Go设计模式](https://github.com/tmrts/go-patterns)
 - [Go 1.18 将引入新的网络地址包](https://taoshu.in/go/go-1.18-netip.html)
-
-### 资源
-
-- [Golang Internals Resources](https://github.com/emluque/golang-internals-resources)
-- [Go Documentation](https://go.dev/doc/)
-- [The Go Blog](https://go.dev/blog/)

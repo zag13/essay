@@ -1,11 +1,6 @@
 <!-- _sidebar.md -->
 
 * [Go](./)
-* [src](./src/)
 * [《100 go mistakes》](./《100%20go%20mistakes》.md)
-* [Effective Go](./Effective%20Go.md)
-* [Language Specification](./Language%20Specification.md)
-* [How to Write Go Code](./How%20to%20Write%20Go%20Code.md)
-* [Frequently Asked Questions](./Frequently%20Asked%20Questions.md)
-* [The Go Memory Model](./The%20Go%20Memory%20Model.md)
-* [数据类型](./数据类型.md)
+* [fmt](./src-fmt.md)
+* [json](./src-json.md)
