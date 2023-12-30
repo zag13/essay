@@ -1,0 +1,135 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Essay",
+    "section": "",
+    "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites."
+  },
+  {
+    "objectID": "docs/language/rust/index.html",
+    "href": "docs/language/rust/index.html",
+    "title": "rust",
+    "section": "",
+    "text": "This is a Rust website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites."
+  },
+  {
+    "objectID": "docs/language/go/100go.html",
+    "href": "docs/language/go/100go.html",
+    "title": "100 go mistakes",
+    "section": "",
+    "text": "意外的变量隐藏 要注意短声明是否会覆盖原先变量\n不必要的嵌套代码 简单可读，尽早返回\n滥用 init 函数 init 在变量声明之后，main 函数之前执行，多个 init 函数按照声明顺序执行\n过度使用 getter 和 setter 尽量使用直接访问，不要过度封装\n接口污染 若无必要，勿增实体（抽象应该是被发现，而不是被创建）\n生产者的接口 一般放在消费端维护，若确有必要放在生产者一方，应尽量减小抽象\n返回接口 一般返回具体抽象\nany 意味着 nothing any 丢失了类型信息，使用时应谨慎\n乱用泛型 应在一些通用的数据结构和函数中使用\n误用嵌入类型 小心方法提升\n不使用函数选项模式 萝卜青菜，各有所爱\n项目无组织 社区公约 golang-standards\n创建通用包 不推荐 common、util、shared 等没有具体含义的包\n变量和包名冲突 小心变量和包名冲突\n缺少代码文档 每个导出的元素都应有文档\n不使用 linters 磨刀不误砍柴工"
+  },
+  {
+    "objectID": "docs/language/go/100go.html#代码和项目组织",
+    "href": "docs/language/go/100go.html#代码和项目组织",
+    "title": "100 go mistakes",
+    "section": "",
+    "text": "意外的变量隐藏 要注意短声明是否会覆盖原先变量\n不必要的嵌套代码 简单可读，尽早返回\n滥用 init 函数 init 在变量声明之后，main 函数之前执行，多个 init 函数按照声明顺序执行\n过度使用 getter 和 setter 尽量使用直接访问，不要过度封装\n接口污染 若无必要，勿增实体（抽象应该是被发现，而不是被创建）\n生产者的接口 一般放在消费端维护，若确有必要放在生产者一方，应尽量减小抽象\n返回接口 一般返回具体抽象\nany 意味着 nothing any 丢失了类型信息，使用时应谨慎\n乱用泛型 应在一些通用的数据结构和函数中使用\n误用嵌入类型 小心方法提升\n不使用函数选项模式 萝卜青菜，各有所爱\n项目无组织 社区公约 golang-standards\n创建通用包 不推荐 common、util、shared 等没有具体含义的包\n变量和包名冲突 小心变量和包名冲突\n缺少代码文档 每个导出的元素都应有文档\n不使用 linters 磨刀不误砍柴工"
+  },
+  {
+    "objectID": "docs/language/go/100go.html#数据类型",
+    "href": "docs/language/go/100go.html#数据类型",
+    "title": "100 go mistakes",
+    "section": "数据类型",
+    "text": "数据类型\n\n使用 8 进制字面量 二进制：0b，八进制：0o，十六进制：0x\n忽略整数溢出 Go 对溢出是静默的\n不了解浮点数 float32 精度 7 位，float64 精度 15 位\n不了解切片的长度和容量 长度是指切片中元素的个数，容量是指底层数组中元素的个数\n低效的切片初始化 初始化时指定容量，避免频繁扩容\n对 nil 和空切片的困惑 nil 和空切片的长度都为0，nil 不需要分配\n不正确检查切片为空 len(s) != 0\n不正确复制切片 copy(dst, src) 会复制 min(len(dst), len(src)) 个元素\n忽视 append 的副作用 append 可能会导致底层数组重新分配，导致之前的切片失效\n切片内存泄露 切片容量泄漏、底层数组泄漏\n低效的 map 初始化 初始化时指定容量，避免频繁扩容\nmap 内存泄漏 map 的桶会随着元素的增加而增加，但是不会随着元素的删除而减少\n比较值时犯错 reflect.DeepEqual()\n\nBooleans 比较两个布尔值是否相等\nNumerics 比较数字是否相等\nStrings 比较字符串是否相等\nChannels 比较两个通道是否指向同一个通道或者都是 nil\nInterfaces 比较两个接口是否具有相同的动态类型且值相等或者都是 nil\nPointers 比较两个指针是否指向同一个对象或者都是 nil\nStructs and Arrays 比较结构体或者数组的每个元素是否相等"
+  },
+  {
+    "objectID": "docs/language/go/100go.html#控制结构",
+    "href": "docs/language/go/100go.html#控制结构",
+    "title": "100 go mistakes",
+    "section": "控制结构",
+    "text": "控制结构\n\n忽视遍历时元素被复制 for range 时， 元素会被复制，修改的是副本\n忽视遍历时参数怎么计算 for range 时，参数只会计算一次；若需要每次都计算，应使用普通 for 循环\n忽视遍历时指针元素的影响 for range 时，元素都会分配给一个具有唯一地址的变量，每次迭代存储引用该指针的变量的话，只会存储最后的值\n遍历 map 时想当然 map 是无序的，每次遍历的顺序都可能不一样；遍历时插入元素，可能会出现在遍历中，也可能被跳过\n忽视 break 的工作机制 break 只会跳出当前循环，若想跳出多层循环，应使用标签\n在循环中使用 defer 会堆积所有 defer，如果循环没有终止，会导致内存泄漏\n忽视闭包中的参数 闭包中的参数是引用，而不是值"
+  },
+  {
+    "objectID": "docs/language/go/100go.html#字符串",
+    "href": "docs/language/go/100go.html#字符串",
+    "title": "100 go mistakes",
+    "section": "字符串",
+    "text": "字符串\n\n不理解 rune rune 是 int32 的别名，可以由多个字节组成；len(s) 返回的是字节数，而不是字符数\n不正确的字符串遍历 for range 遍历字符串时，会将字符串转换为 rune 数组，而不是字节数组\n乱用 trim 要了解 strings.TrimRight() strings.TrimSuffix() 的区别\n未对字符串连接进行优化 使用 strings.Builder 进行字符串拼接\n无用的字符串转换 确认需不需要对 string 和 []byte 进行互转\n字符串内存泄漏 子串占用母串"
+  },
+  {
+    "objectID": "docs/language/go/100go.html#函数与方法",
+    "href": "docs/language/go/100go.html#函数与方法",
+    "title": "100 go mistakes",
+    "section": "函数与方法",
+    "text": "函数与方法\n\n不知道选择哪种接收器类型 若需要修改接收器的值或其中包含一个无法复制的字段，必须使用指针接收器\n从不使用命名的返回值 提升代码可读性\n未预期的命名返回值的副作用 注意变量隐藏\n返回一个 nil 接收器 nil 接收器 != nil ⭐️⭐️⭐️\n使用文件名作为函数输入 增加代码测试的复杂性\n忽视 defer 的参数和接收器的评估 defer 会在函数返回前执行，但是参数和接收器是在使用 defer 语句是评估的；可以使用闭包"
+  },
+  {
+    "objectID": "docs/language/go/100go.html#错误管理",
+    "href": "docs/language/go/100go.html#错误管理",
+    "title": "100 go mistakes",
+    "section": "错误管理",
+    "text": "错误管理\n\npanic 谨慎使用 panic\n忽视何时封装错误 fmt.Errorf(\"detail error: %w\", err)\n不准确的错误类型检查 使用 errors.As() 对封装后的错误类型进行检查\n不准确的错误值检查 使用 errors.Is() 对封装后的错误值进行检查\n两次处理同一个错误 要么记录日志，要么返回错误（可以使用 fmt.Errorf() 进行封装）\n不处理错误 对某个错误不感兴趣，将其赋值给 _ 语义会更明确\n不处理 defer 中的错误 有可能导致资源未被释放"
+  },
+  {
+    "objectID": "docs/language/go/100go.html#并发基础",
+    "href": "docs/language/go/100go.html#并发基础",
+    "title": "100 go mistakes",
+    "section": "并发：基础",
+    "text": "并发：基础\n\n混淆并发和并行 并发是指两个或多个任务在时间上重叠，而并行是指两个或多个任务在同一时刻执行\n认为并发总是更快 当任务开销小于 goroutine 的开销时，并发会降低性能\n不知道使用 channel 还是 mutex 一般来说，并发 goroutines 需要使用 channel，而并行 goroutines 需要使用 mutex\n不理解竞争问题 原子操作；使用互斥锁；使用 channel\n不知道工作负载类型 CPU 密集型、I/O 密集型\n不理解 Go context context 用于在 goroutine 之间传递请求作用域的数据、取消信号和截止日期"
+  },
+  {
+    "objectID": "docs/language/go/100go.html#并发实践",
+    "href": "docs/language/go/100go.html#并发实践",
+    "title": "100 go mistakes",
+    "section": "并发：实践",
+    "text": "并发：实践\n\n传播不恰当的 context 子任务的话要清楚父任务的 context 是否需要传递\n启动一个不知道何时停止的 goroutine 设计时要考虑怎么停止 goroutine\n使用 goroutine 和循环变量时不谨慎 for range 常见问题\n使用 select/channel 保证确定性 select 是伪随机的\n不使用通知类型 channel 使用 chan struct{} 作为通知类型 channel\n不使用 nil channel 一般不使用\n对 channel 缓冲区大小感到困惑 只有无缓冲才能保证同步性\n忘记字符串格式化的副作用 String() 可能不是并发安全的，甚至死锁\n使用 append 导致数据竞争 切片 append 不是并发安全的\n在 slice 和 map 中错误使用互斥锁 slice 和 map 是指针类型\n错误使用 sync.WaitGroup 不要在 子goroutine 中使用 wg.Add()\n忘记还有 sync.Cond 同时向多个 goroutine 发送信号\n不使用 errgroup 不要重复造轮子\n复制同步原语 使用指针"
+  },
+  {
+    "objectID": "docs/language/go/100go.html#标准库",
+    "href": "docs/language/go/100go.html#标准库",
+    "title": "100 go mistakes",
+    "section": "标准库",
+    "text": "标准库\n\n提供错误的持续时间 使用 time.Second() 而不是 1e9\ntime.After 内存泄漏 只有当计时器过期时，创建的资源才会释放，在循环中要使用 time.NewTimer 来替代\n常见的 JSON 处理错误 类型嵌入；时间类型；any 中的数字被认为是 float64\n常见的 SQL 错误\n\nsql.Open() 并不建立连接，只是验证参数\n*sql.DB 是一个连接池\n要使用 Prepared Statement\n要使用 sql.Nullxxx\n要处理迭代中的错误\n\n没有释放临时资源 resp.Body sql.Rows os.File\n处理 http 请求时没有返回 http.Error 后立即返回\n使用默认的 http 客户端和服务端 要设置超时时间"
+  },
+  {
+    "objectID": "docs/language/go/100go.html#测试",
+    "href": "docs/language/go/100go.html#测试",
+    "title": "100 go mistakes",
+    "section": "测试",
+    "text": "测试\n\n未区分测试种类 export MY_ENV=test / go test --tags=... -short\n未打开 -race 开关 本地测试时要打开\n未使用测试执行模式 -parallel -shuffle\n未使用表驱动型测试 用表驱动型测试替代 if/else\n在单元测试中休眠 引入重试代替休眠\n没有有效使用 tim e mock 或者重构时间相关代码\n未使用测试工具包 httptest iotest 等\n编写不准确的基准测试 一些基础测试的误区\n未探索所有的 go 测试特性 代码覆盖率等等"
+  },
+  {
+    "objectID": "docs/language/go/100go.html#优化",
+    "href": "docs/language/go/100go.html#优化",
+    "title": "100 go mistakes",
+    "section": "优化",
+    "text": "优化\n\n不了解 CPU 缓存 编写 CPU 缓存友好的代码\n编写导致伪共享的并发代码 通过填充或通信来防止伪共享\n不考虑指令级并行性 充分利用指令流水线并行\n不了解数据对齐 对齐保证更好的空间局部性\n不了解栈与堆 尽量避免在堆上分配内存\n不了解如何减少分配 初始容量和池化技术\n没有依赖内联 内联是提升性能的有效手段\n没有使用 Go 诊断工具 profile trace\n不了解 GC 的工作原理 了解一些 GC 细节\n不了解容器对 Go 程序的影响 了解一些 GC 细节"
+  },
+  {
+    "objectID": "docs/data-system/mysql/index.html",
+    "href": "docs/data-system/mysql/index.html",
+    "title": "Mysql",
+    "section": "",
+    "text": "This is a Mysql index."
+  },
+  {
+    "objectID": "docs/data-system/index.html",
+    "href": "docs/data-system/index.html",
+    "title": "Data System",
+    "section": "",
+    "text": "This is a data system index."
+  },
+  {
+    "objectID": "docs/data-system/mysql/test.html",
+    "href": "docs/data-system/mysql/test.html",
+    "title": "Mysql Test",
+    "section": "",
+    "text": "This is a test index."
+  },
+  {
+    "objectID": "docs/language/go/index.html",
+    "href": "docs/language/go/index.html",
+    "title": "Go",
+    "section": "",
+    "text": "This is a go index."
+  },
+  {
+    "objectID": "docs/language/javascript/index.html",
+    "href": "docs/language/javascript/index.html",
+    "title": "JavaScript",
+    "section": "",
+    "text": "This is a JavaScript website."
+  }
+]
