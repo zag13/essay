@@ -1,0 +1,5 @@
+---
+title: "Go"
+---
+
+This is a go index.

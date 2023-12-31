@@ -1,0 +1,6 @@
+---
+title: "JavaScript"
+---
+
+This is a JavaScript page.
+

@@ -1,0 +1,71 @@
+project:
+  type: website
+  output-dir: _site
+
+resources:
+  - CNAME
+  
+execute:
+  freeze: auto
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+  
+website:
+  title: "Essay"
+  favicon: "favicon.png"
+  repo-url: https://github.com/zag13/essay
+  navbar:
+    left:
+      - text: Algorithm
+        href: docs/algorithm/index.qmd
+      - text: Data System
+        href: docs/data-system/index.qmd
+      - text: Language
+        menu:
+         - text: "Go"
+           href: docs/language/go/index.qmd
+         - text: "Rust"
+           href: docs/language/rust/index.qmd  
+         - text: "JavaScript"
+           href: docs/language/javascript/index.qmd  
+           
+  sidebar:
+    - id: data-system
+      title: "Data System"
+      style: "floating"
+      collapse-level: 2
+      align: left
+      contents:
+        - section: "Data System"
+          href: docs/data-system/index.qmd
+          contents:
+          - section: "Mysql"
+            href: docs/data-system/mysql/index.qmd
+            contents: 
+    - id: language-go
+      text: "Go"
+      href: docs/language/go/index.qmd
+      collapse-level: 2
+      contents:
+        - section: "Go"
+          contents: 
+            - docs/language/go/100go.qmd
+    - id: language-rust
+      text: "Rust"
+      href: docs/language/rust/index.qmd
+      collapse-level: 2
+      contents:
+        - section: "Rust"
+          contents: 
+    - id: language-javascript
+      text: "JavaScript"
+      href: docs/language/javascript/index.qmd
+      collapse-level: 2
+      contents:
+        - section: "JavaScript"
+          contents: 
+    
