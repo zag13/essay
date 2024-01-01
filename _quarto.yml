@@ -11,12 +11,12 @@ execute:
 format:
   html:
     theme: cosmo
-    css: styles.css
+    css: assets/css/styles.css
     toc: true
   
 website:
   title: "Essay"
-  favicon: "favicon.png"
+  favicon: assets/favicons/favicon.png
   repo-url: https://github.com/zag13/essay
   navbar:
     left:
@@ -32,6 +32,10 @@ website:
            href: docs/language/rust/index.qmd  
          - text: "JavaScript"
            href: docs/language/javascript/index.qmd  
+      - text: Technology Stack
+        menu:
+         - text: "UNIX"
+           href: docs/unix/index.qmd
            
   sidebar:
     - id: data-system
