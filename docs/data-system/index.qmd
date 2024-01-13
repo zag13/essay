@@ -2,5 +2,6 @@
 title: "Data System"
 ---
 
-This is a data system page.
+## 推荐阅读
 
+- [DDIA](http://ddia.vonng.com)

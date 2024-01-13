@@ -22,22 +22,35 @@ website:
     left:
       - text: Algorithm
         href: docs/algorithm/index.qmd
+      - text: Language
+        href: docs/language/index.qmd
       - text: Data System
         href: docs/data-system/index.qmd
-      - text: Language
-        menu:
-         - text: "Go"
-           href: docs/language/go/index.qmd
-         - text: "Rust"
-           href: docs/language/rust/index.qmd  
-         - text: "JavaScript"
-           href: docs/language/javascript/index.qmd  
       - text: Technology Stack
         menu:
          - text: "UNIX"
            href: docs/unix/index.qmd
            
   sidebar:
+    - id: language
+      title: "Language"
+      style: "floating"
+      collapse-level: 2
+      align: left
+      contents:
+        - section: "Language"
+          href: docs/language/index.qmd
+          contents:
+            - section: "Go"
+              href: docs/language/go/index.qmd
+              contents: 
+                - docs/language/go/100go.qmd
+            - section: "Rust"
+              href: docs/language/rust/index.qmd
+              contents: 
+            - section: "JavaScript"
+              href: docs/language/javascript/index.qmd
+              contents:
     - id: data-system
       title: "Data System"
       style: "floating"
@@ -47,29 +60,10 @@ website:
         - section: "Data System"
           href: docs/data-system/index.qmd
           contents:
-          - section: "Mysql"
+          - section: "DataBase"
+            href: docs/data-system/database/index.qmd
+            contents: 
+              - docs/data-system/database/distributed-transaction.qmd
+          - section: "MySQL"
             href: docs/data-system/mysql/index.qmd
             contents: 
-    - id: language-go
-      text: "Go"
-      href: docs/language/go/index.qmd
-      collapse-level: 2
-      contents:
-        - section: "Go"
-          contents: 
-            - docs/language/go/100go.qmd
-    - id: language-rust
-      text: "Rust"
-      href: docs/language/rust/index.qmd
-      collapse-level: 2
-      contents:
-        - section: "Rust"
-          contents: 
-    - id: language-javascript
-      text: "JavaScript"
-      href: docs/language/javascript/index.qmd
-      collapse-level: 2
-      contents:
-        - section: "JavaScript"
-          contents: 
-    

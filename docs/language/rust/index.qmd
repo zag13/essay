@@ -1,5 +1,0 @@
----
-title: "Rust"
----
-
-This is a Rust page.
