@@ -2,38 +2,46 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://essay.zag13.com/index.html</loc>
-    <lastmod>2023-12-31T00:10:03.389Z</lastmod>
+    <lastmod>2024-01-21T02:37:46.791Z</lastmod>
   </url>
   <url>
     <loc>https://essay.zag13.com/docs/algorithm/index.html</loc>
-    <lastmod>2023-12-31T00:10:03.030Z</lastmod>
-  </url>
-  <url>
-    <loc>https://essay.zag13.com/docs/language/rust/index.html</loc>
-    <lastmod>2023-12-31T00:10:02.657Z</lastmod>
+    <lastmod>2024-01-21T02:37:46.451Z</lastmod>
   </url>
   <url>
     <loc>https://essay.zag13.com/docs/language/go/100go.html</loc>
-    <lastmod>2023-12-31T00:10:02.311Z</lastmod>
+    <lastmod>2024-01-21T02:37:45.764Z</lastmod>
   </url>
   <url>
     <loc>https://essay.zag13.com/docs/data-system/index.html</loc>
-    <lastmod>2023-12-31T00:10:01.825Z</lastmod>
+    <lastmod>2024-01-21T02:37:45.271Z</lastmod>
+  </url>
+  <url>
+    <loc>https://essay.zag13.com/docs/data-system/database/index.html</loc>
+    <lastmod>2024-01-21T02:37:44.906Z</lastmod>
+  </url>
+  <url>
+    <loc>https://essay.zag13.com/docs/data-system/database/distributed-transaction.html</loc>
+    <lastmod>2024-01-21T02:37:44.712Z</lastmod>
+  </url>
+  <url>
+    <loc>https://essay.zag13.com/docs/data-system/database/cache-coherence.html</loc>
+    <lastmod>2024-01-21T02:37:45.090Z</lastmod>
   </url>
   <url>
     <loc>https://essay.zag13.com/docs/data-system/mysql/index.html</loc>
-    <lastmod>2023-12-31T00:10:02.009Z</lastmod>
+    <lastmod>2024-01-21T02:37:45.452Z</lastmod>
   </url>
   <url>
     <loc>https://essay.zag13.com/docs/language/go/index.html</loc>
-    <lastmod>2023-12-31T00:10:02.489Z</lastmod>
+    <lastmod>2024-01-21T02:37:45.943Z</lastmod>
   </url>
   <url>
     <loc>https://essay.zag13.com/docs/language/javascript/index.html</loc>
-    <lastmod>2023-12-31T00:10:02.836Z</lastmod>
+    <lastmod>2024-01-21T02:37:46.286Z</lastmod>
   </url>
   <url>
     <loc>https://essay.zag13.com/docs/unix/index.html</loc>
-    <lastmod>2023-12-31T00:10:03.209Z</lastmod>
+    <lastmod>2024-01-21T02:37:46.615Z</lastmod>
   </url>
 </urlset>

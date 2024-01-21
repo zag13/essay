@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Essay - 100 go mistakes</title>
+<title>Essay - 分布式事务</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -60,6 +60,9 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script src="../../../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../../../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../../../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
 
 <link rel="stylesheet" href="../../../assets/css/styles.css">
@@ -87,11 +90,11 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">Algorithm</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../../../docs/language/index.html" rel="" target="" aria-current="page">
+    <a class="nav-link" href="../../../docs/language/index.html" rel="" target="">
  <span class="menu-text">Language</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../docs/data-system/index.html" rel="" target="">
+    <a class="nav-link active" href="../../../docs/data-system/index.html" rel="" target="" aria-current="page">
  <span class="menu-text">Data System</span></a>
   </li>  
   <li class="nav-item dropdown ">
@@ -116,7 +119,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../docs/language/index.html">Language</a></li><li class="breadcrumb-item"><a href="../../../docs/language/go/index.html">Go</a></li><li class="breadcrumb-item"><a href="../../../docs/language/go/100go.html">100 go mistakes</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../docs/data-system/index.html">Data System</a></li><li class="breadcrumb-item"><a href="../../../docs/data-system/database/index.html">DataBase</a></li><li class="breadcrumb-item"><a href="../../../docs/data-system/database/distributed-transaction.html">分布式事务</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
     </div>
@@ -130,8 +133,8 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="../../../docs/language/index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Language</span></a>
+            <a href="../../../docs/data-system/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data System</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -139,8 +142,8 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="../../../docs/language/go/index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Go</span></a>
+            <a href="../../../docs/data-system/database/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DataBase</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -148,19 +151,21 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth2 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../../docs/language/go/100go.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">100 go mistakes</span></a>
+  <a href="../../../docs/data-system/database/distributed-transaction.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">分布式事务</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../docs/data-system/database/cache-coherence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">缓存一致性</span></a>
   </div>
 </li>
       </ul>
   </li>
           <li class="sidebar-item sidebar-item-section">
       <span class="sidebar-item-text sidebar-link text-start">
- <span class="menu-text">Rust</span></span>
-  </li>
-          <li class="sidebar-item sidebar-item-section">
-      <span class="sidebar-item-text sidebar-link text-start">
- <span class="menu-text">JavaScript</span></span>
+ <span class="menu-text">MySQL</span></span>
   </li>
       </ul>
   </li>
@@ -174,17 +179,18 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#代码和项目组织" id="toc-代码和项目组织" class="nav-link active" data-scroll-target="#代码和项目组织">代码和项目组织</a></li>
-  <li><a href="#数据类型" id="toc-数据类型" class="nav-link" data-scroll-target="#数据类型">数据类型</a></li>
-  <li><a href="#控制结构" id="toc-控制结构" class="nav-link" data-scroll-target="#控制结构">控制结构</a></li>
-  <li><a href="#字符串" id="toc-字符串" class="nav-link" data-scroll-target="#字符串">字符串</a></li>
-  <li><a href="#函数与方法" id="toc-函数与方法" class="nav-link" data-scroll-target="#函数与方法">函数与方法</a></li>
-  <li><a href="#错误管理" id="toc-错误管理" class="nav-link" data-scroll-target="#错误管理">错误管理</a></li>
-  <li><a href="#并发基础" id="toc-并发基础" class="nav-link" data-scroll-target="#并发基础">并发：基础</a></li>
-  <li><a href="#并发实践" id="toc-并发实践" class="nav-link" data-scroll-target="#并发实践">并发：实践</a></li>
-  <li><a href="#标准库" id="toc-标准库" class="nav-link" data-scroll-target="#标准库">标准库</a></li>
-  <li><a href="#测试" id="toc-测试" class="nav-link" data-scroll-target="#测试">测试</a></li>
-  <li><a href="#优化" id="toc-优化" class="nav-link" data-scroll-target="#优化">优化</a></li>
+  <li><a href="#acid" id="toc-acid" class="nav-link active" data-scroll-target="#acid">A<del>C</del>ID</a></li>
+  <li><a href="#cap" id="toc-cap" class="nav-link" data-scroll-target="#cap">CA<del>P</del></a></li>
+  <li><a href="#分布式事务方案" id="toc-分布式事务方案" class="nav-link" data-scroll-target="#分布式事务方案">分布式事务方案</a>
+  <ul class="collapse">
+  <li><a href="#pc" id="toc-pc" class="nav-link" data-scroll-target="#pc">2PC</a></li>
+  <li><a href="#pc-1" id="toc-pc-1" class="nav-link" data-scroll-target="#pc-1">3PC</a></li>
+  <li><a href="#xa" id="toc-xa" class="nav-link" data-scroll-target="#xa">XA</a></li>
+  <li><a href="#tcc" id="toc-tcc" class="nav-link" data-scroll-target="#tcc">TCC</a></li>
+  <li><a href="#saga" id="toc-saga" class="nav-link" data-scroll-target="#saga">SAGA</a></li>
+  <li><a href="#本地消息表" id="toc-本地消息表" class="nav-link" data-scroll-target="#本地消息表">本地消息表</a></li>
+  <li><a href="#综合对比" id="toc-综合对比" class="nav-link" data-scroll-target="#综合对比">综合对比</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -193,7 +199,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">100 go mistakes</h1>
+<h1 class="title">分布式事务</h1>
 </div>
 
 
@@ -208,179 +214,318 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<section id="代码和项目组织" class="level2">
-<h2 class="anchored" data-anchor-id="代码和项目组织">代码和项目组织</h2>
-<ol type="1">
-<li><strong>意外的变量隐藏</strong> 要注意短声明是否会覆盖原先变量</li>
-<li><strong>不必要的嵌套代码</strong> 简单可读，尽早返回</li>
-<li><strong>滥用 init 函数</strong> init 在变量声明之后，main 函数之前执行，多个 init 函数按照声明顺序执行</li>
-<li><strong>过度使用 getter 和 setter</strong> 尽量使用直接访问，不要过度封装</li>
-<li><strong>接口污染</strong> 若无必要，勿增实体（抽象应该是被发现，而不是被创建）</li>
-<li><strong>生产者的接口</strong> 一般放在消费端维护，若确有必要放在生产者一方，应尽量减小抽象</li>
-<li><strong>返回接口</strong> 一般返回具体抽象</li>
-<li><strong>any 意味着 nothing</strong> any 丢失了类型信息，使用时应谨慎</li>
-<li><strong>乱用泛型</strong> 应在一些通用的数据结构和函数中使用</li>
-<li><strong>误用嵌入类型</strong> 小心方法提升</li>
-<li><strong>不使用函数选项模式</strong> 萝卜青菜，各有所爱</li>
-<li><strong>项目无组织</strong> 社区公约 golang-standards</li>
-<li><strong>创建通用包</strong> 不推荐 common、util、shared 等没有具体含义的包</li>
-<li><strong>变量和包名冲突</strong> 小心变量和包名冲突</li>
-<li><strong>缺少代码文档</strong> 每个导出的元素都应有文档</li>
-<li><strong>不使用 linters</strong> 磨刀不误砍柴工</li>
-</ol>
-</section>
-<section id="数据类型" class="level2">
-<h2 class="anchored" data-anchor-id="数据类型">数据类型</h2>
-<ol start="17" type="1">
-<li><strong>使用 8 进制字面量</strong> 二进制：<code>0b</code>，八进制：<code>0o</code>，十六进制：<code>0x</code></li>
-<li><strong>忽略整数溢出</strong> Go 对溢出是静默的</li>
-<li><strong>不了解浮点数</strong> float32 精度 7 位，float64 精度 15 位</li>
-<li><strong>不了解切片的长度和容量</strong> 长度是指切片中元素的个数，容量是指底层数组中元素的个数</li>
-<li><strong>低效的切片初始化</strong> 初始化时指定容量，避免频繁扩容</li>
-<li><strong>对 nil 和空切片的困惑</strong> nil 和空切片的长度都为0，nil 不需要分配</li>
-<li><strong>不正确检查切片为空</strong> <code>len(s) != 0</code></li>
-<li><strong>不正确复制切片</strong> <code>copy(dst, src)</code> 会复制 <code>min(len(dst), len(src))</code> 个元素</li>
-<li><strong>忽视 append 的副作用</strong> append 可能会导致底层数组重新分配，导致之前的切片失效</li>
-<li><strong>切片内存泄露</strong> 切片容量泄漏、底层数组泄漏</li>
-<li><strong>低效的 map 初始化</strong> 初始化时指定容量，避免频繁扩容</li>
-<li><strong>map 内存泄漏</strong> map 的桶会随着元素的增加而增加，但是不会随着元素的删除而减少</li>
-<li><strong>比较值时犯错</strong> <code>reflect.DeepEqual()</code>
+<section id="acid" class="level2">
+<h2 class="anchored" data-anchor-id="acid">A<del>C</del>ID</h2>
 <ul>
-<li><strong>Booleans</strong> 比较两个布尔值是否相等</li>
-<li><strong>Numerics</strong> 比较数字是否相等</li>
-<li><strong>Strings</strong> 比较字符串是否相等</li>
-<li><strong>Channels</strong> 比较两个通道是否指向同一个通道或者都是 nil</li>
-<li><strong>Interfaces</strong> 比较两个接口是否具有相同的动态类型且值相等或者都是 nil</li>
-<li><strong>Pointers</strong> 比较两个指针是否指向同一个对象或者都是 nil</li>
-<li><strong>Structs and Arrays</strong> 比较结构体或者数组的每个元素是否相等</li>
-</ul></li>
-</ol>
+<li><p><strong>原子性(Atomicity)</strong></p>
+<p>一系列的操作整体不可拆分，要么同时成功，要么同时失败</p></li>
+<li><p><strong>一致性(Consistency)</strong></p>
+<p>对数据的一组特定约束必须始终成立（一致性（在 ACID 意义上）是应用程序的属性）</p></li>
+<li><p><strong>隔离性(Isolation)</strong></p>
+<p>事务的执行是相互独立的，它们不会相互干扰，一个事务不会看到另一个正在运行过程中的事务的数据</p></li>
+<li><p><strong>持久性(Durabilily)</strong></p>
+<p>一个事务完成之后，事务的执行结果必须是落盘在数据库持久</p></li>
+</ul>
 </section>
-<section id="控制结构" class="level2">
-<h2 class="anchored" data-anchor-id="控制结构">控制结构</h2>
-<ol start="30" type="1">
-<li><strong>忽视遍历时元素被复制</strong> for range 时， 元素会被复制，修改的是副本</li>
-<li><strong>忽视遍历时参数怎么计算</strong> for range 时，参数只会计算一次；若需要每次都计算，应使用普通 for 循环</li>
-<li><strong>忽视遍历时指针元素的影响</strong> for range 时，元素都会分配给一个具有唯一地址的变量，每次迭代存储引用该指针的变量的话，只会存储最后的值</li>
-<li><strong>遍历 map 时想当然</strong> map 是无序的，每次遍历的顺序都可能不一样；遍历时插入元素，可能会出现在遍历中，也可能被跳过</li>
-<li><strong>忽视 break 的工作机制</strong> break 只会跳出当前循环，若想跳出多层循环，应使用标签</li>
-<li><strong>在循环中使用 defer</strong> 会堆积所有 defer，如果循环没有终止，会导致内存泄漏</li>
-<li><strong>忽视闭包中的参数</strong> 闭包中的参数是引用，而不是值</li>
-</ol>
-</section>
-<section id="字符串" class="level2">
-<h2 class="anchored" data-anchor-id="字符串">字符串</h2>
-<ol start="36" type="1">
-<li><strong>不理解 rune</strong> rune 是 int32 的别名，可以由多个字节组成；len(s) 返回的是字节数，而不是字符数</li>
-<li><strong>不正确的字符串遍历</strong> for range 遍历字符串时，会将字符串转换为 rune 数组，而不是字节数组</li>
-<li><strong>乱用 trim</strong> 要了解 <code>strings.TrimRight() strings.TrimSuffix()</code> 的区别</li>
-<li><strong>未对字符串连接进行优化</strong> 使用 <code>strings.Builder</code> 进行字符串拼接</li>
-<li><strong>无用的字符串转换</strong> 确认需不需要对 string 和 []byte 进行互转</li>
-<li><strong>字符串内存泄漏</strong> 子串占用母串</li>
-</ol>
-</section>
-<section id="函数与方法" class="level2">
-<h2 class="anchored" data-anchor-id="函数与方法">函数与方法</h2>
-<ol start="42" type="1">
-<li><strong>不知道选择哪种接收器类型</strong> 若需要修改接收器的值或其中包含一个无法复制的字段，必须使用指针接收器</li>
-<li><strong>从不使用命名的返回值</strong> 提升代码可读性</li>
-<li><strong>未预期的命名返回值的副作用</strong> 注意变量隐藏</li>
-<li><strong>返回一个 nil 接收器</strong> nil 接收器 != nil ⭐️⭐️⭐️</li>
-<li><strong>使用文件名作为函数输入</strong> 增加代码测试的复杂性</li>
-<li><strong>忽视 defer 的参数和接收器的评估</strong> defer 会在函数返回前执行，但是参数和接收器是在使用 defer 语句是评估的；可以使用闭包</li>
-</ol>
-</section>
-<section id="错误管理" class="level2">
-<h2 class="anchored" data-anchor-id="错误管理">错误管理</h2>
-<ol start="48" type="1">
-<li><strong>panic</strong> 谨慎使用 panic</li>
-<li><strong>忽视何时封装错误</strong> <code>fmt.Errorf("detail error: %w", err)</code></li>
-<li><strong>不准确的错误类型检查</strong> 使用 <code>errors.As()</code> 对封装后的错误类型进行检查</li>
-<li><strong>不准确的错误值检查</strong> 使用 <code>errors.Is()</code> 对封装后的错误值进行检查</li>
-<li><strong>两次处理同一个错误</strong> 要么记录日志，要么返回错误（可以使用 <code>fmt.Errorf()</code> 进行封装）</li>
-<li><strong>不处理错误</strong> 对某个错误不感兴趣，将其赋值给 <code>_</code> 语义会更明确</li>
-<li><strong>不处理 defer 中的错误</strong> 有可能导致资源未被释放</li>
-</ol>
-</section>
-<section id="并发基础" class="level2">
-<h2 class="anchored" data-anchor-id="并发基础">并发：基础</h2>
-<ol start="55" type="1">
-<li><strong>混淆并发和并行</strong> 并发是指两个或多个任务在时间上重叠，而并行是指两个或多个任务在同一时刻执行</li>
-<li><strong>认为并发总是更快</strong> 当任务开销小于 goroutine 的开销时，并发会降低性能</li>
-<li><strong>不知道使用 channel 还是 mutex</strong> 一般来说，并发 goroutines 需要使用 channel，而并行 goroutines 需要使用 mutex</li>
-<li><strong>不理解竞争问题</strong> 原子操作；使用互斥锁；使用 channel</li>
-<li><strong>不知道工作负载类型</strong> CPU 密集型、I/O 密集型</li>
-<li><strong>不理解 Go context</strong> context 用于在 goroutine 之间传递请求作用域的数据、取消信号和截止日期</li>
-</ol>
-</section>
-<section id="并发实践" class="level2">
-<h2 class="anchored" data-anchor-id="并发实践">并发：实践</h2>
-<ol start="61" type="1">
-<li><strong>传播不恰当的 context</strong> 子任务的话要清楚父任务的 context 是否需要传递</li>
-<li><strong>启动一个不知道何时停止的 goroutine</strong> 设计时要考虑怎么停止 goroutine</li>
-<li><strong>使用 goroutine 和循环变量时不谨慎</strong> for range 常见问题</li>
-<li><strong>使用 select/channel 保证确定性</strong> select 是伪随机的</li>
-<li><strong>不使用通知类型 channel</strong> 使用 <code>chan struct{}</code> 作为通知类型 channel</li>
-<li><strong>不使用 nil channel</strong> 一般不使用</li>
-<li><strong>对 channel 缓冲区大小感到困惑</strong> 只有无缓冲才能保证同步性</li>
-<li><strong>忘记字符串格式化的副作用</strong> String() 可能不是并发安全的，甚至死锁</li>
-<li><strong>使用 append 导致数据竞争</strong> 切片 append 不是并发安全的</li>
-<li><strong>在 slice 和 map 中错误使用互斥锁</strong> slice 和 map 是指针类型</li>
-<li><strong>错误使用 sync.WaitGroup</strong> 不要在 子goroutine 中使用 wg.Add()</li>
-<li><strong>忘记还有 sync.Cond</strong> 同时向多个 goroutine 发送信号</li>
-<li><strong>不使用 errgroup</strong> 不要重复造轮子</li>
-<li><strong>复制同步原语</strong> 使用指针</li>
-</ol>
-</section>
-<section id="标准库" class="level2">
-<h2 class="anchored" data-anchor-id="标准库">标准库</h2>
-<ol start="75" type="1">
-<li><strong>提供错误的持续时间</strong> 使用 <code>time.Second()</code> 而不是 1e9</li>
-<li><strong>time.After 内存泄漏</strong> 只有当计时器过期时，创建的资源才会释放，在循环中要使用 <code>time.NewTimer</code> 来替代</li>
-<li><strong>常见的 JSON 处理错误</strong> 类型嵌入；时间类型；any 中的数字被认为是 float64</li>
-<li><strong>常见的 SQL 错误</strong>
+<section id="cap" class="level2">
+<h2 class="anchored" data-anchor-id="cap">CA<del>P</del></h2>
 <ul>
-<li><code>sql.Open()</code> 并不建立连接，只是验证参数</li>
-<li><code>*sql.DB</code> 是一个连接池</li>
-<li>要使用 Prepared Statement</li>
-<li>要使用 sql.Nullxxx</li>
-<li>要处理迭代中的错误</li>
-</ul></li>
-<li><strong>没有释放临时资源</strong> <code>resp.Body</code> <code>sql.Rows</code> <code>os.File</code></li>
-<li><strong>处理 http 请求时没有返回</strong> <code>http.Error</code> 后立即返回</li>
-<li><strong>使用默认的 http 客户端和服务端</strong> 要设置超时时间</li>
-</ol>
+<li><p><strong>一致性(Consistency)</strong></p>
+<p>线性一致性，即所有节点在同一时间看到的数据是一样的</p></li>
+<li><p><strong>可用性(Availability)</strong></p>
+<p>在集群中一部分节点故障后，非故障的节点在合理的时间内返回合理的响应（保证返回正确的结果）</p></li>
+<li><p><strong>分区容错性(Partition tolerance)</strong></p>
+<p>系统能够在节点之间发生网络分区（Partition）的情况下仍然能够正常运行。在分布式系统中，网络无法100%可靠，分区其实是一个必然现象</p></li>
+</ul>
 </section>
-<section id="测试" class="level2">
-<h2 class="anchored" data-anchor-id="测试">测试</h2>
-<ol start="82" type="1">
-<li><strong>未区分测试种类</strong> <code>export MY_ENV=test / go test --tags=... -short</code></li>
-<li><strong>未打开 -race 开关</strong> 本地测试时要打开</li>
-<li><strong>未使用测试执行模式</strong> -parallel -shuffle</li>
-<li><strong>未使用表驱动型测试</strong> 用表驱动型测试替代 if/else</li>
-<li><strong>在单元测试中休眠</strong> 引入重试代替休眠</li>
-<li><strong>没有有效使用 tim e</strong> mock 或者重构时间相关代码</li>
-<li><strong>未使用测试工具包</strong> httptest iotest 等</li>
-<li><strong>编写不准确的基准测试</strong> 一些基础测试的误区</li>
-<li><strong>未探索所有的 go 测试特性</strong> 代码覆盖率等等</li>
-</ol>
+<section id="分布式事务方案" class="level2">
+<h2 class="anchored" data-anchor-id="分布式事务方案">分布式事务方案</h2>
+<p>分布式事务是为了解决分布式系统中的共识（数据一致性问题），保证分布式系统中的数据最终一致性。</p>
+<p>在分布式系统中，事务提交必须是不可撤销的 —— 事务提交之后，你不能改变主意，并追溯性地中止事务。这个规则的原因是，一旦数据被提交，其结果就对其他事务可见，因此其他客户端可能会开始依赖这些数据。</p>
+<section id="pc" class="level3">
+<h3 class="anchored" data-anchor-id="pc">2PC</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<div>
+<pre class="mermaid mermaid-js">sequenceDiagram
+    participant coordinator as 协调者
+    participant Alice
+    participant Bob
+
+    activate coordinator
+    coordinator-&gt;&gt;coordinator: 生成 t_id=1
+
+    Note left of coordinator: I. 准备阶段
+    par 
+        coordinator-&gt;&gt;Alice: Prepare(t_id=1)
+        activate Alice
+        Alice-&gt;&gt;Alice: 锁定资源
+        Alice--&gt;&gt;coordinator: Success
+        deactivate Alice
+    and 
+        coordinator-&gt;&gt;Bob: Prepare(t_id=1)
+        activate Bob
+        Bob-&gt;&gt;Bob: 锁定资源
+        Bob--&gt;&gt;coordinator: Success
+        deactivate Bob
+    end
+
+    Note left of coordinator: II. 提交阶段
+    par 
+        coordinator-&gt;&gt;Alice: Commit(t_id=1)
+        activate Alice
+        Alice-&gt;&gt;Alice: 应用更改，释放资源
+        Alice--&gt;&gt;coordinator: Success
+        deactivate Alice
+    and 
+        coordinator-&gt;&gt;Bob: Commit(t_id=1)
+        activate Bob
+        Bob-&gt;&gt;Bob: 应用更改，释放资源
+        Bob--&gt;&gt;coordinator: Success
+        deactivate Bob
+    end
+
+    deactivate coordinator
+</pre>
+</div>
+</div>
+</div>
+</div>
+<p>两阶段提交（two-phase commit）有两个关键点：当参与者投票 “是” 时，它承诺它稍后肯定能够提交（尽管协调者可能仍然选择放弃）；以及一旦协调者做出决定，这一决定是不可撤销的。这些承诺保证了 2PC 的原子性（单节点原子提交将这两个事件合为了一体：将提交记录写入事务日志）。</p>
 </section>
-<section id="优化" class="level2">
-<h2 class="anchored" data-anchor-id="优化">优化</h2>
-<ol start="91" type="1">
-<li><strong>不了解 CPU 缓存</strong> 编写 CPU 缓存友好的代码</li>
-<li><strong>编写导致伪共享的并发代码</strong> 通过填充或通信来防止伪共享</li>
-<li><strong>不考虑指令级并行性</strong> 充分利用指令流水线并行</li>
-<li><strong>不了解数据对齐</strong> 对齐保证更好的空间局部性</li>
-<li><strong>不了解栈与堆</strong> 尽量避免在堆上分配内存</li>
-<li><strong>不了解如何减少分配</strong> 初始容量和池化技术</li>
-<li><strong>没有依赖内联</strong> 内联是提升性能的有效手段</li>
-<li><strong>没有使用 Go 诊断工具</strong> profile trace</li>
-<li><strong>不了解 GC 的工作原理</strong> 了解一些 GC 细节</li>
-<li><strong>不了解容器对 Go 程序的影响</strong> 了解一些 GC 细节</li>
-</ol>
+<section id="pc-1" class="level3">
+<h3 class="anchored" data-anchor-id="pc-1">3PC</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<div>
+<pre class="mermaid mermaid-js">sequenceDiagram
+    participant coordinator as 协调者
+    participant Alice
+    participant Bob
+
+    activate coordinator
+    coordinator-&gt;&gt;coordinator: 生成 t_id=1
+
+    Note left of coordinator: I. 准备阶段
+    par 
+        coordinator-&gt;&gt;Alice: Prepare(t_id=1)
+        activate Alice
+        Alice-&gt;&gt;Alice: 检查资源
+        Alice--&gt;&gt;coordinator: Success
+        deactivate Alice
+    and 
+        coordinator-&gt;&gt;Bob: Prepare(t_id=1)
+        activate Bob
+        Bob-&gt;&gt;Bob: 检查资源
+        Bob--&gt;&gt;coordinator: Success
+        deactivate Bob
+    end
+
+    Note left of coordinator: II. 预提交阶段
+    par 
+        coordinator-&gt;&gt;Alice: Precommit(t_id=1)
+        activate Alice
+        Alice-&gt;&gt;Alice: 锁定资源
+        Alice--&gt;&gt;coordinator: Success
+        deactivate Alice
+    and 
+        coordinator-&gt;&gt;Bob: Precommit(t_id=1)
+        activate Bob
+        Bob-&gt;&gt;Bob: 锁定资源
+        Bob--&gt;&gt;coordinator: Success
+        deactivate Bob
+    end
+
+    Note left of coordinator: III. 提交阶段
+    par 
+        coordinator-&gt;&gt;Alice: Commit(t_id=1)
+        activate Alice
+        Alice-&gt;&gt;Alice: 应用更改，释放资源
+        Alice--&gt;&gt;coordinator: Success
+        deactivate Alice
+    and 
+        coordinator-&gt;&gt;Bob: Commit(t_id=1)
+        activate Bob
+        Bob-&gt;&gt;Bob: 应用更改，释放资源
+        Bob--&gt;&gt;coordinator: Success
+        deactivate Bob
+    end
+
+    deactivate coordinator
+</pre>
+</div>
+</div>
+</div>
+</div>
+<p>三阶段提交（three-phase commit）相对于二阶段提交（2PC）有两个改进：引入了超时机制，以防止协调者在第二阶段失败时永远阻塞（超时自动提交，但也有可能造成数据不一致）；将2PC的准备阶段拆分为两个阶段，这个阶段是重负载的操作（降低失败成本）。</p>
+</section>
+<section id="xa" class="level3">
+<h3 class="anchored" data-anchor-id="xa">XA</h3>
+<p>XA（eXtended Architecture）是两阶段提交（2PC）协议的一个实现，是一种分布式事务处理的标准协议，用于确保多个资源管理器（Resource Manager）之间的事务一致性。偏数据层面，通常由数据库内部支持。</p>
+</section>
+<section id="tcc" class="level3">
+<h3 class="anchored" data-anchor-id="tcc">TCC</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<div>
+<pre class="mermaid mermaid-js">sequenceDiagram
+    participant Coordinator as 协调者
+    participant ServiceA as 服务A
+    participant ServiceB as 服务B
+
+    Note over Coordinator,ServiceB: 事务开始
+    Coordinator-&gt;&gt;ServiceA: Try
+    ServiceA--&gt;&gt;Coordinator: Try 成功/失败
+    Coordinator-&gt;&gt;ServiceB: Try
+    ServiceB--&gt;&gt;Coordinator: Try 成功/失败
 
 
+    alt 所有服务 Try 成功
+        Coordinator-&gt;&gt;+ServiceA: Confirm
+        ServiceA--&gt;&gt;-Coordinator: Confirm 成功/失败
+        Coordinator-&gt;&gt;+ServiceB: Confirm 
+        ServiceB--&gt;&gt;-Coordinator: Confirm 成功/失败
+    else 至少一个服务 Try 或 Confirm 失败
+        Coordinator-&gt;&gt;+ServiceA: Cancel
+        ServiceA--&gt;&gt;-Coordinator: Cancel 响应
+        Coordinator-&gt;&gt;+ServiceB: Cancel
+        ServiceB--&gt;&gt;-Coordinator: Cancel 响应
+    end
+
+    Note over Coordinator,ServiceB: 事务结束
+</pre>
+</div>
+</div>
+</div>
+</div>
+<p>TCC（Try-Confirm-Cancel）是一种补偿性事务模式，它通过明确的三个阶段来保证分布式事务的一致性和可靠性。应用层面，适用于需要跨多个服务进行分布式事务处理的场景。</p>
+</section>
+<section id="saga" class="level3">
+<h3 class="anchored" data-anchor-id="saga">SAGA</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<div>
+<pre class="mermaid mermaid-js">sequenceDiagram
+    participant S as SAGA
+    participant T1 as 事务1
+    participant T2 as 事务2
+    participant C1 as 补偿事务1
+    participant C2 as 补偿事务2
+
+    Note over S, C2: SAGA 开始
+    S-&gt;&gt;T1: 执行事务1
+    T1--&gt;&gt;S: 成功
+    S-&gt;&gt;T2: 执行事务2
+    T2--&gt;&gt;S: 失败
+
+    alt 向后补偿
+        S-&gt;&gt;C1: 执行补偿事务1
+        C1--&gt;&gt;S: 成功
+    else 向前补偿
+        S-&gt;&gt;T2: 继续执行事务2
+        T2--&gt;&gt;S: 成功
+    end
+    Note over S, C2: SAGA 结束
+</pre>
+</div>
+</div>
+</div>
+</div>
+<p>Saga模式将一个大型事务拆分为多个小的、离散的事务片段，每个片段都具有自己的本地事务和补偿操作。应用层面。</p>
+</section>
+<section id="本地消息表" class="level3">
+<h3 class="anchored" data-anchor-id="本地消息表">本地消息表</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<div>
+<pre class="mermaid mermaid-js">sequenceDiagram
+    participant A as 服务A
+    participant LocalDB as 本地数据库
+    participant MQ as 消息队列
+    participant B as 服务B
+
+    A-&gt;&gt;LocalDB: 开始事务
+    A-&gt;&gt;LocalDB: 执行业务逻辑
+    A-&gt;&gt;LocalDB: 写入消息到本地消息表
+    LocalDB-&gt;&gt;A: 提交事务
+    A-&gt;&gt;MQ: 发送消息
+    MQ-&gt;&gt;B: 消息到达服务B
+    B-&gt;&gt;B: 处理消息
+    B-&gt;&gt;A: 确认消息处理完成
+    A-&gt;&gt;LocalDB: 更新本地消息
+</pre>
+</div>
+</div>
+</div>
+</div>
+<p>本地消息表事务（Local Message Table Transaction）是一种可靠消息事务机制，核心思想就是将分布式事务拆分成本地事务进行处理。</p>
+</section>
+<section id="综合对比" class="level3">
+<h3 class="anchored" data-anchor-id="综合对比">综合对比</h3>
+<table class="table-hover table">
+<caption>分布式事务解决方案</caption>
+<thead>
+<tr class="header">
+<th>方案</th>
+<th>类型</th>
+<th>性能</th>
+<th>开发成本</th>
+<th>优缺点</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>2PC</td>
+<td>强一致</td>
+<td>低</td>
+<td>低</td>
+<td>单点、性能低、同步阻塞</td>
+</tr>
+<tr class="even">
+<td>3PC</td>
+<td>强一致</td>
+<td>低</td>
+<td>低</td>
+<td>性能低</td>
+</tr>
+<tr class="odd">
+<td>XA</td>
+<td>强一致</td>
+<td>低</td>
+<td>低</td>
+<td>资源需要支持XA协议</td>
+</tr>
+<tr class="even">
+<td>TCC</td>
+<td>最终一致</td>
+<td>中</td>
+<td>高</td>
+<td>需要协调应用逻辑，复杂性高</td>
+</tr>
+<tr class="odd">
+<td>SAGA</td>
+<td>最终一致</td>
+<td>中</td>
+<td>高</td>
+<td>需要协调应用逻辑，复杂性高</td>
+</tr>
+<tr class="even">
+<td>本地消息表</td>
+<td>最终一致</td>
+<td>高</td>
+<td>中</td>
+<td>没有MQ可以使用定时任务</td>
+</tr>
+</tbody>
+</table>
+
+
+</section>
 </section>
 
 </main> <!-- /main -->

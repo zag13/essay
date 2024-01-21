@@ -14,13 +14,6 @@
     "text": "TODO"
   },
   {
-    "objectID": "docs/language/rust/index.html",
-    "href": "docs/language/rust/index.html",
-    "title": "Rust",
-    "section": "",
-    "text": "This is a Rust page."
-  },
-  {
     "objectID": "docs/language/go/100go.html",
     "href": "docs/language/go/100go.html",
     "title": "100 go mistakes",
@@ -109,7 +102,49 @@
     "href": "docs/data-system/index.html",
     "title": "Data System",
     "section": "",
-    "text": "This is a data system page."
+    "text": "DDIA"
+  },
+  {
+    "objectID": "docs/data-system/index.html#推荐阅读",
+    "href": "docs/data-system/index.html#推荐阅读",
+    "title": "Data System",
+    "section": "",
+    "text": "DDIA"
+  },
+  {
+    "objectID": "docs/data-system/database/index.html",
+    "href": "docs/data-system/database/index.html",
+    "title": "DataBase",
+    "section": "",
+    "text": "This is a DataBase page."
+  },
+  {
+    "objectID": "docs/data-system/database/distributed-transaction.html",
+    "href": "docs/data-system/database/distributed-transaction.html",
+    "title": "分布式事务",
+    "section": "",
+    "text": "原子性(Atomicity)\n一系列的操作整体不可拆分，要么同时成功，要么同时失败\n一致性(Consistency)\n对数据的一组特定约束必须始终成立（一致性（在 ACID 意义上）是应用程序的属性）\n隔离性(Isolation)\n事务的执行是相互独立的，它们不会相互干扰，一个事务不会看到另一个正在运行过程中的事务的数据\n持久性(Durabilily)\n一个事务完成之后，事务的执行结果必须是落盘在数据库持久"
+  },
+  {
+    "objectID": "docs/data-system/database/distributed-transaction.html#acid",
+    "href": "docs/data-system/database/distributed-transaction.html#acid",
+    "title": "分布式事务",
+    "section": "",
+    "text": "原子性(Atomicity)\n一系列的操作整体不可拆分，要么同时成功，要么同时失败\n一致性(Consistency)\n对数据的一组特定约束必须始终成立（一致性（在 ACID 意义上）是应用程序的属性）\n隔离性(Isolation)\n事务的执行是相互独立的，它们不会相互干扰，一个事务不会看到另一个正在运行过程中的事务的数据\n持久性(Durabilily)\n一个事务完成之后，事务的执行结果必须是落盘在数据库持久"
+  },
+  {
+    "objectID": "docs/data-system/database/distributed-transaction.html#cap",
+    "href": "docs/data-system/database/distributed-transaction.html#cap",
+    "title": "分布式事务",
+    "section": "CAP",
+    "text": "CAP\n\n一致性(Consistency)\n线性一致性，即所有节点在同一时间看到的数据是一样的\n可用性(Availability)\n在集群中一部分节点故障后，非故障的节点在合理的时间内返回合理的响应（保证返回正确的结果）\n分区容错性(Partition tolerance)\n系统能够在节点之间发生网络分区（Partition）的情况下仍然能够正常运行。在分布式系统中，网络无法100%可靠，分区其实是一个必然现象"
+  },
+  {
+    "objectID": "docs/data-system/database/distributed-transaction.html#分布式事务方案",
+    "href": "docs/data-system/database/distributed-transaction.html#分布式事务方案",
+    "title": "分布式事务",
+    "section": "分布式事务方案",
+    "text": "分布式事务方案\n分布式事务是为了解决分布式系统中的共识（数据一致性问题），保证分布式系统中的数据最终一致性。\n在分布式系统中，事务提交必须是不可撤销的 —— 事务提交之后，你不能改变主意，并追溯性地中止事务。这个规则的原因是，一旦数据被提交，其结果就对其他事务可见，因此其他客户端可能会开始依赖这些数据。\n\n2PC\n\n\n\n\nsequenceDiagram\n    participant coordinator as 协调者\n    participant Alice\n    participant Bob\n\n    activate coordinator\n    coordinator-&gt;&gt;coordinator: 生成 t_id=1\n\n    Note left of coordinator: I. 准备阶段\n    par \n        coordinator-&gt;&gt;Alice: Prepare(t_id=1)\n        activate Alice\n        Alice-&gt;&gt;Alice: 锁定资源\n        Alice--&gt;&gt;coordinator: Success\n        deactivate Alice\n    and \n        coordinator-&gt;&gt;Bob: Prepare(t_id=1)\n        activate Bob\n        Bob-&gt;&gt;Bob: 锁定资源\n        Bob--&gt;&gt;coordinator: Success\n        deactivate Bob\n    end\n\n    Note left of coordinator: II. 提交阶段\n    par \n        coordinator-&gt;&gt;Alice: Commit(t_id=1)\n        activate Alice\n        Alice-&gt;&gt;Alice: 应用更改，释放资源\n        Alice--&gt;&gt;coordinator: Success\n        deactivate Alice\n    and \n        coordinator-&gt;&gt;Bob: Commit(t_id=1)\n        activate Bob\n        Bob-&gt;&gt;Bob: 应用更改，释放资源\n        Bob--&gt;&gt;coordinator: Success\n        deactivate Bob\n    end\n\n    deactivate coordinator\n\n\n\n\n\n两阶段提交（two-phase commit）有两个关键点：当参与者投票 “是” 时，它承诺它稍后肯定能够提交（尽管协调者可能仍然选择放弃）；以及一旦协调者做出决定，这一决定是不可撤销的。这些承诺保证了 2PC 的原子性（单节点原子提交将这两个事件合为了一体：将提交记录写入事务日志）。\n\n\n3PC\n\n\n\n\nsequenceDiagram\n    participant coordinator as 协调者\n    participant Alice\n    participant Bob\n\n    activate coordinator\n    coordinator-&gt;&gt;coordinator: 生成 t_id=1\n\n    Note left of coordinator: I. 准备阶段\n    par \n        coordinator-&gt;&gt;Alice: Prepare(t_id=1)\n        activate Alice\n        Alice-&gt;&gt;Alice: 检查资源\n        Alice--&gt;&gt;coordinator: Success\n        deactivate Alice\n    and \n        coordinator-&gt;&gt;Bob: Prepare(t_id=1)\n        activate Bob\n        Bob-&gt;&gt;Bob: 检查资源\n        Bob--&gt;&gt;coordinator: Success\n        deactivate Bob\n    end\n\n    Note left of coordinator: II. 预提交阶段\n    par \n        coordinator-&gt;&gt;Alice: Precommit(t_id=1)\n        activate Alice\n        Alice-&gt;&gt;Alice: 锁定资源\n        Alice--&gt;&gt;coordinator: Success\n        deactivate Alice\n    and \n        coordinator-&gt;&gt;Bob: Precommit(t_id=1)\n        activate Bob\n        Bob-&gt;&gt;Bob: 锁定资源\n        Bob--&gt;&gt;coordinator: Success\n        deactivate Bob\n    end\n\n    Note left of coordinator: III. 提交阶段\n    par \n        coordinator-&gt;&gt;Alice: Commit(t_id=1)\n        activate Alice\n        Alice-&gt;&gt;Alice: 应用更改，释放资源\n        Alice--&gt;&gt;coordinator: Success\n        deactivate Alice\n    and \n        coordinator-&gt;&gt;Bob: Commit(t_id=1)\n        activate Bob\n        Bob-&gt;&gt;Bob: 应用更改，释放资源\n        Bob--&gt;&gt;coordinator: Success\n        deactivate Bob\n    end\n\n    deactivate coordinator\n\n\n\n\n\n三阶段提交（three-phase commit）相对于二阶段提交（2PC）有两个改进：引入了超时机制，以防止协调者在第二阶段失败时永远阻塞（超时自动提交，但也有可能造成数据不一致）；将2PC的准备阶段拆分为两个阶段，这个阶段是重负载的操作（降低失败成本）。\n\n\nXA\nXA（eXtended Architecture）是两阶段提交（2PC）协议的一个实现，是一种分布式事务处理的标准协议，用于确保多个资源管理器（Resource Manager）之间的事务一致性。偏数据层面，通常由数据库内部支持。\n\n\nTCC\n\n\n\n\nsequenceDiagram\n    participant Coordinator as 协调者\n    participant ServiceA as 服务A\n    participant ServiceB as 服务B\n\n    Note over Coordinator,ServiceB: 事务开始\n    Coordinator-&gt;&gt;ServiceA: Try\n    ServiceA--&gt;&gt;Coordinator: Try 成功/失败\n    Coordinator-&gt;&gt;ServiceB: Try\n    ServiceB--&gt;&gt;Coordinator: Try 成功/失败\n\n\n    alt 所有服务 Try 成功\n        Coordinator-&gt;&gt;+ServiceA: Confirm\n        ServiceA--&gt;&gt;-Coordinator: Confirm 成功/失败\n        Coordinator-&gt;&gt;+ServiceB: Confirm \n        ServiceB--&gt;&gt;-Coordinator: Confirm 成功/失败\n    else 至少一个服务 Try 或 Confirm 失败\n        Coordinator-&gt;&gt;+ServiceA: Cancel\n        ServiceA--&gt;&gt;-Coordinator: Cancel 响应\n        Coordinator-&gt;&gt;+ServiceB: Cancel\n        ServiceB--&gt;&gt;-Coordinator: Cancel 响应\n    end\n\n    Note over Coordinator,ServiceB: 事务结束\n\n\n\n\n\nTCC（Try-Confirm-Cancel）是一种补偿性事务模式，它通过明确的三个阶段来保证分布式事务的一致性和可靠性。应用层面，适用于需要跨多个服务进行分布式事务处理的场景。\n\n\nSAGA\n\n\n\n\nsequenceDiagram\n    participant S as SAGA\n    participant T1 as 事务1\n    participant T2 as 事务2\n    participant C1 as 补偿事务1\n    participant C2 as 补偿事务2\n\n    Note over S, C2: SAGA 开始\n    S-&gt;&gt;T1: 执行事务1\n    T1--&gt;&gt;S: 成功\n    S-&gt;&gt;T2: 执行事务2\n    T2--&gt;&gt;S: 失败\n\n    alt 向后补偿\n        S-&gt;&gt;C1: 执行补偿事务1\n        C1--&gt;&gt;S: 成功\n    else 向前补偿\n        S-&gt;&gt;T2: 继续执行事务2\n        T2--&gt;&gt;S: 成功\n    end\n    Note over S, C2: SAGA 结束\n\n\n\n\n\nSaga模式将一个大型事务拆分为多个小的、离散的事务片段，每个片段都具有自己的本地事务和补偿操作。应用层面。\n\n\n本地消息表\n\n\n\n\nsequenceDiagram\n    participant A as 服务A\n    participant LocalDB as 本地数据库\n    participant MQ as 消息队列\n    participant B as 服务B\n\n    A-&gt;&gt;LocalDB: 开始事务\n    A-&gt;&gt;LocalDB: 执行业务逻辑\n    A-&gt;&gt;LocalDB: 写入消息到本地消息表\n    LocalDB-&gt;&gt;A: 提交事务\n    A-&gt;&gt;MQ: 发送消息\n    MQ-&gt;&gt;B: 消息到达服务B\n    B-&gt;&gt;B: 处理消息\n    B-&gt;&gt;A: 确认消息处理完成\n    A-&gt;&gt;LocalDB: 更新本地消息\n\n\n\n\n\n本地消息表事务（Local Message Table Transaction）是一种可靠消息事务机制，核心思想就是将分布式事务拆分成本地事务进行处理。\n\n\n综合对比\n\n分布式事务解决方案\n\n\n方案\n类型\n性能\n开发成本\n优缺点\n\n\n\n\n2PC\n强一致\n低\n低\n单点、性能低、同步阻塞\n\n\n3PC\n强一致\n低\n低\n性能低\n\n\nXA\n强一致\n低\n低\n资源需要支持XA协议\n\n\nTCC\n最终一致\n中\n高\n需要协调应用逻辑，复杂性高\n\n\nSAGA\n最终一致\n中\n高\n需要协调应用逻辑，复杂性高\n\n\n本地消息表\n最终一致\n高\n中\n没有MQ可以使用定时任务"
   },
   {
     "objectID": "docs/data-system/mysql/index.html",
